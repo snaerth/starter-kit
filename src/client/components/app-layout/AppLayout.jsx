@@ -2,10 +2,6 @@ import React, { Component, PropTypes } from 'react';
 import s from './AppLayout.scss';
 
 export default class AppLayout extends Component {
-  static propTypes = {
-    children: PropTypes.node,
-  };
-
   render() {
     return (
       <div className={s.layout}>
@@ -14,3 +10,7 @@ export default class AppLayout extends Component {
     );
   }
 }
+
+AppLayout.propTypes = {
+  children: PropTypes.node
+};

@@ -1,4 +1,6 @@
 /* eslint no-console: 0 */
+// Enables proper source map support in Node.js
+import 'source-map-support/register'
 
 // DEVELOPMENT IMPORTS
 import webpack from 'webpack';
@@ -20,7 +22,7 @@ import { Router, match, RouterContext } from 'react-router';
 import { renderToString } from 'react-dom/server';
 import { Provider } from 'react-redux';
 
-//import routes from '../client/routes.jsx';
+import routes from '../client/routes.jsx';
 import configureStore from '../client/store/configureStore';
 
 const isDeveloping = process.env.NODE_ENV !== 'production';
@@ -69,13 +71,13 @@ if (isDeveloping) {
     app.use(express.static(__dirname + '/public'));
 }
 
-app.get('*', (req, res) => {
-    res.set('content-type', 'text/html');
-    res.write(renderHtml());
-    res.end();
-});
+// app.get('*', (req, res) => {
+//     res.set('content-type', 'text/html');
+//     res.write(renderHtml());
+//     res.end();
+// });
 
-// app.use(handleRender);
+app.use(handleRender);
 
 function handleRender(req, res) {
     res.set('content-type', 'text/html');
