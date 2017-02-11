@@ -8,8 +8,6 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 //  PLUGINS
 const plugins = [
-  // new HtmlWebpackPlugin({template: 'src/client/index.tpl.html', inject: 'body',
-  // filename: 'index.html'}),
   new ExtractTextPlugin("styles.css"),
   new webpack
     .optimize

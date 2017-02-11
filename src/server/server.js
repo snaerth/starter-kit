@@ -15,6 +15,13 @@ import helmet from 'helmet';
 import bodyParser from 'body-parser';
 
 import renderHtml from './utils/renderHtml';
+import React from 'react';
+import { Router, match, RouterContext } from 'react-router';
+import { renderToString } from 'react-dom/server';
+import { Provider } from 'react-redux';
+
+//import routes from '../client/routes.jsx';
+import configureStore from '../client/store/configureStore';
 
 const isDeveloping = process.env.NODE_ENV !== 'production';
 const port = process.env.PORT || 3000;
@@ -62,17 +69,41 @@ if (isDeveloping) {
 
     app.use(middleware);
     app.use(webpackHotMiddleware(compiler));
-    app.get('*', (req, res) => {
-        res.set('content-type', 'text/html');
-        res.write(renderHtml());
-        //res.write(middleware.fileSystem.readFileSync(config.output.path + 'index.html'));
-        res.end();
-    });
 } else {
     // PRODUCTION
     app.use(express.static(__dirname + '/public'));
-    app.get('*', (req, res) => {
-        res.sendFile(path.join(__dirname, 'index.html'));
+}
+
+app.get('*', (req, res) => {
+    res.set('content-type', 'text/html');
+    res.write(renderHtml());
+    res.end();
+});
+
+// app.use(handleRender);
+
+function handleRender(req, res) {
+    res.set('content-type', 'text/html');
+    // Do a router match
+    match({
+        routes: (<Router>{routes}</Router>),
+        location: req.url,
+    }, (err, redirect, props) => {
+        // Compile an initial state
+        const preloadedState = { counter: 10 };
+        // Create a new Redux store instance
+        const store = configureStore(preloadedState);
+        // Render the component to a string
+        const html = renderToString(
+            <Provider store={store}>
+                <RouterContext {...props} />
+            </Provider>
+        );
+        // Grab the initial state from Redux store
+        const finalState = store.getState();
+        // Send the rendered page to the client
+        res.send(renderHtml(html, finalState));
+        res.end();
     });
 }
 
