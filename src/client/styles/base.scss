@@ -1,0 +1,75 @@
+@import './variables.scss';
+@import './mixins.scss';
+
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  min-height: 100vh;
+  background: #fff;
+}
+
+html {
+  -webkit-overflow-scrolling: touch;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+body {
+  @include responsive-font(1.5vw, 16px, 25px);
+  background: $primary-background-color;
+  position: relative;
+  margin: 0;
+  font-family: 'Roboto';
+  line-height: 1.5;
+  color: $primary-font-color;
+  overflow-x: hidden;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+h1 {
+    @include responsive-font(13vw, 40px, 70px);
+}
+
+a:link, 
+a:visited, 
+a:active { 
+  color:$primary-font-color; 
+}
+
+a:hover {
+  color:$primary-color-yellow; 
+}
+
+/* Page Loader */
+.js body::before {
+  content: 'Loading...';
+  font-family: 'Montserrat';
+  letter-spacing: 0.2em;
+  text-indent: -0.2em;
+  text-transform: uppercase;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #000;
+  position: fixed;
+  top: -100%;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #facb7a;
+  z-index: 1000;
+  pointer-events: none;
+  transition: transform 0.5s;
+}
+
+.js .loading::before {
+  transform: translate3d(0, 100%, 0);
+}
