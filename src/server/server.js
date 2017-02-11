@@ -42,17 +42,12 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(hpp());
 // Content Security Policy
 app.use(helmet());
-
 // Server routes
 serverRoutes(app);
 
 // DEVELOPMENT
 if (isDeveloping) {
-    const rootPath = isDeveloping
-        ? '../../'
-        : './';
-    const webpackDevConfig = `${rootPath}tools/webpack.config.js`;
-    const config = require(webpackDevConfig);
+    const config = require('../../tools/webpack.config.js');
     const compiler = webpack(config);
     const middleware = webpackMiddleware(compiler, {
         publicPath: config.output.publicPath,
