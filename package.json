@@ -25,12 +25,13 @@
   "scripts": {
     "dev": "cross-env NODE_ENV=development npm-run-all --parallel open:src lint:watch",
     "build": "rimraf build && npm run build-server && cross-env NODE_ENV=production webpack -p --config ./tools/webpack.production.config.js --progress --profile --colors",
-    "start": "cross-env NODE_ENV=production node build/index.js",
+    "start": "cross-env NODE_ENV=production node build/server/index.js",
     "lint": "node_modules/.bin/esw webpack.config.* src --color",
     "lint:watch": "npm run lint -- --watch",
     "open:src": "babel-node src/server/index.js",
     "copy-server": "cp -R src/server/ build/",
-    "build-server": "babel -d ./build ./src/server"
+    "copy-client": "cp -R src/client/ build/client",
+    "build-server": "babel -d ./build/server ./src/server"
   },
   "dependencies": {
     "bcrypt-nodejs": "0.0.3",

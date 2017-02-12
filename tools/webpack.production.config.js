@@ -12,7 +12,6 @@ const plugins = [
   new webpack
     .optimize
     .OccurrenceOrderPlugin(),
-  new HtmlWebpackPlugin({template: 'src/client/index.tpl.html', inject: 'body', filename: 'index.html'}),
   new webpack
     .optimize
     .UglifyJsPlugin({
@@ -33,7 +32,7 @@ const plugins = [
       postcss: [autoprefixer]
     }
   }),
-  new ExtractTextPlugin('[name]-[hash].min.css')
+  new ExtractTextPlugin('styles.css')
 ];
 
 // --------------------------------------------- RULES
@@ -82,7 +81,7 @@ module.exports = {
   entry: [path.join(__dirname, '../src/client/index.jsx')],
   output: {
     path: path.join(__dirname, './../build/public'),
-    filename: '[name]-[hash].min.js',
+    filename: '[name].js',
     publicPath: '/'
   },
   plugins: plugins,
