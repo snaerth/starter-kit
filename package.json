@@ -34,6 +34,7 @@
     "build-server": "babel -d ./build/server ./src/server"
   },
   "dependencies": {
+    "async": "^2.1.4",
     "bcrypt-nodejs": "0.0.3",
     "core-decorators": "^0.15.0",
     "dotenv": "^4.0.0",

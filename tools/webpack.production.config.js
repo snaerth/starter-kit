@@ -10,12 +10,10 @@ const externals = require('webpack-node-externals');
 
 // --------------------------------------------- PLUGINS
 const plugins = [
-  new webpack
-    .optimize
-    .OccurrenceOrderPlugin(),
-  new webpack
-    .optimize
-    .UglifyJsPlugin({
+  new webpack.optimize.OccurrenceOrderPlugin(),
+  new ExtractTextPlugin({filename: 'styles.css', allChunks: true}),
+  new webpack.optimize.CommonsChunkPlugin({name: 'vendor', filename: '[name].js'}),
+  new webpack.optimize.UglifyJsPlugin({
       compressor: {
         warnings: false,
         screw_ie8: true
@@ -25,16 +23,18 @@ const plugins = [
     source: false,
     modules: false
   }),
-  new webpack.DefinePlugin({'process.env.NODE_ENV': 'production'}),
+  new webpack.DefinePlugin({'process.env.NODE_ENV': '"production"'}),
+  new webpack.DefinePlugin({
+    'process.env': {
+      'NODE_ENV': '"production"'
+    }
+  }),
   new webpack.LoaderOptionsPlugin({
+    minimize: true,
     options: {
       postcss: [autoprefixer]
     }
-  }),
-  new ExtractTextPlugin({filename: 'styles.css', allChunks: true}),
-  new webpack
-    .optimize
-    .CommonsChunkPlugin({name: 'vendor', filename: 'vendor.js'})
+  })
 ];
 
 // RULES
@@ -107,10 +107,6 @@ const js = {
 
 const rules = [js, jsx, css, scss, json];
 
-const whitelist = {
-  whitelist: [/\.(eot|woff|woff2|ttf|otf)$/, /\.(svg|png|jpg|jpeg|gif|ico|webm)$/, /\.(mp4|mp3|ogg|swf|webp)$/, /\.(css|scss|sass|less|styl)$/]
-};
-
 const vendor = [
   'react',
   'react-dom',
@@ -129,18 +125,15 @@ module.exports = {
     ],
     vendor
   },
-  cache: true,
-  target: 'node',
+  target: 'web',
   devtool: 'source-map',
   output: {
     path: path.join(__dirname, './../build/server/public'),
     filename: '[name].js',
-    publicPath: '/',
-    libraryTarget: 'commonjs2'
+    publicPath: '/'
   },
-  plugins: plugins,
+  plugins,
   module: {
-    rules: rules
-  },
-  externals: externals(whitelist)
+    rules
+  }
 };

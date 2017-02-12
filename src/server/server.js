@@ -10,20 +10,21 @@ import webpackHotMiddleware from 'webpack-hot-middleware';
 import http from 'http';
 import path from 'path';
 import express from 'express';
-import { serverRoutes } from './router';
+import {serverRoutes} from './router';
 import compression from 'compression';
 import hpp from 'hpp';
 import helmet from 'helmet';
 import bodyParser from 'body-parser';
 import responseTime from 'response-time';
+import {parallel} from './utils/parallel';
 
 import renderHtml from './utils/renderHtml';
 import React from 'react';
-import { Router, match, RouterContext } from 'react-router';
-import { renderToString } from 'react-dom/server';
-import { Provider } from 'react-redux';
+import {Router, match, RouterContext} from 'react-router';
+import {renderToString} from 'react-dom/server';
+import {Provider} from 'react-redux';
 
-import routes from '../client/routes.jsx';
+import routes, {NotFound} from '../client/routes.jsx';
 import configureStore from '../client/store/configureStore';
 
 const isDeveloping = process.env.NODE_ENV !== 'production';
@@ -31,22 +32,35 @@ const port = process.env.PORT || 3000;
 
 // Intialize and setup server
 const app = express();
-app.use('/public', express.static(__dirname + 'public'));
-// Let app use compression
-app.use(compression());
 // Hide all software information
 app.disable('x-powered-by');
-// use application/json parser
-app.use(bodyParser.json());
-// Use application/x-www-form-urlencoded parser
-app.use(bodyParser.urlencoded({ extended: false }));
-// Prevent HTTP Parameter pollution.
-// @note: Make sure body parser goes above the hpp middleware
-app.use(hpp());
-// Content Security Policy
-app.use(helmet());
-// Records the response time for requests in HTTP servers.
-app.use(responseTime());
+
+// Run functions parallel or async for more page speed
+app.use(parallel([
+    // Let app use compression
+    compression(),
+    // use application/json parser
+    bodyParser.json(),
+    // Use application/x-www-form-urlencoded parser
+    bodyParser.urlencoded({extended: false}),
+    // Prevent HTTP Parameter pollution. @note: Make sure body parser goes above the
+    // hpp middleware
+    hpp(),
+    // Content Security Policy
+    helmet(),
+    // Records the response time for requests in HTTP servers.
+    responseTime((req, res, time) => {
+        const stat = `${req
+            .method
+            .toUpperCase()} ${req
+            .url}: `
+            .toLowerCase()
+            .replace(/[:\.]/g, '')
+            .replace(/\//g, '_')
+        console.log(stat, time);
+    })
+]));
+
 // Server routes
 serverRoutes(app);
 
@@ -74,29 +88,39 @@ if (isDeveloping) {
     app.use(express.static(__dirname + '/public'));
 }
 
-// app.get('*', (req, res) => {
-//     res.set('content-type', 'text/html');
-//     res.write(renderHtml());
-//     res.end();
-// });
-
+//
 app.use(handleRender);
 
 function handleRender(req, res) {
     res.set('content-type', 'text/html');
     // Do a router match
     match({
-        routes: (<Router>{routes}</Router>),
-        location: req.url,
+        routes: (
+            <Router>{routes}</Router>
+        ),
+        location: req.url
     }, (err, redirect, props) => {
+        // Sanity checks
+        if (err) {
+            return res
+                .status(500)
+                .send(err.message);
+        } else if (redirect) {
+            return res.redirect(302, redirect.pathname + redirect.search);
+        } else if (props.components.some(component => component === NotFound)) {
+            res.status(404);
+        }
+
         // Compile an initial state
-        const preloadedState = { counter: 10 };
+        const preloadedState = {
+            counter: 10
+        };
         // Create a new Redux store instance
         const store = configureStore(preloadedState);
         // Render the component to a string
         const html = renderToString(
             <Provider store={store}>
-                <RouterContext {...props} />
+                <RouterContext {...props}/>
             </Provider>
         );
         // Grab the initial state from Redux store
@@ -112,6 +136,8 @@ const server = http.createServer(app);
 
 // Start
 server.listen(port, err => {
-  if (err) throw err;
-  console.info('==> 🌎 Listening on port %s. Open up http://0.0.0.0:%s/ in your browser.', port, port);
+    if (err) {
+        throw err;
+    }
+    console.info('==> 🌎 Listening on port %s. Open up http://0.0.0.0:%s/ in your browser.', port, port);
 });
