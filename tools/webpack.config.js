@@ -8,7 +8,7 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 //  PLUGINS
 const plugins = [
-  new ExtractTextPlugin("styles.css"),
+  new ExtractTextPlugin({filename: 'styles.css', allChunks: true}),
   new webpack
     .optimize
     .OccurrenceOrderPlugin(),
@@ -20,7 +20,10 @@ const plugins = [
     options: {
       postcss: [autoprefixer]
     }
-  })
+  }),
+  new webpack
+    .optimize
+    .CommonsChunkPlugin({name: 'vendor', minChunks: Infinity, filename: 'vendor.js'})
 ];
 
 // RULES
@@ -93,12 +96,24 @@ const js = {
 
 const rules = [js, jsx, css, scss, json];
 
+const vendor = [
+  'react',
+  'react-dom',
+  'react-helmet',
+  'react-redux',
+  'lodash',
+  'isomorphic-fetch',
+  'core-decorators'
+];
+
 // --------------------------------------------- MAIN WEBPACK CONFIG
 module.exports = {
   devtool: 'source-map',
-  entry: [
-    'webpack-hot-middleware/client?reload=true', path.join(__dirname, '../src/client/index.jsx')
-  ],
+  target: 'web',
+  entry: {
+    app: ['webpack-hot-middleware/client?reload=true', path.join(__dirname, '../src/client/index.jsx')],
+    vendor
+  },
   output: {
     path: path.join(__dirname, '/dist/'),
     filename: '[name].js',

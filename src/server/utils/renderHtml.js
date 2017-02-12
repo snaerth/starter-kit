@@ -38,7 +38,8 @@ export default (html, preloadedState) => {
                 });
             })();
             </script>
-            <script type="text/javascript" src="/main.js"></script>
+            <script type="text/javascript" src="/vendor.js"></script>
+            <script type="text/javascript" src="/app.js"></script>
         </body>
     </html>`;
 };

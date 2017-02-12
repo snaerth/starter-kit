@@ -32,7 +32,7 @@ const plugins = [
       postcss: [autoprefixer]
     }
   }),
-  new ExtractTextPlugin('styles.css')
+  new ExtractTextPlugin({filename: 'styles.css', allChunks: true})
 ];
 
 // RULES
@@ -115,6 +115,7 @@ const rules = [js, jsx, css, scss, json];
 // Main webpack config
 module.exports = {
   entry: [path.join(__dirname, '../src/client/index.jsx')],
+  target: 'node',
   output: {
     path: path.join(__dirname, './../build/public'),
     filename: '[name].js',
