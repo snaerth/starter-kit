@@ -18,7 +18,7 @@ export default (html, preloadedState) => {
                 <script>document.documentElement.className = 'js';</script>
             </head>
         <body class="loading">
-            <div id="app">${html}</div>
+            <div id="app">${process.env.NODE_ENV === 'production' ? html : `<div>${html}</div>`}</div>
             <script>window.__PRELOADED_STATE__ = ${preloadedState ? serialize(preloadedState): preloadedState}</script>
             <script>
             (function() {
