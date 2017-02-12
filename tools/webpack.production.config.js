@@ -35,48 +35,84 @@ const plugins = [
   new ExtractTextPlugin('styles.css')
 ];
 
-// --------------------------------------------- RULES
-const rules = [
-  {
-    test: /\.css$/,
-    loader: ExtractTextPlugin.extract({
-      fallbackLoader: "style-loader",
-      loader: [
-        {
-          loader: 'css-loader',
-          query: {
-            modules: true,
-            importLoaders: 2,
-            localIdentName: '[name]__[local]__[hash:base64:5]',
-            plugins: () => {
-              return [autoprefixer]
-            }
-          }
-        }, {
-          loader: 'postcss-loader'
-        }
-      ]
-    })
-  }, {
-    test: /\.scss$/,
-    loader: ExtractTextPlugin.extract({
-      fallbackLoader: 'style-loader',
-      loader: 'css-loader?modules&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]!postcss-loader!sass-loader'
-    })
-  }, {
-    test: /\.jsx?$/,
-    exclude: /node_modules/,
-    loader: 'babel-loader',
-    query: {
-      presets: ['react', 'es2015', 'stage-0']
-    }
-  }, {
-    test: /\.json?$/,
-    loader: 'json-loader'
+// RULES
+const jsx = {
+  test: /\.jsx?$/,
+  exclude: /node_modules/,
+  loader: 'babel-loader',
+  query: {
+    presets: ['react', 'es2015', 'stage-0', 'react-hmre']
   }
-];
+};
 
-// --------------------------------------------- MAIN WEBPACK CONFIG
+const json = {
+  test: /\.json?$/,
+  loader: 'json-loader'
+};
+
+const css = {
+  test: /\.css$/,
+  loader: ExtractTextPlugin.extract({
+    fallbackLoader: "style-loader",
+    loader: [
+      {
+        loader: 'css-loader',
+        query: {
+          modules: true,
+          importLoaders: 2,
+          localIdentName: '[name]__[local]__[hash:base64:5]',
+          plugins: () => {
+            return [autoprefixer]
+          }
+        }
+      }, {
+        loader: 'postcss-loader'
+      }
+    ]
+  })
+};
+
+const scss = {
+  test: /\.scss$/,
+  use: ExtractTextPlugin.extract({
+    fallback: 'style-loader',
+    loader: [
+      {
+        loader: 'css-loader',
+        query: {
+          modules: true,
+          sourceMap: false,
+          localIdentName: '[name]__[local]__[hash:base64:5]',
+          plugins: () => {
+            return [autoprefixer]
+          }
+        }
+      },
+      'postcss-loader',
+      'sass-loader'
+    ]
+  })
+};
+
+const js = {
+  test: /\.js$/,
+  exclude: /node_modules/,
+  enforce: 'pre',
+  use: [
+    {
+      loader: 'eslint-loader',
+      options: {
+        rules: {
+          semi: 0
+        }
+      }
+    }
+  ]
+};
+
+const rules = [js, jsx, css, scss, json];
+
+// Main webpack config
 module.exports = {
   entry: [path.join(__dirname, '../src/client/index.jsx')],
   output: {
