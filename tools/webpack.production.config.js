@@ -6,6 +6,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const StatsPlugin = require('stats-webpack-plugin');
 const autoprefixer = require('autoprefixer');
+const externals = require('webpack-node-externals');
 
 // --------------------------------------------- PLUGINS
 const plugins = [
@@ -24,15 +25,16 @@ const plugins = [
     source: false,
     modules: false
   }),
-  new webpack.DefinePlugin({
-    'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV)
-  }),
+  new webpack.DefinePlugin({'process.env.NODE_ENV': 'production'}),
   new webpack.LoaderOptionsPlugin({
     options: {
       postcss: [autoprefixer]
     }
   }),
-  new ExtractTextPlugin({filename: 'styles.css', allChunks: true})
+  new ExtractTextPlugin({filename: 'styles.css', allChunks: true}),
+  new webpack
+    .optimize
+    .CommonsChunkPlugin({name: 'vendor', filename: 'vendor.js'})
 ];
 
 // RULES
@@ -41,19 +43,19 @@ const jsx = {
   exclude: /node_modules/,
   loader: 'babel-loader',
   query: {
-    presets: ['react', 'es2015', 'stage-0', 'react-hmre']
+    presets: ['react', 'es2015', 'stage-0']
   }
 };
 
 const json = {
   test: /\.json?$/,
-  loader: 'json-loader'
+  use: 'json-loader'
 };
 
 const css = {
   test: /\.css$/,
-  loader: ExtractTextPlugin.extract({
-    fallbackLoader: "style-loader",
+  use: ExtractTextPlugin.extract({
+    fallback: "style-loader",
     loader: [
       {
         loader: 'css-loader',
@@ -95,34 +97,50 @@ const scss = {
 };
 
 const js = {
-  test: /\.js$/,
+  test: /\.js?$/,
   exclude: /node_modules/,
-  enforce: 'pre',
-  use: [
-    {
-      loader: 'eslint-loader',
-      options: {
-        rules: {
-          semi: 0
-        }
-      }
-    }
-  ]
+  loader: 'babel-loader',
+  query: {
+    "presets": ["es2015", "stage-0", "react"]
+  }
 };
 
 const rules = [js, jsx, css, scss, json];
 
+const whitelist = {
+  whitelist: [/\.(eot|woff|woff2|ttf|otf)$/, /\.(svg|png|jpg|jpeg|gif|ico|webm)$/, /\.(mp4|mp3|ogg|swf|webp)$/, /\.(css|scss|sass|less|styl)$/]
+};
+
+const vendor = [
+  'react',
+  'react-dom',
+  'react-helmet',
+  'react-redux',
+  'lodash',
+  'isomorphic-fetch',
+  'core-decorators'
+];
+
 // Main webpack config
 module.exports = {
-  entry: [path.join(__dirname, '../src/client/index.jsx')],
+  entry: {
+    app: [
+      'babel-register', path.join(__dirname, '../src/client/index.jsx')
+    ],
+    vendor
+  },
+  cache: true,
   target: 'node',
+  devtool: 'source-map',
   output: {
-    path: path.join(__dirname, './../build/public'),
+    path: path.join(__dirname, './../build/server/public'),
     filename: '[name].js',
-    publicPath: '/'
+    publicPath: '/',
+    libraryTarget: 'commonjs2'
   },
   plugins: plugins,
   module: {
     rules: rules
-  }
+  },
+  externals: externals(whitelist)
 };

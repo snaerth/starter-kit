@@ -15,6 +15,7 @@ import compression from 'compression';
 import hpp from 'hpp';
 import helmet from 'helmet';
 import bodyParser from 'body-parser';
+import responseTime from 'response-time';
 
 import renderHtml from './utils/renderHtml';
 import React from 'react';
@@ -30,7 +31,7 @@ const port = process.env.PORT || 3000;
 
 // Intialize and setup server
 const app = express();
-app.use('/public', express.static(__dirname + '/public'));
+app.use('/public', express.static(__dirname + 'public'));
 // Let app use compression
 app.use(compression());
 // Hide all software information
@@ -44,6 +45,8 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(hpp());
 // Content Security Policy
 app.use(helmet());
+// Records the response time for requests in HTTP servers.
+app.use(responseTime());
 // Server routes
 serverRoutes(app);
 

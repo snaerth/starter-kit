@@ -12,7 +12,9 @@ export default (html, preloadedState) => {
                 <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=0, maximum-scale=1, minimum-scale=1">
                 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
                 <link href="https://fonts.googleapis.com/css?family=Roboto+Condensed:300,300i,400,400i,700,700i|Arapey|Montserrat:700" rel="stylesheet">
-                <link href="styles.css" rel="stylesheet" type="text/css">
+                <link href="/styles.css" rel="stylesheet" type="text/css">
+                <script src="/vendor.js" defer></script>
+                <script src="/app.js" defer></script>
                 <script>document.documentElement.className = 'js';</script>
             </head>
         <body class="loading">
@@ -38,8 +40,6 @@ export default (html, preloadedState) => {
                 });
             })();
             </script>
-            <script type="text/javascript" src="/vendor.js"></script>
-            <script type="text/javascript" src="/app.js"></script>
         </body>
     </html>`;
 };

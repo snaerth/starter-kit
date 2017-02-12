@@ -110,6 +110,7 @@ const vendor = [
 module.exports = {
   devtool: 'source-map',
   target: 'web',
+  cache: true,
   entry: {
     app: ['webpack-hot-middleware/client?reload=true', path.join(__dirname, '../src/client/index.jsx')],
     vendor
