@@ -17,7 +17,6 @@ import compression from 'compression';
 import hpp from 'hpp';
 import helmet from 'helmet';
 import bodyParser from 'body-parser';
-import responseTime from 'response-time';
 import {parallel} from './utils/parallel';
 
 import renderHtml from './utils/renderHtml';
