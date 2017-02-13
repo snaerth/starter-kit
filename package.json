@@ -31,10 +31,12 @@
     "open:src": "babel-node src/server/index.js",
     "copy-server": "cp -R src/server/ build/",
     "copy-client": "cp -R src/client/ build/client",
-    "build-server": "babel -d ./build/server ./src/server"
+    "build-server": "babel -d ./build/server ./src/server",
+    "build-server-test": "webpack -p --config ./tools/webpack.server.prod.js"
   },
   "dependencies": {
     "async": "^2.1.4",
+    "babel-preset-react-optimize": "^1.0.1",
     "bcrypt-nodejs": "0.0.3",
     "core-decorators": "^0.15.0",
     "dotenv": "^4.0.0",
