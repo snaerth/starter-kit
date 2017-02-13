@@ -9,7 +9,9 @@ import webpackHotMiddleware from 'webpack-hot-middleware';
 
 import http from 'http';
 import path from 'path';
+import morgan from 'morgan';
 import express from 'express';
+import RateLimit from 'express-rate-limit';
 import {serverRoutes} from './router';
 import compression from 'compression';
 import hpp from 'hpp';
@@ -48,18 +50,18 @@ app.use(parallel([
     hpp(),
     // Content Security Policy
     helmet(),
-    // Records the response time for requests in HTTP servers.
-    responseTime((req, res, time) => {
-        const stat = `${req
-            .method
-            .toUpperCase()} ${req
-            .url}: `
-            .toLowerCase()
-            .replace(/[:\.]/g, '')
-            .replace(/\//g, '_')
-        console.log(stat, time);
-    })
+    // log all request in the Apache combined format to STDOUT
+    morgan('combined')
 ]));
+
+// Basic IP rate-limiting middleware for Express. Use to limit repeated requests to public APIs and/or endpoints such as password reset.
+const apiLimiter = new RateLimit({
+  windowMs: 10*1000, // 10 seconds
+  max: 30, // limit each IP to 10 requests per windowMs 
+  delayMs: 0 // disabled 
+});
+
+app.use('/api/', apiLimiter);
 
 // Server routes
 serverRoutes(app);
@@ -88,8 +90,8 @@ if (isDeveloping) {
     app.use(express.static(__dirname + '/public'));
 }
 
-//
-app.use(handleRender);
+// Handle all requests
+app.use('*', handleRender);
 
 function handleRender(req, res) {
     res.set('content-type', 'text/html');
