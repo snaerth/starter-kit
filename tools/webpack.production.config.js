@@ -4,25 +4,26 @@ const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
-const StatsPlugin = require('stats-webpack-plugin');
 const autoprefixer = require('autoprefixer');
 const externals = require('webpack-node-externals');
 
-// --------------------------------------------- PLUGINS
+// Plugins
 const plugins = [
-  new webpack.optimize.OccurrenceOrderPlugin(),
+  new webpack
+    .optimize
+    .OccurrenceOrderPlugin(),
   new ExtractTextPlugin({filename: 'styles.css', allChunks: true}),
-  new webpack.optimize.CommonsChunkPlugin({name: 'vendor', filename: '[name].js'}),
-  new webpack.optimize.UglifyJsPlugin({
+  new webpack
+    .optimize
+    .CommonsChunkPlugin({name: 'vendor', filename: '[name].js'}),
+  new webpack
+    .optimize
+    .UglifyJsPlugin({
       compressor: {
         warnings: false,
         screw_ie8: true
       }
     }),
-  new StatsPlugin('webpack.stats.json', {
-    source: false,
-    modules: false
-  }),
   new webpack.DefinePlugin({'process.env.NODE_ENV': '"production"'}),
   new webpack.DefinePlugin({
     'process.env': {
@@ -111,6 +112,7 @@ const vendor = [
   'react',
   'react-dom',
   'react-helmet',
+  'redux',
   'react-redux',
   'lodash',
   'isomorphic-fetch',

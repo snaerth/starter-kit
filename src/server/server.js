@@ -28,6 +28,7 @@ import {Provider} from 'react-redux';
 import routes, {NotFound} from '../client/routes.jsx';
 import configureStore from '../client/store/configureStore';
 
+let assets = null;
 const isDeveloping = process.env.NODE_ENV !== 'production';
 const port = process.env.PORT || 3000;
 
@@ -53,11 +54,12 @@ app.use(parallel([
     morgan('combined')
 ]));
 
-// Basic IP rate-limiting middleware for Express. Use to limit repeated requests to public APIs and/or endpoints such as password reset.
+// Basic IP rate-limiting middleware for Express. Use to limit repeated requests
+// to public APIs and/or endpoints such as password reset.
 const apiLimiter = new RateLimit({
-  windowMs: 10*1000, // 10 seconds
-  max: 30, // limit each IP to 10 requests per windowMs 
-  delayMs: 0 // disabled 
+    windowMs: 10 *1000, // 10 seconds
+    max: 30, // limit each IP to 10 requests per windowMs
+    delayMs: 0 // disabled
 });
 
 app.use('/api/', apiLimiter);
@@ -87,6 +89,7 @@ if (isDeveloping) {
 } else {
     // PRODUCTION
     app.use(express.static(__dirname + '/public'));
+    assets = path.join(process.cwd(), 'assets.json');
 }
 
 // Handle all requests
@@ -127,7 +130,7 @@ function handleRender(req, res) {
         // Grab the initial state from Redux store
         const finalState = store.getState();
         // Send the rendered page to the client
-        res.send(renderHtml(html, finalState));
+        res.send(renderHtml(html, finalState, assets));
         res.end();
     });
 }

@@ -1,9 +1,9 @@
-const path = require('path')
+const path = require('path');
 
 module.exports = {
-  CLIENT_ENTRY:  path.join(process.cwd(), '../src/client'),
-  CLIENT_OUTPUT: path.join(process.cwd(), '../src/public'),
+  CLIENT_ENTRY:  path.join(process.cwd(), 'src/client/index.jsx'),
+  CLIENT_OUTPUT: path.join(process.cwd(), 'build/public'),
   SERVER_ENTRY:  path.join(process.cwd(), 'src/server'),
   SERVER_OUTPUT: path.join(process.cwd(), 'build'),
   PUBLIC_PATH: '/assets/'
-}
+};

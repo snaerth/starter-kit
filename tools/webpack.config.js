@@ -100,6 +100,7 @@ const vendor = [
   'react',
   'react-dom',
   'react-helmet',
+  'redux',
   'react-redux',
   'lodash',
   'isomorphic-fetch',
@@ -112,7 +113,9 @@ module.exports = {
   target: 'web',
   cache: true,
   entry: {
-    app: ['webpack-hot-middleware/client?reload=true', path.join(__dirname, '../src/client/index.jsx')],
+    app: [
+      'webpack-hot-middleware/client?reload=true', path.join(__dirname, '../src/client/index.jsx')
+    ],
     vendor
   },
   output: {

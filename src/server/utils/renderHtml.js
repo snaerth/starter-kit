@@ -1,6 +1,6 @@
 import serialize from 'serialize-javascript';
 
-export default (html, preloadedState) => {
+export default (html, preloadedState, assets) => {
     return `
         <!doctype html>
         <html lang="en">
@@ -13,8 +13,6 @@ export default (html, preloadedState) => {
                 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
                 <link href="https://fonts.googleapis.com/css?family=Roboto+Condensed:300,300i,400,400i,700,700i|Arapey|Montserrat:700" rel="stylesheet">
                 <link href="/styles.css" rel="stylesheet" type="text/css">
-                <script src="vendor.js" defer></script>
-                <script src="app.js" defer></script>
                 <script>document.documentElement.className = 'js';</script>
             </head>
         <body class="loading">
@@ -40,6 +38,9 @@ export default (html, preloadedState) => {
                 });
             })();
             </script>
+
+            <script src="${ assets ? assets.vendor.js : '/vendor.js' }"></script>
+            <script async src="${ assets ? assets.app.js : '/app.js' }" ></script>
         </body>
     </html>`;
 };
