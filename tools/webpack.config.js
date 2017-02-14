@@ -70,26 +70,27 @@ const scss = {
 };
 
 const js = {
-    test: /\.(js|jsx)$/,
-    exclude: /node_modules/,
-    loaders: [
-      {
-        loader: 'babel-loader',
-        query: {
-          presets: [
-            [
-              'es2015', {
-                modules: false
-              }
-            ],
-            'react',
-            'stage-0'
+  test: /\.(js|jsx)$/,
+  exclude: /node_modules/,
+  loaders: [
+    {
+      loader: 'babel-loader',
+      query: {
+        presets: [
+          [
+            'es2015', {
+              modules: false
+            }
           ],
-          plugins: ['transform-decorators-legacy']
-        }
+          'react',
+          'stage-0',
+          'react-hmre'
+        ],
+        plugins: ['transform-decorators-legacy']
       }
-    ]
-  };
+    }
+  ]
+};
 
 const rules = [js, css, scss, json];
 
