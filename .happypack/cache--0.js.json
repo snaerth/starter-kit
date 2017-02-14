@@ -1,1 +1,0 @@
-{"context":{"loaders":[{"path":"C:\\Projects\\starter-kit\\node_modules\\babel-loader\\lib\\index.js","query":"?{\"presets\":[[\"es2015\",{\"modules\":false}],\"react\",\"stage-0\"],\"plugins\":[\"react-hot-loader/babel\",\"transform-decorators-legacy\"]}"}],"external":{}},"mtimes":{}}

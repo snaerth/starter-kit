@@ -6,6 +6,7 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const autoprefixer = require('autoprefixer');
 const externals = require('webpack-node-externals');
 const AssetsPlugin = require('assets-webpack-plugin');
+const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
 const CONFIG = require('./webpack.base');
 const {CLIENT_ENTRY, CLIENT_OUTPUT, PUBLIC_PATH} = CONFIG;
 
@@ -37,6 +38,8 @@ const plugins = [
             }
         }),
     new AssetsPlugin({filename: 'assets.json'}),
+    new webpack.NamedModulesPlugin(), 
+    new CaseSensitivePathsPlugin(),
     new webpack.NoEmitOnErrorsPlugin(),
     new webpack.DefinePlugin({'process.env.NODE_ENV': '"production"', '__DEV__': false}),
     new webpack.LoaderOptionsPlugin({
@@ -139,6 +142,7 @@ module.exports = {
     output: {
         filename: '[name]_[chunkhash].js',
         chunkFilename: '[name]_[chunkhash].js',
+        sourceMapFilename: '[name]_[chunkhash].map',
         publicPath: PUBLIC_PATH,
         path: CLIENT_OUTPUT
     },

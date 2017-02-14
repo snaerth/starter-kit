@@ -5,6 +5,7 @@ const externals = require('webpack-node-externals');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const cloneDeep = require('lodash/cloneDeep');
 const autoprefixer = require('autoprefixer');
+const AssetsPlugin = require('assets-webpack-plugin');
 const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
 
 const root = (folder = '.') => path.join(__dirname, '..', folder);
@@ -244,6 +245,8 @@ function make(conf) {
         }
       }), extract);
 
+    config.plugins.push(new AssetsPlugin({filename: 'assets.json'}));
+
     // Source map with no cost
     config.devtool = 'hidden-source-map';
   }
@@ -251,7 +254,7 @@ function make(conf) {
   if (isServer) {
 
     // Set entry point
-    config.entry.server = ['babel-polyfill', path.join(process.cwd(), 'src/server/index.js')];
+    config.entry.server = ['babel-polyfill', path.join(process.cwd(), 'src/server')];
 
     // Set library target output
     config.output.libraryTarget = 'commonjs2';
