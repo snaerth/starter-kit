@@ -1,6 +1,9 @@
 /* eslint no-console: 0 */
 // Enables proper source map support in Node.js
-import 'source-map-support/register'
+import 'source-map-support/register';
+// Eviromental variables
+import dotenv from 'dotenv';
+dotenv.config();
 
 // DEVELOPMENT IMPORTS
 import webpack from 'webpack';
@@ -51,7 +54,9 @@ app.use(parallel([
     // Content Security Policy
     helmet(),
     // log all request in the Apache combined format to STDOUT
-    morgan('combined')
+    morgan('combined'),
+    express.static('./build'),
+    express.static('./src/assets/favicon')
 ]));
 
 // Basic IP rate-limiting middleware for Express. Use to limit repeated requests
@@ -88,11 +93,11 @@ if (isDeveloping) {
     app.use(webpackHotMiddleware(compiler));
 } else {
     // PRODUCTION
-    app.use(express.static(__dirname + '/public'));
-    assets = path.join(process.cwd(), 'assets.json');
+    assets = require('../../assets.json');
 }
 
 // Handle all requests
+app.use('/', handleRender);
 app.use('*', handleRender);
 
 function handleRender(req, res) {
@@ -134,6 +139,11 @@ function handleRender(req, res) {
         res.end();
     });
 }
+
+app.use((err, req, res, next) => {
+  res.end(`</head><body><h1>500 Server Error</h1><p>${err}</p></body></html>`);
+  next(err);
+});
 
 // Create HTTP Server
 const server = http.createServer(app);

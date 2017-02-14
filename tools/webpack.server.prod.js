@@ -22,15 +22,6 @@ function getExternals() {
   }, {});
 }
 
-function extendLoader(loader, test, name) {
-  const out = cloneDeep(loader);
-  out.test = test;
-  out
-    .loaders
-    .push(name);
-  return out;
-}
-
 const plugins = [
   new webpack.DefinePlugin({
     'process.env.NODE_ENV': '"production"'
@@ -50,15 +41,6 @@ const plugins = [
 ];
 
 // RULES
-const jsx = {
-  test: /\.jsx$/,
-  loader: 'babel-loader',
-  query: {
-    presets: ["es2015", "react", "stage-0", "react-optimize"]
-  },
-  exclude: /(node_modules)/
-};
-
 const json = {
   test: /\.json?$/,
   use: 'json-loader'
@@ -66,9 +48,8 @@ const json = {
 
 const css = {
   test: /\.css$/,
-  include: root('src'),
-  loaders: [
-    'style-loader', {
+  use: [
+    {
       loader: 'css-loader',
       query: {
         sourceMap: false,
@@ -81,18 +62,33 @@ const css = {
   ]
 };
 
-const scss = extendLoader(css, /\.(scss|sass)$/, 'sass-loader');
-
-const js = {
-  test: /\.js$/,
-  loader: 'babel-loader',
-  query: {
-    presets: ["es2015", "react", "stage-0", "react-optimize"]
-  },
-  exclude: /(node_modules)/
+const scss = {
+  test: /\.(scss|sass)$/,
+  use: [
+    {
+      loader: 'css-loader',
+      query: {
+        sourceMap: false,
+        modules: true,
+        importLoaders: 1,
+        localIdentName: '[name]_[local]_[hash:base64:5]'
+      }
+    },
+    'sass-loader',
+    'postcss-loader'
+  ]
 };
 
-const rules = [js, jsx, css, scss, json];
+const js = {
+  test: /\.(js|jsx)$/,
+  loader: 'babel-loader',
+  exclude: /(node_modules)/,
+  query: {
+    presets: ["es2015", "react", "stage-0", "react-optimize"]
+  }
+};
+
+const rules = [js, css, scss, json];
 
 module.exports = {
   target: 'node',

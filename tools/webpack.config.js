@@ -27,15 +27,6 @@ const plugins = [
 ];
 
 // RULES
-const jsx = {
-  test: /\.jsx?$/,
-  exclude: /node_modules/,
-  loader: 'babel-loader',
-  query: {
-    presets: ['react', 'es2015', 'stage-0', 'react-hmre']
-  }
-};
-
 const json = {
   test: /\.json?$/,
   loader: 'json-loader'
@@ -79,22 +70,28 @@ const scss = {
 };
 
 const js = {
-  test: /\.js$/,
-  exclude: /node_modules/,
-  enforce: 'pre',
-  use: [
-    {
-      loader: 'eslint-loader',
-      options: {
-        rules: {
-          semi: 0
+    test: /\.(js|jsx)$/,
+    exclude: /node_modules/,
+    loaders: [
+      {
+        loader: 'babel-loader',
+        query: {
+          presets: [
+            [
+              'es2015', {
+                modules: false
+              }
+            ],
+            'react',
+            'stage-0'
+          ],
+          plugins: ['transform-decorators-legacy']
         }
       }
-    }
-  ]
-};
+    ]
+  };
 
-const rules = [js, jsx, css, scss, json];
+const rules = [js, css, scss, json];
 
 const vendor = [
   'react',
@@ -113,7 +110,7 @@ module.exports = {
   target: 'web',
   cache: true,
   entry: {
-    app: [
+    main: [
       'webpack-hot-middleware/client?reload=true', path.join(__dirname, '../src/client/index.jsx')
     ],
     vendor

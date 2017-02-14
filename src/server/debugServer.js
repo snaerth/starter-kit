@@ -1,7 +1,7 @@
 /* eslint no-console: 0 */
 import path from 'path';
 import express from 'express';
-import { router } from './router';
+import { serverRoutes } from './router';
 
 // VARIABLES
 const port = 3001;
@@ -9,7 +9,7 @@ const port = 3001;
 // INITALIZE APP
 const app = express();
 // SETUP ROUTES
-router(app);
+serverRoutes(app);
 
 app.listen(port, '0.0.0.0', error => {
     if (error) {

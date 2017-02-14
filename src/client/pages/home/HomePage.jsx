@@ -18,7 +18,6 @@ class HomePage extends Component {
             return response.json();
         }).then(stories => {
             this.setState({data: stories});
-            console.log(stories);
         });
     }
 

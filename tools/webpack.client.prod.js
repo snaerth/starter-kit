@@ -37,7 +37,7 @@ const plugins = [
                 screw_ie8: true
             }
         }),
-    new AssetsPlugin({filename: 'assets.json'}),
+    new AssetsPlugin({filename: 'assets.json',prettyPrint: true}),
     new webpack.NamedModulesPlugin(), 
     new CaseSensitivePathsPlugin(),
     new webpack.NoEmitOnErrorsPlugin(),
@@ -51,15 +51,6 @@ const plugins = [
 ];
 
 // Rules
-const jsx = {
-    test: /\.jsx?$/,
-    exclude: /node_modules/,
-    loader: 'babel-loader',
-    query: {
-        presets: ['react', 'es2015', 'stage-0', "react-optimize"]
-    }
-};
-
 const json = {
     test: /\.json?$/,
     use: 'json-loader'
@@ -110,7 +101,7 @@ const scss = {
 };
 
 const js = {
-    test: /\.js?$/,
+    test: /\.(js|jsx)?$/,
     exclude: /node_modules/,
     loader: 'babel-loader',
     query: {
@@ -118,7 +109,7 @@ const js = {
     }
 };
 
-const rules = [js, jsx, css, scss, json];
+const rules = [js, css, scss, json];
 
 const vendor = [
     'react',
@@ -134,7 +125,7 @@ const vendor = [
 // Main webpack config
 module.exports = {
     entry: {
-        app: [CLIENT_ENTRY],
+        main: [CLIENT_ENTRY],
         vendor
     },
     target: 'web',
@@ -143,8 +134,8 @@ module.exports = {
         filename: '[name]_[chunkhash].js',
         chunkFilename: '[name]_[chunkhash].js',
         sourceMapFilename: '[name]_[chunkhash].map',
-        publicPath: PUBLIC_PATH,
-        path: CLIENT_OUTPUT
+        publicPath: '/',
+        path: 'build'
     },
     plugins,
     module: {
