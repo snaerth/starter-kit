@@ -96,7 +96,7 @@ if (isDeveloping) {
 }
 
 
-// route middleware that will happen on every request
+// Route middleware that will happen on every request
 router.use(function(req, res, next) {
     // log each request to the console
     console.log(req.method, req.url);
@@ -120,7 +120,7 @@ router.use((err, req, res, next) => {
   next(err);
 });
 
-app.use('/', router);
+app.use('*', router);
 
 function handleRender(req, res) {
     res.set('content-type', 'text/html');
