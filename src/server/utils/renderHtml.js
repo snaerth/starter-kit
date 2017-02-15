@@ -1,6 +1,6 @@
 import serialize from 'serialize-javascript';
 
-export default (html, preloadedState, assets) => {
+export default ({html, preloadedState, assets}) => {
     return `
         <!doctype html>
         <html lang="en">

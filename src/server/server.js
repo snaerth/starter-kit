@@ -10,6 +10,7 @@ import webpack from 'webpack';
 import webpackMiddleware from 'webpack-dev-middleware';
 import webpackHotMiddleware from 'webpack-hot-middleware';
 
+// Default imports
 import http from 'http';
 import path from 'path';
 import morgan from 'morgan';
@@ -22,12 +23,12 @@ import helmet from 'helmet';
 import bodyParser from 'body-parser';
 import {parallel} from './utils/parallel';
 
+// React server rendering
 import renderHtml from './utils/renderHtml';
 import React from 'react';
 import {Router, match, RouterContext} from 'react-router';
 import {renderToString} from 'react-dom/server';
 import {Provider} from 'react-redux';
-
 import routes, {NotFound} from '../client/routes.jsx';
 import configureStore from '../client/store/configureStore';
 
@@ -37,6 +38,7 @@ const port = process.env.PORT || 3000;
 
 // Intialize and setup server
 const app = express();
+const router = express.Router();
 // Hide all software information
 app.disable('x-powered-by');
 
@@ -64,10 +66,6 @@ const apiLimiter = new RateLimit({
     delayMs: 0 // disabled
 });
 
-app.use('/api/', apiLimiter);
-
-// Server routes
-serverRoutes(app);
 
 // DEVELOPMENT
 if (isDeveloping) {
@@ -97,8 +95,32 @@ if (isDeveloping) {
     app.use(express.static('./build'));
 }
 
+
+// route middleware that will happen on every request
+router.use(function(req, res, next) {
+    // log each request to the console
+    console.log(req.method, req.url);
+    // continue doing what we were doing and go to the route
+    next(); 
+});
+
+router.get('/api/', apiLimiter);
+
+// Server routes
+serverRoutes(router);
+
 // Handle all requests
-app.use('*', handleRender);
+router.get('*', handleRender);
+
+// 500 error
+router.use((err, req, res, next) => {
+  res.set('content-type', 'text/html');
+  res.write(`</head><body><h1>500 Server Error</h1><p>${err}</p></body></html>`);
+  res.end();
+  next(err);
+});
+
+app.use('/', router);
 
 function handleRender(req, res) {
     res.set('content-type', 'text/html');
@@ -111,9 +133,7 @@ function handleRender(req, res) {
     }, (err, redirect, props) => {
         // Sanity checks
         if (err) {
-            return res
-                .status(500)
-                .send(err.message);
+            return res.status(500).send(err.message);
         } else if (redirect) {
             return res.redirect(302, redirect.pathname + redirect.search);
         } else if (props.components.some(component => component === NotFound)) {
@@ -134,19 +154,18 @@ function handleRender(req, res) {
         );
         // Grab the initial state from Redux store
         const finalState = store.getState();
+
+        const renderHtmlObj = {
+            html,
+            finalState,
+            assets
+        };
+
         // Send the rendered page to the client
-        res.send(renderHtml(html, finalState, assets));
+        res.send(renderHtml(renderHtmlObj));
         res.end();
     });
 }
-
-// 500 error
-app.use((err, req, res, next) => {
-  res.set('content-type', 'text/html');
-  res.write(`</head><body><h1>500 Server Error</h1><p>${err}</p></body></html>`);
-  res.end();
-  next(err);
-});
 
 // Create HTTP Server
 const server = http.createServer(app);
