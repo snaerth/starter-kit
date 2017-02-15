@@ -53,9 +53,6 @@ app.use(parallel([
     hpp(),
     // Content Security Policy
     helmet(),
-    // log all request in the Apache combined format to STDOUT
-    morgan('combined'),
-    express.static('./build'),
     express.static('./src/assets/favicon')
 ]));
 
@@ -74,6 +71,9 @@ serverRoutes(app);
 
 // DEVELOPMENT
 if (isDeveloping) {
+    // log all request in the Apache combined format to STDOUT
+    app.use(morgan('dev'));
+
     const config = require('../../tools/webpack.config.js');
     const compiler = webpack(config);
     const middleware = webpackMiddleware(compiler, {
@@ -94,10 +94,10 @@ if (isDeveloping) {
 } else {
     // PRODUCTION
     assets = require('../../assets.json');
+    app.use(express.static('./build'));
 }
 
 // Handle all requests
-app.use('/', handleRender);
 app.use('*', handleRender);
 
 function handleRender(req, res) {
@@ -140,8 +140,11 @@ function handleRender(req, res) {
     });
 }
 
+// 500 error
 app.use((err, req, res, next) => {
-  res.end(`</head><body><h1>500 Server Error</h1><p>${err}</p></body></html>`);
+  res.set('content-type', 'text/html');
+  res.write(`</head><body><h1>500 Server Error</h1><p>${err}</p></body></html>`);
+  res.end();
   next(err);
 });
 
