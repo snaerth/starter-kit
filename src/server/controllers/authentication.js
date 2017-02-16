@@ -4,9 +4,9 @@ import jwt from 'jwt-simple';
 
 // SIGNUP
 export function signup(req, res, next) {
-    const email = req.body.email;
-    const password = req.body.password;
-    const message = req.body.message;
+    const email = req.body.email || '';
+    const password = req.body.password || '';
+    const message = req.body.message || '';
 
     if (!email || !password || !message) {
         return res

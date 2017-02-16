@@ -113,12 +113,12 @@ serverRoutes(router);
 router.get('*', handleRender);
 
 // 500 error
-router.use((err, req, res, next) => {
-  res.set('content-type', 'text/html');
-  res.write(`</head><body><h1>500 Server Error</h1><p>${err}</p></body></html>`);
-  res.end();
-  next(err);
-});
+// router.use((err, req, res, next) => {
+//   res.set('content-type', 'text/html');
+//   res.write(`</head><body><h1>500 Server Error</h1><p>${err}</p></body></html>`);
+//   res.end();
+//   next(err);
+// });
 
 app.use('*', router);
 
@@ -161,6 +161,7 @@ function handleRender(req, res) {
             assets
         };
 
+        res.status(200);
         // Send the rendered page to the client
         res.send(renderHtml(renderHtmlObj));
         res.end();
