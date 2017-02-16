@@ -10,10 +10,9 @@ const port = 3001;
 
 // INITALIZE APP
 const app = express();
-const router = express.Router();
 
 // SETUP ROUTES
-serverRoutes(router);
+serverRoutes(app);
 
 app.listen(port, '0.0.0.0', error => {
   if (error) {

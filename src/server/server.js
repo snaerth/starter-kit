@@ -38,7 +38,9 @@ const port = process.env.PORT || 3000;
 
 // Intialize and setup server
 const app = express();
-const router = express.Router();
+// Create HTTP Server
+const server = new http.createServer(app);
+
 // Hide all software information
 app.disable('x-powered-by');
 
@@ -97,30 +99,26 @@ if (isDeveloping) {
 
 
 // Route middleware that will happen on every request
-router.use(function(req, res, next) {
+app.use(function(req, res, next) {
     // log each request to the console
     console.log(req.method, req.url);
     // continue doing what we were doing and go to the route
     next(); 
 });
 
-router.get('/api/', apiLimiter);
-
 // Server routes
-serverRoutes(router);
+serverRoutes(app);
 
 // Handle all requests
-router.get('*', handleRender);
+app.get('*', handleRender);
 
 // 500 error
-// router.use((err, req, res, next) => {
-//   res.set('content-type', 'text/html');
-//   res.write(`</head><body><h1>500 Server Error</h1><p>${err}</p></body></html>`);
-//   res.end();
-//   next(err);
-// });
-
-app.use('*', router);
+app.use((err, req, res, next) => {
+  res.set('content-type', 'text/html');
+  res.write(`</head><body><h1>500 Server Error</h1><p>${err}</p></body></html>`);
+  res.end();
+  next(err);
+});
 
 function handleRender(req, res) {
     res.set('content-type', 'text/html');
@@ -167,9 +165,6 @@ function handleRender(req, res) {
         res.end();
     });
 }
-
-// Create HTTP Server
-const server = http.createServer(app);
 
 // Start
 server.listen(port, err => {

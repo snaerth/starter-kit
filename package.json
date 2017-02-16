@@ -44,6 +44,7 @@
     "express-rate-limit": "^2.6.0",
     "extract-text-webpack-plugin": "^2.0.0-rc.2",
     "helmet": "^3.4.0",
+    "http-proxy": "^1.16.2",
     "isomorphic-fetch": "^2.2.1",
     "jwt-simple": "^0.5.1",
     "lodash": "^4.17.4",
