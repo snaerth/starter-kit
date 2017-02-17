@@ -1,4 +1,3 @@
-
 /* eslint no-console: 0 */
 // Eviromental variables
 import dotenv from 'dotenv';
@@ -52,7 +51,7 @@ app.use(parallel([
     helmet(),
     // Middleware for dynamically or statically enabling CORS in express applications
     cors(),
-    // Middleware for dynamically or statically enabling CORS
+    // Basic IP rate-limiting middleware for Express. 
     apiLimiter
 ]));
 
@@ -65,7 +64,7 @@ app.use(...errorHandlers);
 // Start server
 server.listen(port, error => {
   if (error) {
-    console.log(error);
+    console.error(error);
   }
-  console.info('==> 🌎 Listening on port %s. Open up http://0.0.0.0:%s/ in your browser.', process.env.APIHOST, port);
+  console.info('==> ✅  API server is running on %s:%s.', process.env.APIHOST, process.env.APIPORT);
 });

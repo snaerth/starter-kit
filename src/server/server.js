@@ -92,7 +92,8 @@ if (isDeveloping) {
     app.get('*', function response(req, res) {
         res
             .set('content-type', 'text/html')
-            .write(200, renderHtml(renderHtmlObj))
+            .status(200)
+            .send(renderHtml(renderHtmlObj))
             .end();
     });
 } else {
@@ -104,7 +105,13 @@ if (isDeveloping) {
 }
 
 // Error Handler middlewares.
-app.use(...errorHandlers);
+app.use((err, req, res, next) => {
+    res.set('content-type', 'text/html');
+    res.status(500),
+    res.send(`</head><body><h1>500 Server Error</h1><p>${err}</p></body></html>`);
+    res.end();
+    next(err);
+});
 
 /**
  * Handles all request and renders react universally
@@ -159,9 +166,9 @@ function handleRender(req, res) {
 }
 
 // Start server 
-server.listen(port, err => {
-    if (err) {
-        throw err;
+server.listen(port, error => {
+    if (error) {
+        console.error(error);
     }
     console.info('----\n==> ✅  %s is running, talking to API server on %s.', process.env.APIHOST, process.env.APIPORT);
     console.info('==> 💻  Open http://%s:%s in a browser to view the app.', process.env.HOST, process.env.PORT);

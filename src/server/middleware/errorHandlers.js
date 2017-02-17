@@ -1,5 +1,3 @@
-/* eslint-disable no-console */
-
 /**
 * Handle 404 errors.
 * Note: the react application middleware hands 404 paths, but it is good to
@@ -10,8 +8,10 @@
 * @returns {undefined}
 */
 function notFoundMiddlware(req, res) {
-    res.status(404).send('Sorry, page not found!.');
+    res.status(404);
+    res.send('Sorry, page not found!.');
 }
+
 
 /**
 * Handle all unhandled errors. Typically you want to return a "500" response status.
@@ -25,11 +25,10 @@ function notFoundMiddlware(req, res) {
 */
 function unhandledErrorMiddleware(err, req, res, next) {
     res.set('content-type', 'text/html');
-    res.write(500, `</head><body><h1>500 Server Error</h1><p>${err}</p></body></html>`);
+    res.status(500),
+    res.send(`</head><body><h1>500 Server Error</h1><p>${err}</p></body></html>`);
     res.end();
     next(err);
 }
 
-const errorHandlersMiddleware = [notFoundMiddlware, unhandledErrorMiddleware];
-
-export default errorHandlersMiddleware;
+export default [notFoundMiddlware, unhandledErrorMiddleware];
