@@ -2,16 +2,18 @@
 
 const path = require('path');
 const webpack = require('webpack');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
 const autoprefixer = require('autoprefixer');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 //  PLUGINS
 const plugins = [
-  new ExtractTextPlugin({filename: 'styles.css', allChunks: true}),
+  new ExtractTextPlugin({
+    filename: 'styles.css',
+    allChunks: true
+  }),
   new webpack
-    .optimize
-    .OccurrenceOrderPlugin(),
+  .optimize
+  .OccurrenceOrderPlugin(),
   new webpack.HotModuleReplacementPlugin(),
   new webpack.DefinePlugin({
     'process.env.NODE_ENV': JSON.stringify('development')
@@ -22,8 +24,12 @@ const plugins = [
     }
   }),
   new webpack
-    .optimize
-    .CommonsChunkPlugin({name: 'vendor', minChunks: Infinity, filename: 'vendor.js'})
+  .optimize
+  .CommonsChunkPlugin({
+    name: 'vendor',
+    minChunks: Infinity,
+    filename: 'vendor.js'
+  })
 ];
 
 // RULES
@@ -36,8 +42,7 @@ const css = {
   test: /\.css$/,
   use: ExtractTextPlugin.extract({
     fallback: 'style-loader',
-    loader: [
-      {
+    loader: [{
         loader: 'css-loader',
         query: {
           modules: true,
@@ -54,8 +59,7 @@ const scss = {
   test: /\.scss$/,
   use: ExtractTextPlugin.extract({
     fallback: 'style-loader',
-    loader: [
-      {
+    loader: [{
         loader: 'css-loader',
         query: {
           modules: true,
@@ -72,24 +76,22 @@ const scss = {
 const js = {
   test: /\.(js|jsx)$/,
   exclude: /node_modules/,
-  loaders: [
-    {
-      loader: 'babel-loader',
-      query: {
-        presets: [
-          [
-            'es2015', {
-              modules: false
-            }
-          ],
-          'react',
-          'stage-0',
-          'react-hmre'
+  loaders: [{
+    loader: 'babel-loader',
+    query: {
+      presets: [
+        [
+          'es2015', {
+            modules: false
+          }
         ],
-        plugins: ['transform-decorators-legacy']
-      }
+        'react',
+        'stage-0',
+        'react-hmre'
+      ],
+      plugins: ['transform-decorators-legacy']
     }
-  ]
+  }]
 };
 
 const rules = [js, css, scss, json];
@@ -120,8 +122,8 @@ module.exports = {
     path: path.join(__dirname, '/dist/'),
     filename: '[name].js'
   },
-  plugins: plugins,
+  plugins,
   module: {
-    rules: rules
+    rules
   }
 };

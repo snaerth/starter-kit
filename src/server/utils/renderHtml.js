@@ -16,8 +16,8 @@ export default ({html, preloadedState, assets}) => {
                 <script>document.documentElement.className = 'js';</script>
             </head>
         <body class="loading">
-            <div id="app">${process.env.NODE_ENV === 'production' ? html : `<div>${html}</div>`}</div>
-            <script>window.__PRELOADED_STATE__ = ${preloadedState ? serialize(preloadedState): preloadedState}</script>
+            <div id="app">${process.env.NODE_ENV === 'production' ? html : ''}</div>
+            ${preloadedState ? `<script>window.__PRELOADED_STATE__ = ${serialize(preloadedState)}</script>`: ''}
             <script>
             (function() {
                 document.addEventListener("DOMContentLoaded", function() {

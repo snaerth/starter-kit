@@ -14,14 +14,6 @@ const {
 } = CONFIG;
 const root = (folder = '.') => path.join(__dirname, '..', folder);
 
-function getExternals() {
-  const nodeModules = fs.readdirSync(path.join(process.cwd(), 'node_modules'));
-  return nodeModules.reduce(function(ext, mod) {
-    ext[mod] = 'commonjs ' + mod;
-    return ext;
-  }, {});
-}
-
 const plugins = [
   new webpack.DefinePlugin({
     'process.env.NODE_ENV': '"production"'

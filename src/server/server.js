@@ -68,6 +68,8 @@ const apiLimiter = new RateLimit({
     delayMs: 0 // disabled
 });
 
+// Server routes
+serverRoutes(app);
 
 // DEVELOPMENT
 if (isDeveloping) {
@@ -91,28 +93,28 @@ if (isDeveloping) {
 
     app.use(middleware);
     app.use(webpackHotMiddleware(compiler));
+
+    const renderHtmlObj = {
+        html: null,
+        finalState: null,
+        assets: null
+    };
+
+    app.get('*', function response(req, res) {
+        res.set('content-type', 'text/html');
+        res.status(200);
+        res.write(renderHtml(renderHtmlObj));
+        res.end();
+    });
 } else {
     // PRODUCTION
     assets = require('../../assets.json');
     app.use(express.static('./build'));
+    // Handle all requests
+    app.get('*', handleRender);
 }
 
-
-// Route middleware that will happen on every request
-app.use(function(req, res, next) {
-    // log each request to the console
-    console.log(req.method, req.url);
-    // continue doing what we were doing and go to the route
-    next(); 
-});
-
-// Server routes
-serverRoutes(app);
-
-// Handle all requests
-app.get('*', handleRender);
-
-// 500 error
+// 500 error handler function
 app.use((err, req, res, next) => {
   res.set('content-type', 'text/html');
   res.write(`</head><body><h1>500 Server Error</h1><p>${err}</p></body></html>`);
@@ -120,6 +122,12 @@ app.use((err, req, res, next) => {
   next(err);
 });
 
+/**
+ * Handles all request and renders react universally
+ * @param {Object} req - Request object
+ * @param {Object} res - Reponse object
+ * @returns {undefined}
+ */
 function handleRender(req, res) {
     res.set('content-type', 'text/html');
     // Do a router match
