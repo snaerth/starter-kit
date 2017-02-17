@@ -49,7 +49,7 @@ const css = {
   test: /\.css$/,
   use: ExtractTextPlugin.extract({
     fallback: 'style-loader',
-    loader: [{
+    use: [{
         loader: 'css-loader',
         query: {
           modules: true,
@@ -66,7 +66,7 @@ const scss = {
   test: /\.scss$/,
   use: ExtractTextPlugin.extract({
     fallback: 'style-loader',
-    loader: [{
+    use: [{
         loader: 'css-loader',
         query: {
           modules: true,

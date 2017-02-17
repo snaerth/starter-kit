@@ -16,12 +16,12 @@ import path from 'path';
 import morgan from 'morgan';
 import express from 'express';
 import RateLimit from 'express-rate-limit';
-import {serverRoutes} from './router';
 import compression from 'compression';
 import hpp from 'hpp';
 import helmet from 'helmet';
 import bodyParser from 'body-parser';
 import {parallel} from './utils/parallel';
+import errorHandlers from './middleware/errorHandlers';
 
 // React server rendering
 import renderHtml from './utils/renderHtml';
@@ -60,17 +60,6 @@ app.use(parallel([
     express.static('./src/assets/favicon')
 ]));
 
-// Basic IP rate-limiting middleware for Express. Use to limit repeated requests
-// to public APIs and/or endpoints such as password reset.
-const apiLimiter = new RateLimit({
-    windowMs: 10 *1000, // 10 seconds
-    max: 30, // limit each IP to 10 requests per windowMs
-    delayMs: 0 // disabled
-});
-
-// Server routes
-serverRoutes(app);
-
 // DEVELOPMENT
 if (isDeveloping) {
     // log all request in the Apache combined format to STDOUT
@@ -101,10 +90,10 @@ if (isDeveloping) {
     };
 
     app.get('*', function response(req, res) {
-        res.set('content-type', 'text/html');
-        res.status(200);
-        res.write(renderHtml(renderHtmlObj));
-        res.end();
+        res
+            .set('content-type', 'text/html')
+            .write(200, renderHtml(renderHtmlObj))
+            .end();
     });
 } else {
     // PRODUCTION
@@ -114,13 +103,8 @@ if (isDeveloping) {
     app.get('*', handleRender);
 }
 
-// 500 error handler function
-app.use((err, req, res, next) => {
-  res.set('content-type', 'text/html');
-  res.write(`</head><body><h1>500 Server Error</h1><p>${err}</p></body></html>`);
-  res.end();
-  next(err);
-});
+// Error Handler middlewares.
+app.use(...errorHandlers);
 
 /**
  * Handles all request and renders react universally
@@ -139,7 +123,7 @@ function handleRender(req, res) {
     }, (err, redirect, props) => {
         // Sanity checks
         if (err) {
-            return res.status(500).send(err.message);
+            return res.send(500, err.message);
         } else if (redirect) {
             return res.redirect(302, redirect.pathname + redirect.search);
         } else if (props.components.some(component => component === NotFound)) {
@@ -174,10 +158,11 @@ function handleRender(req, res) {
     });
 }
 
-// Start
+// Start server 
 server.listen(port, err => {
     if (err) {
         throw err;
     }
-    console.info('==> 🌎 Listening on port %s. Open up http://0.0.0.0:%s/ in your browser.', port, port);
+    console.info('----\n==> ✅  %s is running, talking to API server on %s.', process.env.APIHOST, process.env.APIPORT);
+    console.info('==> 💻  Open http://%s:%s in a browser to view the app.', process.env.HOST, process.env.PORT);
 });
