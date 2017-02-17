@@ -4,6 +4,13 @@ const path = require('path');
 const webpack = require('webpack');
 const autoprefixer = require('autoprefixer');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const CONFIG = require('./webpack.base');
+
+const {
+  CLIENT_ENTRY,
+  CLIENT_OUTPUT,
+  PUBLIC_PATH
+} = CONFIG;
 
 //  PLUGINS
 const plugins = [
@@ -114,7 +121,9 @@ module.exports = {
   cache: true,
   entry: {
     main: [
-      'webpack-hot-middleware/client?reload=true', path.join(__dirname, '../src/client/index.jsx')
+      'webpack/hot/only-dev-server',
+      'webpack-hot-middleware/client',
+      CLIENT_ENTRY
     ],
     vendor
   },

@@ -76,7 +76,7 @@ if (isDeveloping) {
     // log all request in the Apache combined format to STDOUT
     app.use(morgan('dev'));
 
-    const config = require('../../tools/webpack.config.js');
+    const config = require('../../tools/webpack.client.dev.js');
     const compiler = webpack(config);
     const middleware = webpackMiddleware(compiler, {
         publicPath: config.output.publicPath,
