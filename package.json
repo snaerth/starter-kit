@@ -23,15 +23,16 @@
   },
   "homepage": "",
   "scripts": {
-    "dev": "cross-env NODE_ENV=development npm-run-all --parallel open:src lint:watch",
-    "start": "cross-env NODE_ENV=production node build/server.js",
+    "start-prod": "cross-env NODE_ENV=production node build/server.js",
+    "start-dev": "cross-env NODE_ENV=development npm-run-all --parallel start-dev-server start-dev-api lint:watch",
+    "start-dev-server": "babel-node src/server/index.js",
+    "start-dev-api": "babel-node src/api/index.js",
+    "build": "rimraf build && npm run build-client && npm run build-server && npm run build-api",
+    "build-client": "webpack -p --config ./tools/webpack.client.prod.js --progress --profile --colors",
+    "build-server": "webpack -p --config  ./tools/webpack.server.prod.js --progress --profile --colors",
+    "build-api": "webpack -p --config  ./tools/webpack.api.prod.js --progress --profile --colors",
     "lint": "node_modules/.bin/esw webpack.client.dev.* src --color",
-    "lint:watch": "npm run lint -- --watch",
-    "open:src": "babel-node src/server/index.js",
-    "copy-server": "cp -R src/server/ build/",
-    "copy-client": "cp -R src/client/ build/client",
-    "build-server": "babel -d ./build/server ./src/server",
-    "build": "rimraf build && webpack -p --config ./tools/webpack.client.prod.js --progress --profile --colors && webpack -p --config  ./tools/webpack.server.prod.js --progress --profile --colors"
+    "lint:watch": "npm run lint -- --watch"
   },
   "dependencies": {
     "async": "^2.1.4",

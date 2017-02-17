@@ -20,6 +20,7 @@ import compression from 'compression';
 import hpp from 'hpp';
 import helmet from 'helmet';
 import bodyParser from 'body-parser';
+import httpProxy from 'http-proxy';
 import {parallel} from './utils/parallel';
 import errorHandlers from './middleware/errorHandlers';
 
@@ -33,13 +34,42 @@ import routes, {NotFound} from '../client/routes.jsx';
 import configureStore from '../client/store/configureStore';
 
 let assets = null;
+const apiHost = process.env.APIHOST; 
+const apiPort = process.env.APIPORT;
 const isDeveloping = process.env.NODE_ENV !== 'production';
 const port = process.env.PORT || 3000;
+const targetUrl = `http://${ apiHost }:${apiPort}`;
 
 // Intialize and setup server
 const app = express();
 // Create HTTP Server
 const server = new http.createServer(app);
+
+const proxy = httpProxy.createProxyServer({
+  target: targetUrl,
+  ws: true
+});
+
+// Proxy to API server
+app.use('/api', (req, res) => {
+  proxy.web(req, res, {target: targetUrl});
+});
+
+// Added the error handling to avoid https://github.com/nodejitsu/node-http-proxy/issues/527
+proxy.on('error', (error, req, res) => {
+  let json;
+
+  if (error.code !== 'ECONNRESET') {
+    console.error('proxy error', error);
+  }
+  
+  if (!res.headersSent) {
+    res.writeHead(500, {'content-type': 'application/json'});
+  }
+
+  json = {error: 'proxy_error', reason: error.message};
+  res.end(JSON.stringify(json));
+});
 
 // Hide all software information
 app.disable('x-powered-by');

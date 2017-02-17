@@ -1,16 +1,12 @@
 const webpack = require('webpack');
-const fs = require('fs');
 const path = require('path');
 const CONFIG = require('./webpack.base');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const externals = require('webpack-node-externals');
-const cloneDeep = require('lodash/cloneDeep');
 const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
 
 const {
   SERVER_ENTRY,
-  SERVER_OUTPUT,
-  PUBLIC_PATH
+  SERVER_OUTPUT
 } = CONFIG;
 const root = (folder = '.') => path.join(__dirname, '..', folder);
 
