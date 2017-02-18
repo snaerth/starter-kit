@@ -34,8 +34,8 @@ import configureStore from '../client/store/configureStore';
 let assets = null;
 const {APIHOST, APIPORT, HOST, PORT, NODE_ENV} = config();
 const isDeveloping = NODE_ENV !== 'production';
-const port = config.PORT || 3000;
-const targetUrl = `http://${ APIHOST }:${APIPORT}`;
+const port = PORT || 3000;
+const targetUrl = `${ APIHOST }:${APIPORT}`;
 
 // Intialize and setup server
 const app = express();
