@@ -1,18 +1,14 @@
 const webpack = require('webpack');
 const path = require('path');
 const CONFIG = require('./webpack.base');
+const externals = require('webpack-node-externals');
 const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
 
-const {
-  API_ENTRY,
-  API_OUTPUT
-} = CONFIG;
+const {API_ENTRY, API_OUTPUT} = CONFIG;
 const root = (folder = '.') => path.join(__dirname, '..', folder);
 
 const plugins = [
-  new webpack.DefinePlugin({
-    'process.env.NODE_ENV': '"production"'
-  }),
+  new webpack.DefinePlugin({'process.env.NODE_ENV': '"production"'}),
   new webpack.DefinePlugin({
     'process.env': {
       'NODE_ENV': '"production"'
@@ -20,11 +16,7 @@ const plugins = [
   }),
   new webpack.NamedModulesPlugin(),
   new CaseSensitivePathsPlugin(),
-  new webpack.BannerPlugin({
-    banner: 'require("source-map-support").install();',
-    raw: true,
-    entryOnly: false
-  })
+  new webpack.BannerPlugin({banner: 'require("source-map-support").install();', raw: true, entryOnly: false})
 ];
 
 // RULES
@@ -38,11 +30,11 @@ const js = {
   loader: 'babel-loader',
   exclude: /(node_modules)/,
   query: {
-    presets: ["es2015","stage-0"]
+    presets: ["es2015", "stage-0"]
   }
 };
 
-const rules = [js,json];
+const rules = [js, json];
 
 module.exports = {
   target: 'node',
@@ -52,12 +44,13 @@ module.exports = {
     path: API_OUTPUT,
     filename: 'api.js',
     sourceMapFilename: 'api.map',
-    libraryTarget : 'commonjs2'
+    libraryTarget: 'commonjs2'
   },
   node: {
     __filename: true,
     __dirname: true
   },
+  externals: externals(),
   plugins,
   module: {
     rules

@@ -18,4 +18,7 @@ export function serverRoutes(app) {
   app.post('/api', requireAuth, (req, res) => {
     res.send('This is an route with required authentication API');
   });
+  app.get('test', (req, res) => {
+    res.send('test');
+  });
 }

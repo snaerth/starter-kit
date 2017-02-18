@@ -41,7 +41,6 @@
     "core-decorators": "^0.15.0",
     "cors": "^2.8.1",
     "dotenv": "^4.0.0",
-    "es6-promise": "^4.0.5",
     "express": "^4.14.0",
     "express-rate-limit": "^2.6.0",
     "extract-text-webpack-plugin": "^2.0.0-rc.2",

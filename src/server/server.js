@@ -38,7 +38,7 @@ const apiHost = process.env.APIHOST;
 const apiPort = process.env.APIPORT;
 const isDeveloping = process.env.NODE_ENV !== 'production';
 const port = process.env.PORT || 3000;
-const targetUrl = `http://${ apiHost }:${apiPort}`;
+const targetUrl = `${ apiHost }:${apiPort}`;
 
 // Intialize and setup server
 const app = express();
