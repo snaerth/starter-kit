@@ -1,7 +1,4 @@
 /* eslint no-console: 0 */
-// Eviromental variables
-import dotenv from 'dotenv';
-dotenv.config();
 
 // Default imports
 import http from 'http';
@@ -15,9 +12,10 @@ import cors from 'cors';
 import {parallel} from '../server/utils/parallel';
 import {serverRoutes} from './router';
 import errorHandlers from '../server/middleware/errorHandlers';
+import config from './config';
 
 // VARIABLES
-const port = process.env.APIPORT || 3030;
+const {APIPORT, APIHOST} = config();
 
 // Intialize and setup server
 const app = express();
@@ -62,9 +60,9 @@ serverRoutes(app);
 app.use(...errorHandlers);
 
 // Start server
-server.listen(port, error => {
+server.listen(APIPORT, error => {
   if (error) {
     console.error(error);
   }
-  console.info('==> ✅  API server is running on %s:%s.', process.env.APIHOST, process.env.APIPORT);
+  console.info('==> ✅  API server is running on %s:%s.', APIHOST, APIPORT);
 });

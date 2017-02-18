@@ -12,7 +12,6 @@ function notFoundMiddlware(req, res) {
     res.send('Sorry, page not found!.');
 }
 
-
 /**
 * Handle all unhandled errors. Typically you want to return a "500" response status.
 * Note: You must provide specify all 4 parameters on this callback function

@@ -2,6 +2,10 @@ import passport from 'passport';
 import User from '../models/user';
 import {Strategy as JwtStrategy, ExtractJwt} from 'passport-jwt';
 import LocalStategy from 'passport-local';
+import config from '../config';
+
+// VARIABLES
+const {JWT_SECRET} = config();
 
 // Setup options for local strategy
 const localOptions = {
@@ -35,7 +39,7 @@ const localLogin = new LocalStategy(localOptions, (email, password, done) => {
 // Setup options for JWT Strategy
 const jwtOptions = {
     jwtFromRequest: ExtractJwt.fromHeader('authorization'),
-    secretOrKey: process.env.JWT_SECRET
+    secretOrKey: JWT_SECRET
 };
 
 // Create JWT Strategy

@@ -8,10 +8,14 @@ const {API_ENTRY, API_OUTPUT} = CONFIG;
 const root = (folder = '.') => path.join(__dirname, '..', folder);
 
 const plugins = [
-  new webpack.DefinePlugin({'process.env.NODE_ENV': '"production"'}),
-  new webpack.DefinePlugin({
+    new webpack.DefinePlugin({
     'process.env': {
-      'NODE_ENV': '"production"'
+      'NODE_ENV': JSON.stringify(process.env.NODE_ENV),
+      'PORT': JSON.stringify(process.env.APIPORT),
+      'HOST': JSON.stringify(process.env.APIHOST),
+      'DB_URL': JSON.stringify(process.env.DB_URL),
+      'DB_USERNAME': JSON.stringify(process.env.DB_USERNAME),
+      'DB_PASSWORD': JSON.stringify(process.env.DB_PASSWORD)
     }
   }),
   new webpack.NamedModulesPlugin(),

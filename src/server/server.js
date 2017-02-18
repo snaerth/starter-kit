@@ -1,9 +1,6 @@
 /* eslint no-console: 0 */
 // Enables proper source map support in Node.js
 import 'source-map-support/register';
-// Eviromental variables
-import dotenv from 'dotenv';
-dotenv.config();
 
 // DEVELOPMENT IMPORTS
 import webpack from 'webpack';
@@ -23,6 +20,7 @@ import bodyParser from 'body-parser';
 import httpProxy from 'http-proxy';
 import {parallel} from './utils/parallel';
 import errorHandlers from './middleware/errorHandlers';
+import config from './config';
 
 // React server rendering
 import renderHtml from './utils/renderHtml';
@@ -34,11 +32,10 @@ import routes, {NotFound} from '../client/routes.jsx';
 import configureStore from '../client/store/configureStore';
 
 let assets = null;
-const apiHost = process.env.APIHOST; 
-const apiPort = process.env.APIPORT;
-const isDeveloping = process.env.NODE_ENV !== 'production';
-const port = process.env.PORT || 3000;
-const targetUrl = `${ apiHost }:${apiPort}`;
+const {APIHOST, APIPORT, HOST, PORT, NODE_ENV} = config();
+const isDeveloping = NODE_ENV !== 'production';
+const port = config.PORT || 3000;
+const targetUrl = `http://${ APIHOST }:${APIPORT}`;
 
 // Intialize and setup server
 const app = express();
@@ -200,6 +197,6 @@ server.listen(port, error => {
     if (error) {
         console.error(error);
     }
-    console.info('----\n==> ✅  %s is running, talking to API server on %s.', process.env.APIHOST, process.env.APIPORT);
-    console.info('==> 💻  Open http://%s:%s in a browser to view the app.', process.env.HOST, process.env.PORT);
+    console.info('----\n==> ✅  %s is running, talking to API server on %s.', APIHOST, APIPORT);
+    console.info('==> 💻  Open http://%s:%s in a browser to view the app.', HOST, PORT);
 });

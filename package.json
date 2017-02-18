@@ -23,7 +23,9 @@
   },
   "homepage": "",
   "scripts": {
-    "start-prod": "cross-env NODE_ENV=production node build/server.js",
+    "start-prod": "cross-env NODE_ENV=production npm-run-all --parallel start-prod-server start-prod-api",
+    "start-prod-server": "cross-env HOST=localhost PORT=3000 node build/server.js",
+    "start-prod-api": "cross-env HOST=localhost PORT=3030 node build/api.js",
     "start-dev": "cross-env NODE_ENV=development npm-run-all --parallel start-dev-server start-dev-api lint:watch",
     "start-dev-server": "babel-node src/server/index.js",
     "start-dev-api": "babel-node src/api/index.js",

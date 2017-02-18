@@ -3,12 +3,12 @@ import _ from 'lodash';
 import {deepTrim} from './utils';
 import genres from '../data/genres';
 import {MongoClient} from 'mongodb';
+import config from '../config';
 
-const apiKeyKvikmyndir = process.env.API_KEY_KVIKMYNDIR;
-const apiKeyTmdb = process.env.API_KEY_TMDB;
-const mlabDevUrl = process.env.MLAB_DEV_URL;
+// VARIABLES
+const {API_KEY_KVIKMYNDIR, API_KEY_TMDB, DB_URL} = config();
 
-module.exports = (callback) => {
+export default(callback) => {
     // Contains all movies for 5 days in one big array [movie1, movie2, movie2, ...]
     let allMovies = [];
     // Contains all movies for 5 days [[day0]], [day1]], [day2]], ...]
@@ -77,7 +77,7 @@ module.exports = (callback) => {
 
         upcomingMovies.data = extendMoviesObjects(upcomingMovies.data, plotsArr, trailersArr, imagesArr, omdbArr, propsToDelete);
 
-        MongoClient.connect(mlabDevUrl, function (err, db) {
+        MongoClient.connect(DB_URL, function (err, db) {
             insertDocument(db, moviesByDay[0].data, function () {
                 db.close();
                 callback('Inserted a document into the movies collection.');
@@ -283,7 +283,7 @@ function getKvikmyndir() {
         let promises = [];
 
         for (let i = 0; i < 5; i++) {
-            const url = `http://kvikmyndir.is/api/showtimes_by_date/?key=${apiKeyKvikmyndir}&dagur=${i}`;
+            const url = `http://kvikmyndir.is/api/showtimes_by_date/?key=${API_KEY_KVIKMYNDIR}&dagur=${i}`;
 
             const request = fetch(url)
                 .then(res => res.json())
@@ -313,7 +313,7 @@ function getKvikmyndir() {
  */
 function getUpcoming() {
     return new Promise((resolve, reject) => {
-        const url = `http://kvikmyndir.is/api/movie_list_upcoming/?key=${apiKeyKvikmyndir}&count=100`;
+        const url = `http://kvikmyndir.is/api/movie_list_upcoming/?key=${API_KEY_KVIKMYNDIR}&count=100`;
 
         fetch(url)
             .then(res => res.json())
@@ -335,7 +335,7 @@ function getPlotForMovies(movies) {
 
         movies.forEach(movie => {
             if (movie.ids && movie.ids.imdb) {
-                const url = `http://kvikmyndir.is/api/movie/?imdb=${movie.ids.imdb}&key=${apiKeyKvikmyndir}`;
+                const url = `http://kvikmyndir.is/api/movie/?imdb=${movie.ids.imdb}&key=${API_KEY_KVIKMYNDIR}`;
                 const request = fetch(url)
                     .then(res => res.json())
                     .then(data => {
@@ -376,7 +376,7 @@ function getTmdbData(movies, fn, type) {
 
             if (movie.ids && movie.ids.imdb) {
                 const imdbId = formatImdbId(movie.ids.imdb);
-                const url = `https://api.themoviedb.org/3/movie/${imdbId}/${type}?api_key=${apiKeyTmdb}`;
+                const url = `https://api.themoviedb.org/3/movie/${imdbId}/${type}?api_key=${API_KEY_TMDB}`;
                 const delay = 400 * i; // TMDB has 30 request per 10 seconds
 
                 const request = fn(url, imdbId, delay).then(data => {

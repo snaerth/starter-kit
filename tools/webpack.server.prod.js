@@ -4,28 +4,20 @@ const CONFIG = require('./webpack.base');
 const externals = require('webpack-node-externals');
 const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
 
-const {
-  SERVER_ENTRY,
-  SERVER_OUTPUT
-} = CONFIG;
+const {SERVER_ENTRY, SERVER_OUTPUT} = CONFIG;
 const root = (folder = '.') => path.join(__dirname, '..', folder);
 
 const plugins = [
   new webpack.DefinePlugin({
-    'process.env.NODE_ENV': '"production"'
-  }),
-  new webpack.DefinePlugin({
     'process.env': {
-      'NODE_ENV': '"production"'
+      'NODE_ENV': JSON.stringify(process.env.NODE_ENV),
+      'PORT': JSON.stringify(process.env.PORT),
+      'HOST': JSON.stringify(process.env.HOST)
     }
   }),
   new webpack.NamedModulesPlugin(),
   new CaseSensitivePathsPlugin(),
-  new webpack.BannerPlugin({
-    banner: 'require("source-map-support").install();',
-    raw: true,
-    entryOnly: false
-  })
+  new webpack.BannerPlugin({banner: 'require("source-map-support").install();', raw: true, entryOnly: false})
 ];
 
 // RULES
@@ -86,7 +78,7 @@ module.exports = {
     path: SERVER_OUTPUT,
     filename: 'server.js',
     sourceMapFilename: 'server.map',
-    libraryTarget : 'commonjs2'
+    libraryTarget: 'commonjs2'
   },
   externals: externals({
     whitelist: [/\.(eot|woff|woff2|ttf|otf)$/, /\.(svg|png|jpg|jpeg|gif|ico|webm)$/, /\.(mp4|mp3|ogg|swf|webp)$/, /\.(css|scss|sass|less|styl)$/]
