@@ -20,7 +20,7 @@ import bodyParser from 'body-parser';
 import httpProxy from 'http-proxy';
 import {parallel} from './utils/parallel';
 import errorHandlers from './middleware/errorHandlers';
-import config from './config';
+import config from '../config';
 
 // React server rendering
 import renderHtml from './utils/renderHtml';
@@ -35,17 +35,35 @@ let assets = null;
 const {APIHOST, APIPORT, HOST, PORT, NODE_ENV} = config();
 const isDeveloping = NODE_ENV !== 'production';
 const port = PORT || 3000;
-const targetUrl = `${ APIHOST }:${APIPORT}`;
+const targetUrl = `http://${APIHOST}:${APIPORT}`;
 
 // Intialize and setup server
-const app = express();
-// Create HTTP Server
-const server = new http.createServer(app);
+const app = express(); 
 
+// Create HTTP Server
+const server = new http.createServer(app); 
 const proxy = httpProxy.createProxyServer({
-  target: targetUrl,
-  ws: true
+  target: targetUrl
 });
+
+// Hide all software information
+app.disable('x-powered-by');
+
+// Run functions parallel or async for more page speed
+app.use(parallel([
+    // Let app use compression
+    compression(),
+    // use application/json parser
+    bodyParser.json(),
+    // Use application/x-www-form-urlencoded parser
+    bodyParser.urlencoded({extended: false}),
+    // Prevent HTTP Parameter pollution. @note: Make sure body parser goes above the
+    // hpp middleware
+    hpp(),
+    // Content Security Policy
+    helmet(),
+    express.static('./src/assets/favicon')
+]));
 
 // Proxy to API server
 app.use('/api', (req, res) => {
@@ -67,25 +85,6 @@ proxy.on('error', (error, req, res) => {
   json = {error: 'proxy_error', reason: error.message};
   res.end(JSON.stringify(json));
 });
-
-// Hide all software information
-app.disable('x-powered-by');
-
-// Run functions parallel or async for more page speed
-app.use(parallel([
-    // Let app use compression
-    compression(),
-    // use application/json parser
-    bodyParser.json(),
-    // Use application/x-www-form-urlencoded parser
-    bodyParser.urlencoded({extended: false}),
-    // Prevent HTTP Parameter pollution. @note: Make sure body parser goes above the
-    // hpp middleware
-    hpp(),
-    // Content Security Policy
-    helmet(),
-    express.static('./src/assets/favicon')
-]));
 
 // DEVELOPMENT
 if (isDeveloping) {
@@ -132,13 +131,7 @@ if (isDeveloping) {
 }
 
 // Error Handler middlewares.
-app.use((err, req, res, next) => {
-    res.set('content-type', 'text/html');
-    res.status(500),
-    res.send(`</head><body><h1>500 Server Error</h1><p>${err}</p></body></html>`);
-    res.end();
-    next(err);
-});
+app.use(...errorHandlers);
 
 /**
  * Handles all request and renders react universally

@@ -12,13 +12,13 @@ const requireSignin = passport.authenticate('local', {
   session: false
 });
 
-export function serverRoutes(app) {
+export default function(app) {
   app.post('/signup', signup);
   app.post('/signin', requireSignin, signin);
   app.post('/api', requireAuth, (req, res) => {
     res.send('This is an route with required authentication API');
   });
-  app.get('test', (req, res) => {
+  app.get('/test', (req, res) => {
     res.send('test');
   });
 }

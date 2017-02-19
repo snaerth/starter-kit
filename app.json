@@ -1,0 +1,27 @@
+{
+  "name": "react-redux-universal-starter",
+  "description": "Starter kit for React, Redux, Universal rendering, express server with proxy to api server and mongoDb",
+  "main": "./src/server/index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/snaerth/starter-kit"
+  },
+  "keywords": [
+    "Express",
+    "Webpack",
+    "node",
+    "React",
+    "Redux",
+    "Universal",
+    "isomorphic",
+    "mongodb",
+    "hot reloading",
+    "react-hot-reloader",
+    "babel"
+  ],
+  "author": "Snær Seljan Þóroddsson",
+  "license": "MIT",
+  "bugs": {
+    "url": "/issues"
+  }
+}
