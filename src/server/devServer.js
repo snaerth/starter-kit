@@ -1,6 +1,13 @@
 /* eslint no-console: 0 */
 // Enables proper source map support in Node.js
 import 'source-map-support/register';
+
+// Development
+import webpack from 'webpack';
+import webpackMiddleware from 'webpack-dev-middleware';
+import webpackHotMiddleware from 'webpack-hot-middleware';
+import webpackConfig from '../../tools/webpack.client.dev';
+
 // Librarys
 import http from 'http';
 import path from 'path';
@@ -14,10 +21,8 @@ import middleware from './middleware';
 import config from '../config';
 import renderHtml from './utils/renderHtml';
 import errorHandlers from './middleware/errorHandlers';
-import handleRender from './middleware/handleRender';
 
-const {APIHOST, APIPORT, HOST, PORT, NODE_ENV} = config();
-const isDeveloping = NODE_ENV !== 'production';
+const {APIHOST, APIPORT, HOST, PORT} = config();
 const port = PORT || 3000;
 const targetUrl = `http://${APIHOST}:${APIPORT}`;
 
@@ -35,6 +40,8 @@ app.disable('x-powered-by');
 app.use(middleware());
 
 app.use(express.static('./src/assets/favicon'));
+// Log all request in the Apache combined format to STDOUT
+app.use(morgan('dev'));
 
 // Proxy to API server
 app.use('/api', (req, res) => {
@@ -61,9 +68,34 @@ proxy.on('error', (error, req, res) => {
     res.end(JSON.stringify(json));
 });
 
-app.use(express.static('./build'));
-// Handle all requests
-app.get('*', handleRender);
+const compiler = webpack(webpackConfig);
+app.use(webpackMiddleware(compiler, {
+    publicPath: webpackConfig.output.publicPath,
+    contentBase: 'src',
+    stats: {
+        colors: true,
+        hash: false,
+        timings: true,
+        chunks: false,
+        chunkModules: false,
+        modules: false
+    }
+}));
+app.use(webpackHotMiddleware(compiler));
+
+const renderHtmlObj = {
+    html: null,
+    finalState: null,
+    assets: null
+};
+
+app.get('*', function response(req, res) {
+    res
+        .set('content-type', 'text/html')
+        .status(200)
+        .send(renderHtml(renderHtmlObj))
+        .end();
+});
 
 // Error Handler middlewares.
 app.use(...errorHandlers);

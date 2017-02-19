@@ -8,5 +8,7 @@ if (process.env.NODE_ENV !== 'production') {
     require.extensions['.css'] = () => {
         return;
     };
+    require('./devServer');
+} else {
+    require('./server');
 }
-require('./server.js');

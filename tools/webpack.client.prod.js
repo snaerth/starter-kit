@@ -6,57 +6,32 @@ const externals = require('webpack-node-externals');
 const AssetsPlugin = require('assets-webpack-plugin');
 const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
 const CONFIG = require('./webpack.base');
-const {
-  CLIENT_ENTRY,
-  CLIENT_OUTPUT,
-  PUBLIC_PATH
-} = CONFIG;
+const {CLIENT_ENTRY, CLIENT_OUTPUT, PUBLIC_PATH} = CONFIG;
 
 // Plugins
 const plugins = [
   new webpack
-  .optimize
-  .OccurrenceOrderPlugin(),
+    .optimize
+    .OccurrenceOrderPlugin(),
   new webpack
-  .optimize
-  .AggressiveMergingPlugin(),
-  new ExtractTextPlugin({
-    filename: 'styles.css',
-    allChunks: true
-  }),
+    .optimize
+    .AggressiveMergingPlugin(),
+  new ExtractTextPlugin({filename: 'styles.css', allChunks: true}),
   new webpack
-  .optimize
-  .CommonsChunkPlugin({
-    name: 'vendor',
-    filename: 'vendor_[hash].js',
-    minChunks: 2
-  }),
-  new webpack
-  .optimize
-  .UglifyJsPlugin({
-    compressor: {
-      screw_ie8: true,
-      warnings: false
-    },
-    mangle: {
-      screw_ie8: true
-    },
-    output: {
-      comments: false,
-      screw_ie8: true
-    }
-  }),
-  new AssetsPlugin({
-    filename: 'assets.json',
-    prettyPrint: true
-  }),
+    .optimize
+    .CommonsChunkPlugin({name: 'vendor', filename: 'vendor_[hash].js', minChunks: 2}),
+  new AssetsPlugin({filename: 'assets.json', prettyPrint: true}),
   new webpack.NamedModulesPlugin(),
   new CaseSensitivePathsPlugin(),
   new webpack.NoEmitOnErrorsPlugin(),
   new webpack.DefinePlugin({
-    'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
-    '__DEV__': false
+    'process.env': {
+      NODE_ENV: JSON.stringify('production')
+    }
   }),
+  new webpack
+    .optimize
+    .UglifyJsPlugin(),
   new webpack.LoaderOptionsPlugin({
     minimize: true,
     options: {
@@ -75,19 +50,21 @@ const css = {
   test: /\.css$/,
   use: ExtractTextPlugin.extract({
     fallback: "style-loader",
-    loader: [{
-      loader: 'css-loader',
-      query: {
-        modules: true,
-        importLoaders: 2,
-        localIdentName: '[name]__[local]__[hash:base64:5]',
-        plugins: () => {
-          return [autoprefixer]
+    loader: [
+      {
+        loader: 'css-loader',
+        query: {
+          modules: true,
+          importLoaders: 2,
+          localIdentName: '[name]__[local]__[hash:base64:5]',
+          plugins: () => {
+            return [autoprefixer]
+          }
         }
+      }, {
+        loader: 'postcss-loader'
       }
-    }, {
-      loader: 'postcss-loader'
-    }]
+    ]
   })
 };
 
@@ -95,7 +72,8 @@ const scss = {
   test: /\.scss$/,
   use: ExtractTextPlugin.extract({
     fallback: 'style-loader',
-    loader: [{
+    loader: [
+      {
         loader: 'css-loader',
         query: {
           modules: true,
