@@ -9,7 +9,10 @@
 */
 function notFoundMiddlware(req, res) {
     res.status(404);
-    res.send('Sorry, page not found!.');
+    res.send({
+        status: 404,
+        message: 'Page not found'
+    });
 }
 
 /**

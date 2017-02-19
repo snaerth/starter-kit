@@ -2,7 +2,7 @@ import passport from 'passport';
 import User from '../models/user';
 import {Strategy as JwtStrategy, ExtractJwt} from 'passport-jwt';
 import LocalStategy from 'passport-local';
-import config from '../config';
+import config from '../../config';
 
 // VARIABLES
 const {JWT_SECRET} = config();

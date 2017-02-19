@@ -1,40 +1,61 @@
 {
-  "name": "express-mongodb-react-redux-universal-starter",
+  "name": "react-redux-universal-starter",
   "version": "0.1.0",
-  "description": "Starter for react, redux, universal rendering, express and mongodb",
-  "main": "server/index.js",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/snaerth/express-mongodb-react-redux-universal-starter.git"
-  },
-  "keywords": [
-    "express",
-    "webpack",
-    "node",
-    "react",
-    "redux",
-    "universal rendering",
-    "mongodb"
-  ],
-  "author": "Snær Seljan Þóroddsson",
-  "license": "MIT",
-  "bugs": {
-    "url": "/issues"
-  },
-  "homepage": "",
   "scripts": {
-    "start-prod": "cross-env NODE_ENV=production npm-run-all --parallel start-prod-server start-prod-api",
-    "start-prod-server": "cross-env HOST=localhost PORT=3000 node build/server.js",
-    "start-prod-api": "cross-env HOST=localhost PORT=3030 node build/api.js",
-    "start-dev": "cross-env NODE_ENV=development npm run start-dev-api && npm run start-dev-server && npm run lint:watch",
-    "start-dev-server": "babel-node src/server/index.js",
-    "start-dev-api": "babel-node src/api/index.js",
-    "build": "rimraf build && npm run build-client && npm run build-server && npm run build-api",
-    "build-client": "webpack -p --config ./tools/webpack.client.prod.js --progress --profile --colors",
-    "build-server": "webpack -p --config  ./tools/webpack.server.prod.js --progress --profile --colors",
-    "build-api": "webpack -p --config  ./tools/webpack.api.prod.js --progress --profile --colors",
+    "start-prod": "concurrent --kill-others \"npm run start-prod-server\" \"npm run start-prod-api\"",
+    "start-prod-server": "better-npm-run start-prod-server",
+    "start-prod-api": "better-npm-run start-prod-api",
+    "start-dev": "concurrent --kill-others \"npm run start-dev-api\" \"npm run start-dev-server\" \"npm run lint:watch\"",
+    "start-dev-server": "better-npm-run start-dev-server",
+    "start-dev-api": "better-npm-run start-dev-api",
+    "build": "rimraf build && npm-run-all --parallel build-client build-server build-api",
+    "build-client": "webpack -p --config ./tools/webpack.client.prod.js --progress --profile --colors --display-error-details",
+    "build-server": "webpack -p --config  ./tools/webpack.server.prod.js --progress --profile --colors --display-error-details",
+    "build-api": "webpack -p --config  ./tools/webpack.api.prod.js --progress --profile --colors --display-error-details",
     "lint": "node_modules/.bin/esw webpack.client.dev.* src --color",
     "lint:watch": "npm run lint -- --watch"
+  },
+  "betterScripts": {
+    "start-prod-server": {
+      "command": "node build/server.js",
+      "env": {
+        "NODE_ENV": "production",
+        "HOST": "localhost",
+        "PORT": 8080
+      }
+    },
+    "start-prod-api": {
+      "command": "node build/api.js",
+      "env": {
+        "NODE_ENV": "production",
+        "APIPORT": 3030,
+        "APIHOST": "localhost"
+      }
+    },
+    "start-dev-server": {
+      "command": "babel-node src/server/index.js",
+      "env": {
+        "NODE_ENV": "development",
+        "HOST": "localhost",
+        "PORT": 3000
+      }
+    },
+    "start-dev-api": {
+      "command": "babel-node src/api/index.js",
+      "env": {
+        "NODE_ENV": "development",
+        "APIPORT": 3030,
+        "APIHOST": "localhost"
+      }
+    },
+    "build": {
+      "command": "babel-node src/api/index.js",
+      "env": {
+        "NODE_ENV": "development",
+        "APIPORT": 3030,
+        "APIHOST": "localhost"
+      }
+    }
   },
   "dependencies": {
     "async": "^2.1.4",
@@ -82,7 +103,6 @@
     "babel-preset-react": "^6.22.0",
     "babel-preset-react-hmre": "^1.1.1",
     "babel-preset-stage-0": "^6.22.0",
-    "better-npm-run": "0.0.14",
     "body-parser": "^1.16.1",
     "case-sensitive-paths-webpack-plugin": "^1.1.4",
     "compression": "^1.6.2",

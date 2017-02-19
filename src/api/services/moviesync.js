@@ -3,7 +3,7 @@ import _ from 'lodash';
 import {deepTrim} from './utils';
 import genres from '../data/genres';
 import {MongoClient} from 'mongodb';
-import config from '../config';
+import config from '../../config';
 
 // VARIABLES
 const {API_KEY_KVIKMYNDIR, API_KEY_TMDB, DB_URL} = config();
