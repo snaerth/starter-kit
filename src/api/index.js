@@ -1,15 +1,7 @@
 /* eslint no-console: 0 */
-
-// Default imports
 import http from 'http';
 import express from 'express';
 import RateLimit from 'express-rate-limit';
-import compression from 'compression';
-import hpp from 'hpp';
-import helmet from 'helmet';
-import bodyParser from 'body-parser';
-import cors from 'cors';
-import {parallel} from '../server/utils/parallel';
 import routes from './router';
 import errorHandlers from '../server/middleware/errorHandlers';
 import middleware from '../server/middleware';
@@ -36,9 +28,8 @@ const apiLimiter = new RateLimit({
 app.disable('x-powered-by');
 
 // Apply middleware to app
-app.use(middleware());
+app.use(middleware([apiLimiter]));
 
-app.use(apiLimiter);
 // Api routes
 routes(app);
 
