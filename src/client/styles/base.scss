@@ -17,7 +17,7 @@ html {
 
 body {
   @include responsive-font(1.5vw, 16px, 25px);
-  background: $primary-pink;
+  background: $primary-black;
   position: relative;
   margin: 0;
   font-family: 'Roboto';
@@ -44,6 +44,10 @@ a:active {
 
 a:hover {
   color:$primary-red; 
+}
+
+fieldset {
+  border: 0;
 }
 
 /* Page Loader */

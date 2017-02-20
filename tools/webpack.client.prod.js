@@ -107,6 +107,7 @@ const vendor = [
   'react-helmet',
   'redux',
   'react-redux',
+  'classnames',
   'lodash',
   'isomorphic-fetch',
   'core-decorators'

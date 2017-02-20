@@ -78,6 +78,7 @@
     "async": "^2.1.4",
     "babel-preset-react-optimize": "^1.0.1",
     "bcrypt-nodejs": "0.0.3",
+    "classnames": "^2.2.5",
     "concurrently": "^3.3.0",
     "core-decorators": "^0.15.0",
     "cors": "^2.8.1",

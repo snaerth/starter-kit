@@ -1,0 +1,19 @@
+@import '../../../styles/variables.scss';
+.heading {
+    color: $primary-red;
+    text-align: center;
+}
+
+@media only screen and (min-width: $min-320) {
+    .heading {
+        text-align: center;
+        padding: 0 15px;
+    }
+}
+
+@media only screen and (min-width: $min-768) {
+    .heading {
+        text-align: center;
+        padding: 0 30px;
+    }
+}
