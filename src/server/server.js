@@ -34,7 +34,9 @@ app.disable('x-powered-by');
 // Apply middleware to app
 app.use(middleware());
 
+// Serve static content for the app from the assets/favicon directory and build directory
 app.use(express.static('./src/assets/favicon'));
+app.use(express.static('./build'));
 
 // Proxy to API server
 app.use('/api', (req, res) => {
@@ -61,7 +63,6 @@ proxy.on('error', (error, req, res) => {
     res.end(JSON.stringify(json));
 });
 
-app.use(express.static('./build'));
 // Handle all requests
 app.get('*', handleRender);
 

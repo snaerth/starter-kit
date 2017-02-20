@@ -12,6 +12,7 @@ import cors from 'cors';
 import {parallel} from '../server/utils/parallel';
 import routes from './router';
 import errorHandlers from '../server/middleware/errorHandlers';
+import middleware from '../server/middleware';
 import config from '../config';
 
 // VARIABLES
@@ -34,26 +35,10 @@ const apiLimiter = new RateLimit({
 // Hide all software information
 app.disable('x-powered-by');
 
-// Run Middlewares parallel/async for more page speed
-app.use(parallel([
-  // Let app use compression
-  compression(),
-  // use application/json parser
-  bodyParser.json(),
-  // Use application/x-www-form-urlencoded parser
-  bodyParser.urlencoded({extended: false}),
-  // Prevent HTTP Parameter pollution. @note: Make sure body parser goes above the
-  // hpp middleware
-  hpp(),
-  // Content Security Policy
-  helmet(),
-  // Middleware for dynamically or statically enabling CORS in express
-  // applications
-  cors(),
-  // Basic IP rate-limiting middleware for Express.
-  apiLimiter
-]));
+// Apply middleware to app
+app.use(middleware());
 
+app.use(apiLimiter);
 // Api routes
 routes(app);
 
