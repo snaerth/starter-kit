@@ -16,6 +16,6 @@ export default() => {
         DB_USERNAME: process.env.DB_USERNAME || 'username',
         DB_PASSWORD: process.env.DB_PASSWORD || 'password',
         // Passport
-        JWT_SECRET: process.env.JWT_SECRET || 'secret'
+        JWT_SECRET: process.env.JWT_SECRET || 'secret',
     };
 };

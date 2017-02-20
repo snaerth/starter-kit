@@ -17,12 +17,12 @@ html {
 
 body {
   @include responsive-font(1.5vw, 16px, 25px);
-  background: $primary-background-color;
+  background: $primary-pink;
   position: relative;
   margin: 0;
   font-family: 'Roboto';
   line-height: 1.5;
-  color: $primary-font-color;
+  color: $primary-black;
   overflow-x: hidden;
 }
 
@@ -39,11 +39,11 @@ h1 {
 a:link, 
 a:visited, 
 a:active { 
-  color:$primary-font-color; 
+  color:$primary-black; 
 }
 
 a:hover {
-  color:$primary-color-yellow; 
+  color:$primary-red; 
 }
 
 /* Page Loader */

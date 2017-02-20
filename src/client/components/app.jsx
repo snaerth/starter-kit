@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import AppLayout from './app-layout';
-import Header from './common/header/Header.jsx';
+import Header from './common/header';
 
 class App extends Component {
   render() {

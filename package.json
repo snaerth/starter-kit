@@ -2,6 +2,7 @@
   "name": "react-redux-universal-starter",
   "version": "0.1.0",
   "scripts": {
+    "start": "concurrent --kill-others \"npm run start-server\" \"npm run start-api\"",
     "start-prod": "concurrent --kill-others \"npm run start-prod-server\" \"npm run start-prod-api\"",
     "start-prod-server": "better-npm-run start-prod-server",
     "start-prod-api": "better-npm-run start-prod-api",
@@ -55,6 +56,22 @@
         "APIPORT": 3030,
         "APIHOST": "localhost"
       }
+    },
+    "start-server": {
+      "command": "pm2 start build/server.js",
+      "env": {
+        "NODE_ENV": "production",
+        "HOST": "localhost",
+        "PORT": 8080
+      }
+    },
+    "start-api": {
+      "command": "pm2 start build/api.js",
+      "env": {
+        "NODE_ENV": "production",
+        "APIPORT": 3030,
+        "APIHOST": "localhost"
+      }
     }
   },
   "dependencies": {
@@ -81,7 +98,6 @@
     "passport": "^0.3.2",
     "passport-jwt": "^2.2.1",
     "passport-local": "^1.0.0",
-    "pm2": "^2.4.0",
     "react": "^15.4.2",
     "react-dom": "^15.4.2",
     "react-helmet": "^4.0.0",

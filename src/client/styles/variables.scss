@@ -1,43 +1,30 @@
-$primary-color-yellow: #facb7a;
-$primary-background-color: #111;
-$primary-font-color: #fff;
+$primary-yellow: #facb7a;
+$primary-red: #eca29b;
+$primary-pink: #f9f7f6;
+$primary-black: #333333;
 
 // Custom break point (Min)
 $min-1800: 1800px;
 $min-1440: 1440px;
 $min-1280: 1280px;
 $min-1200: 1200px;
-$min-1080: 1080px;
 $min-1024: 1024px;
 $min-960: 960px;
-$min-840: 840px;
 $min-768: 768px;
-$min-720: 720px;
-$min-640: 640px;
-$min-600: 600px;
-$min-560: 560px;
-$min-540: 540px;
 $min-480: 480px;
-$min-375: 375px;
 $min-360: 360px;
 $min-320: 320px;
 
 // Custom break points (Max)
 $max-1280: 1279px;
 $max-1200: 1199px;
-$max-1080: 1079px;
 $max-1024: 1023px;
 $max-960: 959px;
-$max-840: 839px;
 $max-768: 767px;
-$max-720: 719px;
-$max-640: 639px;
-$max-600: 599px;
-$max-540: 539px;
 $max-480: 479px;
-$max-375: 374px;
 $max-360: 359px;
 $max-320: 320px;
 
-// Container max width+
+// Containers max width
 $max-width: 1920px;
+$max-480: 480px;
