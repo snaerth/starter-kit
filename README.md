@@ -1,21 +1,18 @@
 # React-Redux-Universal with Mongodb and express
 
-## Inspired by
- https://github.com/christianalfoni/webpack-express-boilerplate
-
 ## Install, Development, Production and Running
-git clone https://github.com/snaerth/express-mongodb-react-redux-universal-starter.git my-project
+git clone https://github.com/snaerth/starter-kit my-project
 
 1. cd my-project
 2. npm install
 
 ### Development
-1. npm run dev
+1. npm run start-dev
 2. Navigate to http://localhost:3000 in your browser of choice.
 
 ### Production
 1. npm run build
-2. npm run start 
+2. npm run start-prod 
 
 ## Overview
 
@@ -32,3 +29,10 @@ Both Node server and frontend code runs with Babel. And all of it is linted. Wit
 You are covered. Also run `npm run eslint` or `npm run jscs` to verify all files.
 ### Beautify
 With a beautify package installed in your editor it will also do that
+
+## Inspired by
+https://github.com/ueno-llc/starter-kit
+https://github.com/erikras/react-redux-universal-hot-example
+
+ 
+
