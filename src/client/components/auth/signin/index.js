@@ -1,2 +1,2 @@
-import signin from './signin';
+import signin from './signin.jsx';
 export default signin;

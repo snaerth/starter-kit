@@ -5,7 +5,7 @@ class HomePage extends Component {
     render() {
         return (
             <div>
-                <MainHeading text="ICELANDIC MOVIE API" />
+                <MainHeading text="MY NEW HOMEPAGE" />
             </div>
         );
     }

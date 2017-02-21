@@ -5,9 +5,9 @@ import classnames from 'classnames';
 /**
  * Button component
  */
-const Button = ({text, ariaLabel, color}) => {
+const Button = ({text, ariaLabel, color, className}) => {
     return (
-        <button className={classnames(styles.button, styles[color])} role="button" aria-label={ariaLabel}>{text}</button>
+        <button className={classnames(styles.button, styles[color], styles[className] )} role="button" aria-label={ariaLabel}>{text}</button>
     );
 };
 

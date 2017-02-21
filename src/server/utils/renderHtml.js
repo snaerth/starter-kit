@@ -21,7 +21,7 @@ export default ({html, preloadedState, assets}) => {
             <script>
             (function() {
                 document.addEventListener("DOMContentLoaded", function() {
-                var minTime = 100;
+                var minTime = 500;
                 var now = new Date();
                 var next = new Date();
                 var timeDiff = next.getTime() - now.getTime();

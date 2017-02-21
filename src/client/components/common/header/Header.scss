@@ -1,23 +1,32 @@
 @import '../../../styles/variables.scss';
+@import '../../../styles/mixins.scss';
 
 .container {
-    background-color: transparent;
+    background: $secondary-black;
     max-width: $max-width;
     margin: 0 auto;
     display: flex;
     flex-direction: row;
 }
 
-.link {
+a.link {
+    @include responsive-font(1.5vw, 20px, 28px);
     text-decoration: none;
     outline: none;
     font-weight: bold;
-    margin: 0 1em 0.5em 0;
+    margin: 0 0.5em;
     pointer-events: visible;
+    color:$primary-white;
+    opacity: 0.9;
+
+    &:hover {
+        color: $primary-red;
+    }
 }
 
-.home_link {
-    color:$primary-black;
+a.home_link {
+    color:$primary-white;
+    opacity: 0.9;
 }
 
 .links_right {
@@ -27,12 +36,12 @@
 
 @media only screen and (min-width: $min-320) {
     .container {
-        padding: 10px;
+        padding: 0.5em;
     }
 }
 
 @media only screen and (min-width: $max-768) {
     .container {
-        padding: 30px;
+        padding: 1em;
     }
 }

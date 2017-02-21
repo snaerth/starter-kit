@@ -1,17 +1,26 @@
 @import '../../../styles/variables.scss';
 @import '../../../styles/mixins.scss';
-
-
-
 .button {
-    @include responsive-font(1.5vw, 20px, 30px);
-    border-radius: 5px;
-    box-shadow: 0 45px 100px rgba(0, 0, 0, 0.4);
-    overflow:hidden;
-    border: 0;
-    padding: 10px 15px;
+  @include responsive-font(1.5vw, 18px, 30px);
+  border-radius: $border-radius;
+  overflow: hidden;
+  border: 0;
+  padding: 15px 20px;
+  cursor: pointer;
+  transition: box-shadow .35s ease-out, transform .3s ease-out, opacity .2s ease-out;
+
+  &:hover {
+    opacity: 0.9;
+    box-shadow: 0 15px 20px rgba(0, 0, 0, 0.2);
+    transform: translate(0, -4px);
+  }
+}
+
+.fullWidth {
+  margin: 0 1em;
+  width: calc(100% - 2em);
 }
 
 .red {
-    background: $primary-red;
+  background: $primary-red;
 }

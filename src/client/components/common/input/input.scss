@@ -1,24 +1,25 @@
 @import '../../../styles/variables.scss';
+@import '../../../styles/mixins.scss';
 
 .input {
     position: relative;
     z-index: 1;
     display: inline-block;
-    margin: 1em;
-    max-width: 400px;
+    margin: 0 1em;
     width: calc(100% - 2em);
     vertical-align: top;
 }
 
 .inputField {
+    @include responsive-font(1.5vw, 18px, 30px);
     position: relative;
     display: block;
     float: right;
     padding: 0.8em;
     width: 60%;
     border: none;
-    border-radius: 0;
-    background: transparent;
+    border-radius: $border-radius;
+    background: $primary-white;
     font-weight: bold;
     -webkit-appearance: none;
     /* for box shadows to show on iOS */
@@ -37,7 +38,7 @@
     display: inline-block;
     padding: 0 1em;
     width: 40%;
-    color: $primary-red;
+    color: $primary-black;
     font-weight: bold;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -46,6 +47,7 @@
     padding: 0;
     width: 100%;
     text-align: left;
+    opacity: 0.9;
 }
 
 .inputLabel::after {
