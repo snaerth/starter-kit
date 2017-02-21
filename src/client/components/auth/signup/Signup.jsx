@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { reduxForm } from 'redux-form';
 import Input from '../../common/input';
-import styles from './Signin.scss';
+import styles from './Signup.scss';
 import Button from '../../common/button';
 import MainHeading from './../../../components/common/mainheading';
 
@@ -12,7 +12,7 @@ class Signin extends Component {
     render() {
         return (
             <div className={styles.container}>
-                <MainHeading text="SIGN IN" />
+                <MainHeading text="SIGN UP" />
                 <form>
                     <fieldset>
                         <Input label="Email" id="email" type="email" />
@@ -22,7 +22,7 @@ class Signin extends Component {
                     </fieldset>
                     <fieldset>
                         <div>
-                            <Button text="Send" ariaLabel="Send" color="red" className="fullWidth" />
+                            <Button text="Sign up" ariaLabel="Sign up" color="red" className="fullWidth" />
                         </div>
                     </fieldset>
                 </form>
