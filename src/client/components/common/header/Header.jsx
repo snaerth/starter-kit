@@ -9,16 +9,16 @@ class Header extends Component {
             <nav className={styles.container}>
                 <IndexLink
                     to="/"
-                    activeClassName="active"
+                    activeClassName={styles.active}
                     className={classnames(styles.home_link,styles.link)}>MY NEW HOMEPAGE</IndexLink>
                 <div className={styles.links_right}>
                     <Link
                         to="/signin"
-                        activeClassName="active"
+                        activeClassName={styles.active}
                         className={styles.link}>Sign in</Link>
                     <Link
                         to="/signup"
-                        activeClassName="active"
+                        activeClassName={styles.active}
                         className={styles.link}>Sign up</Link>
                 </div>
             </nav>

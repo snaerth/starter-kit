@@ -5,8 +5,7 @@
 }
 
 html,
-body,
-#app {
+body {
   min-height: 100vh;
 }
 
@@ -54,6 +53,7 @@ fieldset {
 
 .page {
     position: absolute;
+    width: 100%;
 }
 
 
@@ -86,19 +86,23 @@ fieldset {
 }
 
 .fadeIn-enter {
-  opacity: 0.01;
+    opacity: 0;
+    transform: scale3d(0.8, 0.8, 1);
 }
 
 .fadeIn-enter.fadeIn-enter-active {
-  opacity: 1;
-  transition: opacity 500ms ease-in;
+    opacity: 1;
+    transition: all 700ms, transform 700ms;
+    transform: scale3d(1, 1, 1);
 }
 
 .fadeIn-leave {
-  opacity: 1;
+    opacity: 1;
+    transform: scale3d(1, 1, 1);
 }
 
 .fadeIn-leave.fadeIn-leave-active {
-  opacity: 0.01;
-  transition: opacity 300ms ease-in;
+    opacity: 0.01;
+    transition: all 350ms, transform 350ms;
+    transform: scale3d(0.8, 0.8, 1);
 }

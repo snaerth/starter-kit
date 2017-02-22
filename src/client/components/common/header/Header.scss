@@ -29,6 +29,10 @@ a.home_link {
     opacity: 0.9;
 }
 
+a.active {
+    color: $primary-red;
+}
+
 .links_right {
     position: relative;
     margin-left: auto;
