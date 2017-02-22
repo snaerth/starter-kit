@@ -1,4 +1,5 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
+import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import SigninForm from './../../components/auth/signin';
 
 /**
@@ -8,7 +9,13 @@ class Signin extends Component {
     render() {
         return (
             <div>
-                <SigninForm />
+                <ReactCSSTransitionGroup
+                    component="div"
+                    transitionName="fadeIn"
+                    transitionEnterTimeout={500}
+                    transitionLeaveTimeout={250}>
+                    <SigninForm />
+                </ReactCSSTransitionGroup>
             </div>
         );
     }

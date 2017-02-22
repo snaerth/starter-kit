@@ -1,11 +1,11 @@
 @import './variables.scss';
 @import './mixins.scss';
-
 * {
   box-sizing: border-box;
 }
 
-html, body {
+html,
+body {
   min-height: 100vh;
 }
 
@@ -33,25 +33,27 @@ img {
 }
 
 h1 {
-    @include responsive-font(13vw, 40px, 70px);
+  @include responsive-font(13vw, 40px, 70px);
 }
 
-a:link, 
-a:visited, 
-a:active { 
-  color:$primary-black; 
+a:link,
+a:visited,
+a:active {
+  color: $primary-black;
 }
 
 a:hover {
   transition: color $hover-transition ease-out;
-  color:$primary-red; 
+  color: $primary-red;
 }
 
 fieldset {
   border: 0;
 }
 
+
 /* Page Loader */
+
 .js body::before {
   content: 'Loading...';
   font-family: 'Montserrat';
@@ -76,4 +78,22 @@ fieldset {
 
 .js .loading::before {
   transform: translate3d(0, 100%, 0);
+}
+
+.fadeIn-enter {
+  opacity: 0.01;
+}
+
+.fadeIn-enter.fadeIn-enter-active {
+  opacity: 1;
+  transition: opacity 500ms ease-in;
+}
+
+.fadeIn-leave {
+  opacity: 1;
+}
+
+.fadeIn-leave.fadeIn-leave-active {
+  opacity: 0.01;
+  transition: opacity 300ms ease-in;
 }
