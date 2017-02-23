@@ -1,17 +1,16 @@
 import React, {PropTypes} from 'react';
-import styles from './Input.scss';
+import styles from './input.scss';
 
-const Input = ({id, label, placholder, type}) => {
+const Input = props => {
     return (
         <span className={styles.input}>
             <input
-                type={type}
+                type={props.type}
                 className={styles.inputField}
-                type="text"
-                id={id}
-                placeholder={placholder}/>
-            <label className={styles.inputLabel} htmlFor={id}>
-                <span className={styles.inputLabelContent}>{label}</span>
+                id={props.id}
+                placeholder={props.placholder}/>
+            <label className={styles.inputLabel} htmlFor={props.id}>
+                <span className={styles.inputLabelContent}>{props.label}</span>
             </label>
         </span>
     );
