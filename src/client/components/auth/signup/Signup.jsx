@@ -22,7 +22,7 @@ class Signin extends Component {
                     </fieldset>
                     <fieldset>
                         <div>
-                            <Button text="Sign up" ariaLabel="Sign up" color="red" className="fullWidth" />
+                            <Button text="Sign up" ariaLabel="Sign up" className="fullWidth" />
                         </div>
                     </fieldset>
                 </form>

@@ -8,7 +8,7 @@
   padding: 15px 20px;
   cursor: pointer;
   transition: box-shadow .25s ease-out, transform .20s ease-out, opacity .10s ease-out;
-
+  
   &:hover {
     opacity: 0.9;
     box-shadow: 0 15px 20px rgba(0, 0, 0, 0.2);
@@ -21,6 +21,6 @@
   width: calc(100% - 2em);
 }
 
-.red {
-  background: $primary-red;
+.default {
+  background: $button-background;
 }

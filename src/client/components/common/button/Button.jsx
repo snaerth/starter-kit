@@ -7,7 +7,7 @@ import classnames from 'classnames';
  */
 const Button = ({text, ariaLabel, color, className}) => {
     return (
-        <button className={classnames(styles.button, styles[color], styles[className] )} role="button" aria-label={ariaLabel}>{text}</button>
+        <button className={classnames(styles.button, styles[color ? color: 'default'], styles[className] )} role="button" aria-label={ariaLabel}>{text}</button>
     );
 };
 
