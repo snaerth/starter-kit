@@ -10,7 +10,7 @@ class Header extends Component {
                 <IndexLink
                     to="/"
                     activeClassName={styles.active}
-                    className={classnames(styles.home_link,styles.link)}>MY NEW HOMEPAGE</IndexLink>
+                    className={classnames(styles.home_link,styles.link)}>Home</IndexLink>
                 <div className={styles.links_right}>
                     <Link
                         to="/signin"

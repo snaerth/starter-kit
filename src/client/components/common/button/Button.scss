@@ -5,14 +5,21 @@
   border-radius: $border-radius;
   overflow: hidden;
   border: 0;
-  padding: 15px 20px;
+  padding: 11px 20px;
   cursor: pointer;
-  transition: box-shadow .25s ease-out, transform .20s ease-out, opacity .10s ease-out;
-  
+  transition: box-shadow .25s ease-out, transform .20s ease-out, opacity .10s ease-out, background .15s ease-out;
+  color: $secondary-black;
+  font-weight: bold;
+
   &:hover {
     opacity: 0.9;
     box-shadow: 0 15px 20px rgba(0, 0, 0, 0.2);
     transform: translate(0, -4px);
+  }
+
+  &:focus {
+    outline: 0;
+    background: darken($button-background, 5%);
   }
 }
 
@@ -23,4 +30,8 @@
 
 .default {
   background: $button-background;
+
+  &:hover {
+    background: lighten($button-background, 5%);
+  }
 }
