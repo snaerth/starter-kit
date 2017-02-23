@@ -2,7 +2,7 @@
 @import '../../../styles/mixins.scss';
 
 .container {
-    background: $secondary-black;
+    background: $navbar-background;
     max-width: $max-width;
     margin: 0 auto;
     display: flex;
@@ -16,22 +16,26 @@ a.link {
     font-weight: bold;
     margin: 0 0.5em;
     pointer-events: visible;
-    color:$primary-white;
-    opacity: 0.9;
+    color:$navbar-text;
 
     &:hover {
-        color: $primary-red;
+        color: $primary-white;
+        opacity: 0.9;
     }
 }
 
 a.home_link {
-    color:$primary-white;
+    color:$navbar-text;
     opacity: 0.9;
 }
 
 a.active {
-    color: $primary-red;
+    color:$primary-white;
+    opacity: 0.9;
 }
+
+
+
 
 .links_right {
     position: relative;

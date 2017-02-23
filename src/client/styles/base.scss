@@ -17,7 +17,7 @@ html {
 
 body {
   @include responsive-font(1.5vw, 16px, 25px);
-  background: $primary-pink;
+  background: $linear-background-primary;
   position: relative;
   margin: 0;
   font-family: 'Roboto';
