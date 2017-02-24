@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import { reduxForm } from 'redux-form';
+import React, {PropTypes, Component} from 'react';
+import {reduxForm, Field} from 'redux-form';
 import Input from '../../common/input';
 import styles from './Signup.scss';
 import Button from '../../common/button';
@@ -8,21 +8,32 @@ import MainHeading from './../../../components/common/mainheading';
 /**
  * Signin component
  */
-class Signin extends Component {
+class Signup extends Component {
+    static propTypes = {
+        fields: PropTypes.array.isRequired,
+        handleSubmit: PropTypes.func.isRequired
+    }
+
+    handleFormSubmit({email, password}) {
+        console.log(email, password);
+    }
+
     render() {
+        const {handleSubmit} = this.props;
+
         return (
             <div className={styles.container}>
-                <MainHeading text="SIGN UP" />
-                <form>
+                <MainHeading text="SIGN IN"/>
+                <form onSubmit={handleSubmit(this.handleFormSubmit.bind(this))}>
                     <fieldset>
-                        <Input label="Email" id="email" type="email" />
+                        <Field component={Input} name="email" id="email" type="email" label="Email"/>
                     </fieldset>
                     <fieldset>
-                        <Input label="password" id="password" type="password" />
+                        <Field component={Input} name="password" id="password" type="password" label="Password"/>
                     </fieldset>
                     <fieldset>
                         <div>
-                            <Button text="Sign up" ariaLabel="Sign up" className="fullWidth" />
+                            <Button text="Send" ariaLabel="Send" className="fullWidth"/>
                         </div>
                     </fieldset>
                 </form>
@@ -33,5 +44,5 @@ class Signin extends Component {
 
 export default reduxForm({
     form: 'signin',
-    fields: ['email', 'passpword']
-})(Signin);
+    fields: ['email', 'password']
+})(Signup);

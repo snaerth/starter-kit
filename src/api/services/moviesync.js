@@ -2,11 +2,10 @@ import fetch from 'node-fetch';
 import _ from 'lodash';
 import {deepTrim} from './utils';
 import genres from '../data/genres';
-import {MongoClient} from 'mongodb';
 import config from '../../config';
 
 // VARIABLES
-const {API_KEY_KVIKMYNDIR, API_KEY_TMDB, DB_URL} = config();
+const {API_KEY_KVIKMYNDIR, API_KEY_TMDB} = config();
 
 export default(callback) => {
     // Contains all movies for 5 days in one big array [movie1, movie2, movie2, ...]
@@ -76,24 +75,8 @@ export default(callback) => {
         });
 
         upcomingMovies.data = extendMoviesObjects(upcomingMovies.data, plotsArr, trailersArr, imagesArr, omdbArr, propsToDelete);
-
-        MongoClient.connect(DB_URL, function (err, db) {
-            insertDocument(db, moviesByDay[0].data, function () {
-                db.close();
-                callback('Inserted a document into the movies collection.');
-            });
-        });
-
     }).catch(error => callback(error));
 };
-
-function insertDocument(db, documents, callback) {
-    db
-        .collection('movies')
-        .insert(documents, () => {
-            callback();
-        });
-}
 
 /**
  * Extends movie objects with plots, trailers, images and omdb objects
