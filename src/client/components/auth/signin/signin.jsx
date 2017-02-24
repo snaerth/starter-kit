@@ -1,5 +1,5 @@
 import React, {PropTypes, Component} from 'react';
-import {reduxForm} from 'redux-form';
+import { reduxForm } from 'redux-form';
 import Input from '../../common/input';
 import styles from './Signin.scss';
 import Button from '../../common/button';
@@ -9,14 +9,14 @@ import MainHeading from './../../../components/common/mainheading';
  * Signin component
  */
 class Signin extends Component {
-    static propTypes = {
-        fields: PropTypes.array.isRequired,
-        handleSubmit: PropTypes.func.isRequired
-    }
-
     constructor(props) {
         super(props);
         this.handleFormSubmit = this.handleFormSubmit.bind(this);
+    }
+
+    static propTypes = {
+        fields: PropTypes.array.isRequired,
+        handleSubmit: PropTypes.func.isRequired
     }
 
     handleFormSubmit({email, password}) {
