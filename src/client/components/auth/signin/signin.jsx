@@ -1,5 +1,5 @@
 import React, {PropTypes, Component} from 'react';
-import { reduxForm } from 'redux-form';
+import {reduxForm, Field} from 'redux-form';
 import Input from '../../common/input';
 import styles from './Signin.scss';
 import Button from '../../common/button';
@@ -9,11 +9,6 @@ import MainHeading from './../../../components/common/mainheading';
  * Signin component
  */
 class Signin extends Component {
-    constructor(props) {
-        super(props);
-        this.handleFormSubmit = this.handleFormSubmit.bind(this);
-    }
-
     static propTypes = {
         fields: PropTypes.array.isRequired,
         handleSubmit: PropTypes.func.isRequired
@@ -24,17 +19,17 @@ class Signin extends Component {
     }
 
     render() {
-            const {fields: {email, password}, handleSubmit} = this.props;
+        const {handleSubmit} = this.props;
 
         return (
             <div className={styles.container}>
                 <MainHeading text="SIGN IN"/>
-                <form onSubmit={handleSubmit(this.handleFormSubmit)}>
+                <form onSubmit={handleSubmit(this.handleFormSubmit.bind(this))}>
                     <fieldset>
-                        <Input {...email} label="Email" id="email" type="email" />
+                        <Field component={Input} name="email" id="email" type="email" label="Email"/>
                     </fieldset>
                     <fieldset>
-                        <Input {...password} label="password" id="password" type="password"/>
+                        <Field component={Input} name="password" id="password" type="password" label="Password"/>
                     </fieldset>
                     <fieldset>
                         <div>

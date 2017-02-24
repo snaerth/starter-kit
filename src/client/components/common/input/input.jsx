@@ -5,6 +5,7 @@ const Input = props => {
     return (
         <span className={styles.input}>
             <input
+                {...props.input}
                 type={props.type}
                 className={styles.inputField}
                 id={props.id}
@@ -20,7 +21,8 @@ Input.propTypes = {
     id: PropTypes.string.isRequired,
     label: PropTypes.string.isRequired,
     placholder: PropTypes.string,
-    type: PropTypes.string.isRequired
+    type: PropTypes.string.isRequired,
+    input: PropTypes.object
 };
 
 export default Input;
