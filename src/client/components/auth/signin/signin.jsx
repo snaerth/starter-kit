@@ -3,7 +3,7 @@ import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import {reduxForm, Field} from 'redux-form';
 import Input from '../../common/input';
-import styles from './Signin.scss';
+import styles from './signin.scss';
 import Button from '../../common/button';
 import MainHeading from './../../../components/common/mainheading';
 import * as actionCreators from './../../../actions';

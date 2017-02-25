@@ -9,8 +9,7 @@ const {JWT_SECRET} = config();
 // Setup options for local strategy
 const localOptions = {
     usernameField: 'email',
-    passwordField: 'password',
-    session: false
+    passwordField: 'password'
 };
 
 // Create local strategy
@@ -40,8 +39,7 @@ export const localLogin = new LocalStrategy(localOptions, (email, password, done
 // Setup options for JWT Strategy
 const jwtOptions = {
     jwtFromRequest: ExtractJwt.fromHeader('authorization'),
-    secretOrKey: JWT_SECRET,
-    session: false
+    secretOrKey: JWT_SECRET
 };
 
 // Create JWT Strategy

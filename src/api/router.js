@@ -7,8 +7,8 @@ passport.use(jwtLogin);
 passport.use(localLogin);
 
 // Initialize require authentication helpers
-const requireAuth = passport.authenticate('jwt');
-const requireSignin = passport.authenticate('local');
+const requireAuth = passport.authenticate('jwt', {session: false});
+const requireSignin = passport.authenticate('local', {session: false});
 
 /**
  * Default API routes

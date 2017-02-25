@@ -1,2 +1,2 @@
-import input from './Input.jsx';
+import input from './input.jsx';
 export default input;

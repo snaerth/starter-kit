@@ -4,7 +4,7 @@ import express from 'express';
 import RateLimit from 'express-rate-limit';
 import routes from './router';
 import errorHandlers from '../server/middleware/errorHandlers';
-import middleware from '../server/middleware';
+import middleware from './middleware';
 import config from '../config';
 import db from './db';
 

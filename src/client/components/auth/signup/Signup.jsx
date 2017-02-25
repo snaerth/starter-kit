@@ -1,7 +1,7 @@
 import React, {PropTypes, Component} from 'react';
 import {reduxForm, Field} from 'redux-form';
 import Input from '../../common/input';
-import styles from './Signup.scss';
+import styles from './signup.scss';
 import Button from '../../common/button';
 import MainHeading from './../../../components/common/mainheading';
 
@@ -23,7 +23,7 @@ class Signup extends Component {
 
         return (
             <div className={styles.container}>
-                <MainHeading text="SIGN IN"/>
+                <MainHeading text="SIGN UP"/>
                 <form onSubmit={handleSubmit(this.handleFormSubmit.bind(this))}>
                     <fieldset>
                         <Field component={Input} name="email" id="email" type="email" label="Email"/>
