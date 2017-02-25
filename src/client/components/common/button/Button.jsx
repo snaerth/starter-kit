@@ -14,7 +14,8 @@ const Button = ({text, ariaLabel, color, className}) => {
 Button.propTypes = {
     text: PropTypes.string.isRequired,
     ariaLabel: PropTypes.string.isRequired,
-    color: PropTypes.string
+    color: PropTypes.string,
+    className: PropTypes.string
 };
 
 export default Button;

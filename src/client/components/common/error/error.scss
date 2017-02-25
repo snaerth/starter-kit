@@ -1,0 +1,10 @@
+@import '../../../styles/variables.scss';
+
+.error {
+    background: $primary-red;
+    border-radius: $border-radius;
+    padding: 11px 15px;
+    margin: 0 1em 2em;
+    width: calc(100% - 2em);
+    box-shadow: $box-shadow;
+}

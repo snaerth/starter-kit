@@ -74,6 +74,11 @@
     animation: anim-shadow 0.3s forwards;
 }
 
+.error {
+    color: $primary-red;
+    margin-bottom: 5px;
+}
+
 @-webkit-keyframes anim-shadow {
     to {
         box-shadow: 0px 0px 100px 50px;

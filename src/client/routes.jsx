@@ -5,6 +5,7 @@ import NotFoundPage from './pages/notfound';
 import HomePage from './pages/home';
 import SigninPage from './pages/signin';
 import SignupPage from './pages/signup';
+import SignoutPage from './pages/signout';
 
 export {
   NotFoundPage
@@ -15,6 +16,7 @@ export default (
     <IndexRoute component={HomePage} />
     <Route path="signin"component={SigninPage} />
     <Route path="signup"component={SignupPage} />
+    <Route path="signout"component={SignoutPage} />
     <Route path="*" component={NotFoundPage} />
   </Route>
 );

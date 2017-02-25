@@ -1,29 +1,51 @@
-import React, {Component} from 'react';
+import React, {Component, PropTypes} from 'react';
+import {connect} from 'react-redux';
 import {Link, IndexLink} from 'react-router';
 import styles from './Header.scss';
 import classnames from 'classnames';
 
+/**
+ * Header Component
+ */
 class Header extends Component {
+    static propTypes = {
+        authenticated: PropTypes.bool
+    }
+
+    /**
+     * Renders auth links. If authenticated then signout link
+     * else signin and signup
+     * 
+     * @returns {Component} Link 
+     */
+    renderAuthLinks() {
+        if (this.props.authenticated) {
+            return <Link to="/signout" activeClassName={styles.active} className={styles.link}>Sign out</Link>
+        } else {
+            return [
+                <Link to="/signin" key="signin" activeClassName={styles.active} className={styles.link}>Sign in</Link>,
+                <Link to="/signup" key="signup" activeClassName={styles.active} className={styles.link}>Sign up</Link>
+            ];
+        }
+    }
+
     render() {
         return (
             <nav className={styles.container}>
                 <IndexLink
                     to="/"
                     activeClassName={styles.active}
-                    className={classnames(styles.home_link,styles.link)}>Home</IndexLink>
+                    className={classnames(styles.home_link, styles.link)}>Home</IndexLink>
                 <div className={styles.links_right}>
-                    <Link
-                        to="/signin"
-                        activeClassName={styles.active}
-                        className={styles.link}>Sign in</Link>
-                    <Link
-                        to="/signup"
-                        activeClassName={styles.active}
-                        className={styles.link}>Sign up</Link>
+                    {this.renderAuthLinks()}
                 </div>
             </nav>
         );
     }
 }
 
-export default Header;
+function mapStateToProps(state) {
+    return {authenticated: state.auth.authenticated };
+}
+
+export default connect(mapStateToProps)(Header);

@@ -1,5 +1,6 @@
 @import '../../../styles/variables.scss';
 @import '../../../styles/mixins.scss';
+
 .button {
   @include responsive-font(1.5vw, 18px, 30px);
   border-radius: $border-radius;
@@ -13,8 +14,8 @@
 
   &:hover {
     opacity: 0.9;
-    box-shadow: 0 15px 20px rgba(0, 0, 0, 0.2);
-    transform: translate(0, -4px);
+    box-shadow: $box-shadow;
+    transform: translate3d(0, -4px, 0);
   }
 
   &:focus {
