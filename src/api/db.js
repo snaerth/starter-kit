@@ -13,6 +13,7 @@ export default(mongoUri, callback) => {
         }
     };
 
+    // Connect to database
     mongoose.connect(mongoUri, options);
 
     mongoose

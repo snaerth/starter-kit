@@ -26,7 +26,6 @@ const apiLimiter = new RateLimit({
 });
 
 db(DB_URL, () => {
-
   // Hide all software information
   app.disable('x-powered-by');
 

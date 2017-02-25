@@ -4,6 +4,12 @@ import jwt from 'jwt-simple';
 
 // SIGNUP
 export function signup(req, res, next) {
+    if (!req.body) {
+        return res
+            .status(422)
+            .send({error: 'No post data found'});
+    }
+
     const email = req.body.email || '';
     const password = req.body.password || '';
     const message = req.body.message || '';
