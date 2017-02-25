@@ -2,9 +2,11 @@ import compression from 'compression';
 import hpp from 'hpp';
 import helmet from 'helmet';
 import bodyParser from 'body-parser';
-import {parallel} from '../../server/utils/parallel';
+import cors from 'cors';
 import passport from 'passport';
+import {parallel} from '../../server/utils/parallel';
 
+// Default middlewares
 const defaultMiddlewares = [
     // Let app use compression
     compression(),
@@ -18,7 +20,9 @@ const defaultMiddlewares = [
     // hpp middleware
     hpp(),
     // Content Security Policy
-    helmet()
+    helmet(),
+    // Dynamically or statically enable CORS
+    cors()
 ];
 
 export default(otherMiddleware) => {

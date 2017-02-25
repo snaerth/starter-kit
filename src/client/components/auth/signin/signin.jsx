@@ -16,10 +16,14 @@ class Signin extends Component {
         fields: PropTypes.array.isRequired,
         handleSubmit: PropTypes.func.isRequired,
         signinUser: PropTypes.func,
+        actions: PropTypes.object.isRequired
     }
 
     handleFormSubmit({email, password}) {
-        this.props.actions.signinUser({email, password});
+        this
+            .props
+            .actions
+            .signinUser({email, password});
     }
 
     render() {
@@ -33,12 +37,7 @@ class Signin extends Component {
                         <Field component={Input} name="email" id="email" type="email" label="Email"/>
                     </fieldset>
                     <fieldset>
-                        <Field
-                            component={Input}
-                            name="password"
-                            id="password"
-                            type="password"
-                            label="Password"/>
+                        <Field component={Input} name="password"id="password" type="password" label="Password"/>
                     </fieldset>
                     <fieldset>
                         <div>
