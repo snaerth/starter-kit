@@ -8,3 +8,10 @@
     width: calc(100% - 2em);
     box-shadow: $box-shadow;
 }
+
+@media only screen and (max-width: $max-768) {
+    .error {
+        width: 100%;
+        margin: 0 0 2em;
+    }
+}

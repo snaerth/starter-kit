@@ -12,7 +12,7 @@ export default() => {
         APIPORT: process.env.APIPORT || 3030,
         APIHOST: process.env.APIHOST || 'localhost',
         // Database
-        DB_URL: process.env.DB_URL || 'mongodb://localhost/movieapi',
+        DB_URL: process.env.DB_URL || 'mongodb://starterkit:starterkit@ds161159.mlab.com:61159/starterkit',
         DB_USERNAME: process.env.DB_USERNAME || 'username',
         DB_PASSWORD: process.env.DB_PASSWORD || 'password',
         // Passport

@@ -1,14 +1,15 @@
-import React, {PropTypes, Component} from 'react';
-import {bindActionCreators} from 'redux';
-import {connect} from 'react-redux';
-import {reduxForm, Field} from 'redux-form';
+import React, { PropTypes, Component } from 'react';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import { reduxForm, Field } from 'redux-form';
 import Input from '../../common/input';
+import Textarea from '../../common/textarea';
 import styles from './signup.scss';
 import Button from '../../common/button';
 import MainHeading from './../../../components/common/mainheading';
 import Error from '../../common/error';
 import * as actionCreators from './../../../actions';
-import {validateEmail} from './../../../utils/validate';
+import { validateEmail } from './../../../utils/validate';
 
 /**
  * Signup component
@@ -17,9 +18,9 @@ class Signup extends Component {
     static propTypes = {
         fields: PropTypes.array.isRequired,
         handleSubmit: PropTypes.func.isRequired,
-        SignupUser: PropTypes.func,
+        signupUser: PropTypes.func,
         actions: PropTypes.object.isRequired,
-        errorMessage: PropTypes.string
+        errorMessage: PropTypes.string,
     }
 
     /**
@@ -29,11 +30,11 @@ class Signup extends Component {
      * @returns {undefined}
      * @author Snær Seljan Þóroddsson
      */
-    handleFormSubmit({email, password}) {
+    handleFormSubmit({email, password, message}) {
         this
             .props
             .actions
-            .SignupUser({email, password});
+            .signupUser({ email, password, message });
     }
 
     /**
@@ -47,7 +48,7 @@ class Signup extends Component {
         if (errorMessage) {
             return (
                 <fieldset>
-                    <Error strongText="Error: " text={errorMessage}/>
+                    <Error strongText="Error: " text={errorMessage} />
                 </fieldset>
             );
         }
@@ -58,10 +59,10 @@ class Signup extends Component {
 
         return (
             <div className={styles.container}>
-                <MainHeading text="SIGN UP"/> {this.renderError(errorMessage)}
+                <MainHeading text="SIGN UP" /> {this.renderError(errorMessage)}
                 <form onSubmit={handleSubmit(this.handleFormSubmit.bind(this))} noValidate>
                     <fieldset>
-                        <Field component={Input} name="email" id="email" type="email" label="Email"/>
+                        <Field component={Input} name="email" id="email" type="email" label="Email" />
                     </fieldset>
                     <fieldset>
                         <Field
@@ -69,11 +70,18 @@ class Signup extends Component {
                             name="password"
                             id="password"
                             type="password"
-                            label="Password"/>
+                            label="Password" />
+                    </fieldset>
+                    <fieldset>
+                        <Field
+                            component={Textarea}
+                            name="message"
+                            id="message"
+                            label="Message" />
                     </fieldset>
                     <fieldset>
                         <div>
-                            <Button text="Sign up" ariaLabel="Sign up" className="fullWidth"/>
+                            <Button text="Sign up" ariaLabel="Sign up" className="fullWidth" />
                         </div>
                     </fieldset>
                 </form>
@@ -82,7 +90,16 @@ class Signup extends Component {
     }
 }
 
-function validate({email, password}) {
+/**
+ * Validates form inputs, both email, password and message
+ * 
+ * @param {String} email
+ * @param {String} password
+ * @param {String} message
+ * @return {Object} errors
+ * @author Snær Seljan Þóroddsson
+ */
+function validate({email, password, message}) {
     const errors = {};
 
     // Email
@@ -107,6 +124,10 @@ function validate({email, password}) {
         errors.password = 'Password required';
     }
 
+    if (!message) {
+        errors.message = 'Message required';
+    }
+
     return errors;
 }
 
@@ -118,7 +139,7 @@ function validate({email, password}) {
  * @author Snær Seljan Þóroddsson
  */
 function mapStateToProps(state) {
-    return {errorMessage: state.auth.error};
+    return { errorMessage: state.auth.error };
 }
 
 /**
@@ -137,7 +158,7 @@ function mapDispatchToProps(dispatch) {
 export default connect(mapStateToProps, mapDispatchToProps)(reduxForm({
     form: 'signup',
     fields: [
-        'email', 'password'
+        'email', 'password', 'message'
     ],
     validate
 })(Signup));

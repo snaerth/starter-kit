@@ -83,6 +83,14 @@ class Signin extends Component {
     }
 }
 
+/**
+ * Validates form inputs, both email and password
+ * 
+ * @param {String} email
+ * @param {String} password
+ * @return {Object} errors
+ * @author Snær Seljan Þóroddsson
+ */
 function validate({email, password}) {
     const errors = {};
 
