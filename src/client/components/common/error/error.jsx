@@ -10,7 +10,7 @@ import {TweenMax} from 'gsap';
 class Error extends Component {
     componentDidMount() {
         const node = ReactDOM.findDOMNode(this);
-        TweenMax.fromTo(node, 0.5, {scale: 0.8, y: 10}, {scale: 1, y: 0});
+        TweenMax.fromTo(node, 0.5, {y: 10}, {y: 0});
     }
 
     render() {

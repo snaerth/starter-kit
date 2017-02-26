@@ -2,20 +2,20 @@
 @import '../../../styles/mixins.scss';
 
 .button {
-  @include responsive-font(1.5vw, 18px, 30px);
   border-radius: $border-radius;
   overflow: hidden;
   border: 0;
   padding: 11px 20px;
   cursor: pointer;
-  transition: box-shadow .25s ease-out, transform .20s ease-out, opacity .10s ease-out, background .15s ease-out;
-  color: $secondary-black;
+  transition: box-shadow .25s ease-out, transform .20s ease-out, opacity .10s ease-out, background .15s ease-out, color .2s ease-out;
+  color: $primary-white;
   font-weight: bold;
 
   &:hover {
     opacity: 0.9;
     box-shadow: $box-shadow;
     transform: translate3d(0, -4px, 0);
+    color: $secondary-black;
   }
 
   &:focus {
@@ -35,4 +35,11 @@
   &:hover {
     background: lighten($button-background, 5%);
   }
+}
+
+@media only screen and (max-width: $max-768) {
+    .button {
+        width: 100%;
+        margin: 0;
+    }
 }

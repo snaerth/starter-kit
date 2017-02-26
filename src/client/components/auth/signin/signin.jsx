@@ -7,6 +7,7 @@ import styles from './signin.scss';
 import Button from '../../common/button';
 import MainHeading from './../../../components/common/mainheading';
 import Error from '../../common/error';
+import {validateEmail} from './../../../utils/validate';
 import * as actionCreators from './../../../actions';
 
 /**
@@ -59,7 +60,7 @@ class Signin extends Component {
         return (
             <div className={styles.container}>
                 <MainHeading text="SIGN IN"/> {this.renderError()}
-                <form onSubmit={handleSubmit(this.handleFormSubmit.bind(this))}>
+                <form onSubmit={handleSubmit(this.handleFormSubmit.bind(this))} noValidate>
                     <fieldset>
                         <Field component={Input} name="email" id="email" type="email" label="Email"/>
                     </fieldset>
@@ -80,6 +81,34 @@ class Signin extends Component {
             </div>
         );
     }
+}
+
+function validate({email, password}) {
+    const errors = {};
+
+    // Email
+    if (!validateEmail(email)) {
+        errors.email = `Email ${email} is not valid email`;
+    }
+
+    if (!email) {
+        errors.email = 'Email required';
+    }
+
+    // Password
+    if (!/[0-9]/.test(password) || !/[A-Z]/.test(password)) {
+        errors.password = 'Password must contain at least one number (0-9) and one uppercase letter (A-Z)';
+    }
+
+    if (password && password.length < 6) {
+        errors.password = 'The password must be of minimum length 6 characters';
+    }
+
+    if (!password) {
+        errors.password = 'Password required';
+    }
+
+    return errors;
 }
 
 /**
@@ -108,5 +137,6 @@ function mapDispatchToProps(dispatch) {
 
 export default connect(mapStateToProps, mapDispatchToProps)(reduxForm({
     form: 'signin',
-    fields: ['email', 'password']
+    fields: ['email', 'password'],
+    validate
 })(Signin));

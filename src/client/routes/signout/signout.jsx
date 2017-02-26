@@ -1,5 +1,6 @@
 import React, {Component, PropTypes} from 'react';
 import {connect} from 'react-redux';
+import {Link} from 'react-router';
 import * as actions from '../../actions';
 
 /**
@@ -11,13 +12,18 @@ class Signout extends Component {
     }
 
     componentWillMount() {
-        this.props.signoutUser();
+        this
+            .props
+            .signoutUser();
     }
 
     render() {
         return (
             <div className="page">
-                <div>Back to home page perhaps???</div>
+                <div className="container">
+                    <div>You are signed out. You can sign in again here</div>
+                    <Link to="/" className="underline">Home</Link>
+                </div>
             </div>
 
         );

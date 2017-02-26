@@ -59,7 +59,7 @@ class Signup extends Component {
         return (
             <div className={styles.container}>
                 <MainHeading text="SIGN UP"/> {this.renderError(errorMessage)}
-                <form onSubmit={handleSubmit(this.handleFormSubmit.bind(this))}>
+                <form onSubmit={handleSubmit(this.handleFormSubmit.bind(this))} noValidate>
                     <fieldset>
                         <Field component={Input} name="email" id="email" type="email" label="Email"/>
                     </fieldset>
