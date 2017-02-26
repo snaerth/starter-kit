@@ -8,7 +8,7 @@ import Button from '../../common/button';
 import MainHeading from './../../../components/common/mainheading';
 import Error from '../../common/error';
 import * as actionCreators from './../../../actions';
-import {validateEmail } from './../../../utils/validate';
+import {validateEmail} from './../../../utils/validate';
 
 /**
  * Signup component
@@ -61,7 +61,7 @@ class Signup extends Component {
                 <MainHeading text="SIGN UP"/> {this.renderError(errorMessage)}
                 <form onSubmit={handleSubmit(this.handleFormSubmit.bind(this))}>
                     <fieldset>
-                        <Field component={Input} name="email" id="email" type="email" label="Email" error={errorMessage}/>
+                        <Field component={Input} name="email" id="email" type="email" label="Email"/>
                     </fieldset>
                     <fieldset>
                         <Field
@@ -85,15 +85,28 @@ class Signup extends Component {
 function validate({email, password}) {
     const errors = {};
 
-    if(password && password.length < 6) {
-        errors.password = 'The password must be of minimum length 6 characters';
-    }
-
-    if(!validateEmail(email)) {
+    // Email
+    if (!validateEmail(email)) {
         errors.email = `Email ${email} is not valid email`;
     }
 
-    console.log(errors);
+    if (!email) {
+        errors.email = 'Email required';
+    }
+
+    // Password
+    if (!/[0-9]/.test(password) || !/[A-Z]/.test(password)) {
+        errors.password = 'Password must contain at least one number (0-9) and one uppercase letter (A-Z)';
+    }
+
+    if (password && password.length < 6) {
+        errors.password = 'The password must be of minimum length 6 characters';
+    }
+
+    if (!password) {
+        errors.password = 'Password required';
+    }
+
     return errors;
 }
 
@@ -123,6 +136,8 @@ function mapDispatchToProps(dispatch) {
 
 export default connect(mapStateToProps, mapDispatchToProps)(reduxForm({
     form: 'signup',
-    fields: ['email', 'password'],
+    fields: [
+        'email', 'password'
+    ],
     validate
 })(Signup));

@@ -31,7 +31,13 @@ export function signup(req, res, next) {
     if (password.length < 6) {
         return res
             .status(422)
-            .send({error: 'The password must be of minimum length 6 characters'});
+            .send({error: 'Password must be of minimum length 6 characters'});
+    }
+    
+    if (!/[0-9]/.test(password) || !/[A-Z]/.test(password)) {
+        return res
+            .status(422)
+            .send({error: 'Password must contain at least one number (0-9) and one uppercase letter (A-Z)'});
     }
 
     // See if user with given email exists
