@@ -1,6 +1,6 @@
-import React, {Component, PropTypes} from 'react';
-import {connect} from 'react-redux';
-import {Link, IndexLink} from 'react-router';
+import React, { Component, PropTypes } from 'react';
+import { connect } from 'react-redux';
+import { Link, IndexLink } from 'react-router';
 import styles from './header.scss';
 import classnames from 'classnames';
 
@@ -20,7 +20,10 @@ class Header extends Component {
      */
     renderAuthLinks() {
         if (this.props.authenticated) {
-            return <Link to="/signout" activeClassName={styles.active} className={styles.link}>Sign out</Link>
+            return [
+                <Link to="/profile" key="profile" activeClassName={styles.active} className={styles.link}>Profile</Link>,
+                <Link to="/signout" key="signout" activeClassName={styles.active} className={styles.link}>Sign out</Link>
+            ];
         } else {
             return [
                 <Link to="/signin" key="signin" activeClassName={styles.active} className={styles.link}>Sign in</Link>,
@@ -45,7 +48,7 @@ class Header extends Component {
 }
 
 function mapStateToProps(state) {
-    return {authenticated: state.auth.authenticated };
+    return { authenticated: state.auth.authenticated };
 }
 
 export default connect(mapStateToProps)(Header);
