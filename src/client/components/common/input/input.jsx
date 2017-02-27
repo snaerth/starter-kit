@@ -1,16 +1,11 @@
 import React, {PropTypes} from 'react';
 import styles from './input.scss';
+import ErrorText from '../errorText';
 
 const Input = props => {
     return (
         <span className={styles.input}>
-            {(props.meta.touched && props.meta.error )
-                ? (
-                    <div className={styles.error} role="alert" aria-describedby={props.id}>
-                        {props.meta.error}
-                    </div>
-                )
-                : ''}
+            {(props.meta.error && props.meta.touched) ? <ErrorText error={props.meta.error} id={props.id}/>: ''}
             <input
                 {...props.input}
                 type={props.type}
