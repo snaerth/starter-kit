@@ -3,9 +3,7 @@ const path = require('path');
 const CONFIG = require('./webpack.base');
 const externals = require('webpack-node-externals');
 const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
-
 const {API_ENTRY, API_OUTPUT} = CONFIG;
-const root = (folder = '.') => path.join(__dirname, '..', folder);
 
 const plugins = [
     new webpack.DefinePlugin({

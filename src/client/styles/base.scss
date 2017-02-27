@@ -1,79 +1,95 @@
 @import './variables.scss';
 @import './mixins.scss';
-
 * {
-  box-sizing: border-box;
+    box-sizing: border-box;
 }
 
-html, body {
-  min-height: 100vh;
+html,
+body {
+    min-height: 100vh;
 }
 
 html {
-  -webkit-overflow-scrolling: touch;
-  overflow-x: hidden;
-  overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    overflow-x: hidden;
+    overflow-y: auto;
 }
 
 body {
-  @include responsive-font(1.5vw, 16px, 25px);
-  background: $primary-pink;
-  position: relative;
-  margin: 0;
-  font-family: 'Roboto';
-  line-height: 1.5;
-  color: $primary-black;
-  overflow-x: hidden;
+    @include responsive-font(1.5vw, 16px, 20px);
+    background: $linear-background-primary;
+    position: relative;
+    margin: 0;
+    font-family: "Helvetica Neue", "Helvetica", "Arial", sans-serif;
+    line-height: 1.5;
+    letter-spacing: 0.5px;
+    color: $primary-black;
+    overflow-x: hidden;
 }
 
 img {
-  display: block;
-  max-width: 100%;
-  height: auto;
+    display: block;
+    max-width: 100%;
+    height: auto;
 }
 
 h1 {
     @include responsive-font(13vw, 40px, 70px);
 }
 
-a:link, 
-a:visited, 
-a:active { 
-  color:$primary-black; 
+a::link,
+a::visited,
+a::active {
+    color: $primary-black;
 }
 
-a:hover {
-  transition: color $hover-transition ease-out;
-  color:$primary-red; 
+a::hover {
+    transition: color $hover-transition ease-out;
+    color: $primary-red;
+}
+
+a.underline {
+    display: inline-block;
+    vertical-align: middle;
+    transform: translateZ(0);
+    box-shadow: 0 0 1px rgba(0, 0, 0, 0);
+    backface-visibility: hidden;
+    -moz-osx-font-smoothing: grayscale;
+    position: relative;
+    overflow: hidden;
+    line-height: 25px;
+}
+
+a.underline::before {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    left: 50%;
+    right: 50%;
+    bottom: 0;
+    background: $primary-black;
+    height: 1px;
+    transition-property: left, right;
+    transition-duration: 0.2s;
+    transition-timing-function: ease-out;
+}
+
+a.underline:hover::before {
+    left: 0;
+    right: 0;
 }
 
 fieldset {
-  border: 0;
+    border: 0;
 }
 
-/* Page Loader */
-.js body::before {
-  content: 'Loading...';
-  font-family: 'Montserrat';
-  letter-spacing: 0.2em;
-  text-indent: -0.2em;
-  text-transform: uppercase;
-  font-weight: bold;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: $primary-black;
-  position: fixed;
-  top: -100%;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: $primary-red;
-  z-index: 1000;
-  pointer-events: none;
-  transition: transform 0.5s;
+.page {
+    position: absolute;
+    width: 100%;
+    padding: 2em 0;
 }
 
-.js .loading::before {
-  transform: translate3d(0, 100%, 0);
+.container {
+    max-width: $max-1280;
+    margin: 0 auto;
 }

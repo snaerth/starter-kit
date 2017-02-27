@@ -7,7 +7,7 @@ import SignupForm from './../../components/auth/signup';
 class Signup extends Component {
     render() {
         return (
-            <div>
+            <div className="page">
                 <SignupForm />
             </div>
         );

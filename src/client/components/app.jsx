@@ -1,20 +1,24 @@
-import React, { Component, PropTypes } from 'react';
+import React, {PropTypes} from 'react';
+import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import AppLayout from './app-layout';
 import Header from './common/header';
 
-class App extends Component {
-  render() {
-    return (
-        <AppLayout>
-            <Header />
-            {this.props.children}
-        </AppLayout>
-      );
-  }
-}
+const App = ({children, location}) => (
+  <AppLayout>
+    <Header/>
+    <ReactCSSTransitionGroup
+      component="div"
+      transitionName="fadeInScale"
+      transitionEnterTimeout={700}
+      transitionLeaveTimeout={350}>
+      {React.cloneElement(children, {key: location.pathname})}
+    </ReactCSSTransitionGroup>
+  </AppLayout>
+);
 
 App.propTypes = {
   children: PropTypes.object.isRequired,
+  location: PropTypes.object.isRequired
 };
 
 export default App;

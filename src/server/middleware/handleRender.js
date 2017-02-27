@@ -4,7 +4,7 @@ import React from 'react';
 import {Router, match, RouterContext} from 'react-router';
 import {renderToString} from 'react-dom/server';
 import {Provider} from 'react-redux';
-import routes, {NotFound} from '../../client/routes.jsx';
+import routes, {NotFound} from '../../client/routes';
 import configureStore from '../../client/store/configureStore';
 
 let assets = require('../../../assets.json');

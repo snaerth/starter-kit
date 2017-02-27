@@ -1,5 +1,10 @@
 import mongoose, {Schema} from 'mongoose';
 import bcrypt from 'bcrypt-nodejs';
+import Promise from 'bluebird';
+
+// Let mongoose use bluebird promises
+// because mongoose promise library is deprecated
+mongoose.Promise = Promise;
 
 // Define user model
 const userSchema = new Schema({

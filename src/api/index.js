@@ -4,11 +4,12 @@ import express from 'express';
 import RateLimit from 'express-rate-limit';
 import routes from './router';
 import errorHandlers from '../server/middleware/errorHandlers';
-import middleware from '../server/middleware';
+import middleware from './middleware';
 import config from '../config';
+import db from './db';
 
 // VARIABLES
-const {APIPORT, APIHOST} = config();
+const {APIPORT, APIHOST, DB_URL} = config();
 
 // Intialize and setup server
 const app = express();
@@ -24,17 +25,19 @@ const apiLimiter = new RateLimit({
   delayMs: 0 // disabled
 });
 
-// Hide all software information
-app.disable('x-powered-by');
+db(DB_URL, () => {
+  // Hide all software information
+  app.disable('x-powered-by');
 
-// Apply middleware to app
-app.use(middleware([apiLimiter]));
+  // Apply middleware to app
+  app.use(middleware([apiLimiter]));
 
-// Api routes
-routes(app);
+  // Api routes
+  routes(app);
 
-// Error Handler middlewares.
-app.use(...errorHandlers);
+  // Error Handler middlewares.
+  app.use(...errorHandlers);
+});
 
 // Start API
 server.listen(APIPORT, error => {

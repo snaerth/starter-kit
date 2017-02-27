@@ -1,7 +1,6 @@
-import passport from 'passport';
 import User from '../models/user';
 import {Strategy as JwtStrategy, ExtractJwt} from 'passport-jwt';
-import LocalStategy from 'passport-local';
+import LocalStrategy from 'passport-local';
 import config from '../../config';
 
 // VARIABLES
@@ -9,11 +8,12 @@ const {JWT_SECRET} = config();
 
 // Setup options for local strategy
 const localOptions = {
-    usernameField: 'email'
+    usernameField: 'email',
+    passwordField: 'password'
 };
 
 // Create local strategy
-const localLogin = new LocalStategy(localOptions, (email, password, done) => {
+export const localLogin = new LocalStrategy(localOptions, (email, password, done) => {
     // Verify username and passport, call done with that user if correct credentials
     // otherwise call done with false
     User.findOne({
@@ -43,7 +43,7 @@ const jwtOptions = {
 };
 
 // Create JWT Strategy
-const jwtLogin = new JwtStrategy(jwtOptions, (payload, done) => {
+export const jwtLogin = new JwtStrategy(jwtOptions, (payload, done) => {
     // Check if user ID in the payload exist in database
     User.findById(payload.sub, (error, user) => {
         if (error) 
@@ -57,7 +57,3 @@ const jwtLogin = new JwtStrategy(jwtOptions, (payload, done) => {
         }
     });
 });
-
-// Tell passport to use strategy
-passport.use(jwtLogin);
-passport.use(localLogin);

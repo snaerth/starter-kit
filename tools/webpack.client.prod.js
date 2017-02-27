@@ -6,7 +6,7 @@ const externals = require('webpack-node-externals');
 const AssetsPlugin = require('assets-webpack-plugin');
 const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
 const CONFIG = require('./webpack.base');
-const {CLIENT_ENTRY, CLIENT_OUTPUT, PUBLIC_PATH} = CONFIG;
+const {CLIENT_ENTRY, CLIENT_OUTPUT, PUBLIC_PATH, VENDOR} = CONFIG;
 
 // Plugins
 const plugins = [
@@ -101,23 +101,11 @@ const js = {
 
 const rules = [js, css, scss, json];
 
-const vendor = [
-  'react',
-  'react-dom',
-  'react-helmet',
-  'redux',
-  'react-redux',
-  'classnames',
-  'lodash',
-  'isomorphic-fetch',
-  'core-decorators'
-];
-
 // Main webpack config
 module.exports = {
   entry: {
     main: [CLIENT_ENTRY],
-    vendor
+    vendor: VENDOR
   },
   target: 'web',
   devtool: false,

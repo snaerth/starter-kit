@@ -4,7 +4,7 @@ import {Link} from 'react-router';
 /**
  * Not Found component
  */
-export default class NotFoundPage extends Component {
+export default class NotFound extends Component {
     /**
    * Render method
    * @return {Component}

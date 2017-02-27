@@ -1,49 +1,59 @@
-import {validateEmail} from '../services/utils';
+import { validateEmail } from '../services/utils';
 import User from '../models/user';
 import jwt from 'jwt-simple';
 
 // SIGNUP
 export function signup(req, res, next) {
-    const email = req.body.email || '';
-    const password = req.body.password || '';
-    const message = req.body.message || '';
+    if (!req.body) {
+        return res
+            .status(422)
+            .send({ error: 'No post data found' });
+    }
+
+    const {email, password, message} = req.body;
 
     if (!email || !password || !message) {
         return res
             .status(422)
-            .send({error: 'You must provide email, password and message'});
+            .send({ error: 'You must provide email, password and message' });
     }
 
     // Validate email
     if (!validateEmail(email)) {
         return res
             .status(422)
-            .send({error: `${email} is not a valid email`});
+            .send({ error: `${email} is not a valid email` });
     }
 
     // Check if password length is longer then 6 characters
     if (password.length < 6) {
         return res
             .status(422)
-            .send({error: 'The password must be of minimum length 6 characters'});
+            .send({ error: 'Password must be of minimum length 6 characters' });
+    }
+
+    if (!/[0-9]/.test(password) || !/[A-Z]/.test(password)) {
+        return res
+            .status(422)
+            .send({ error: 'Password must contain at least one number (0-9) and one uppercase letter (A-Z)' });
     }
 
     // See if user with given email exists
     User.findOne({
         email
     }, (error, existingUser) => {
-        if (error) 
+        if (error)
             return next(error);
-        
+
         // If a user does exist, return error
         if (existingUser) {
             return res
                 .status(422)
-                .send({error: 'Email is in use'});
+                .send({ error: 'Email is in use' });
         }
 
         // If a user does not exist, create and save new user
-        const user = new User({email: email, password: password, message: message});
+        const user = new User({ email: email, password: password, message: message });
 
         user.save((error) => {
             if (error) {
@@ -51,7 +61,7 @@ export function signup(req, res, next) {
             }
 
             // Respond to request that user was created
-            res.json({token: tokenForUser(user)});
+            res.json({ token: tokenForUser(user) });
         });
 
     });

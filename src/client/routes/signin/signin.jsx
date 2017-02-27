@@ -7,8 +7,8 @@ import SigninForm from './../../components/auth/signin';
 class Signin extends Component {
     render() {
         return (
-            <div>
-                <SigninForm />
+            <div className="page">
+                <SigninForm/>
             </div>
         );
     }

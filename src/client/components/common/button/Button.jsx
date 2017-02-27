@@ -1,5 +1,5 @@
 import React, { PropTypes } from 'react';
-import styles from './Button.scss';
+import styles from './button.scss';
 import classnames from 'classnames';
 
 /**
@@ -7,14 +7,15 @@ import classnames from 'classnames';
  */
 const Button = ({text, ariaLabel, color, className}) => {
     return (
-        <button className={classnames(styles.button, styles[color], styles[className] )} role="button" aria-label={ariaLabel}>{text}</button>
+        <button className={classnames(styles.button, styles[color ? color: 'default'], styles[className] )} role="button" aria-label={ariaLabel}>{text}</button>
     );
 };
 
 Button.propTypes = {
     text: PropTypes.string.isRequired,
     ariaLabel: PropTypes.string.isRequired,
-    color: PropTypes.string
+    color: PropTypes.string,
+    className: PropTypes.string
 };
 
 export default Button;

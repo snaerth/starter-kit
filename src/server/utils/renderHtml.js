@@ -10,8 +10,6 @@ export default ({html, preloadedState, assets}) => {
                 <title>Starter kit</title>
                 <meta name="description" content="just another react + webpack boilerplate">
                 <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=0, maximum-scale=1, minimum-scale=1">
-                <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-                <link href="https://fonts.googleapis.com/css?family=Roboto+Condensed:300,300i,400,400i,700,700i|Arapey|Montserrat:700" rel="stylesheet">
                 <link href="${assets ? assets.main.css : '/styles.css'}" rel="stylesheet" type="text/css">
                 <script>document.documentElement.className = 'js';</script>
             </head>

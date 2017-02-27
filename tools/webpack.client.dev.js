@@ -5,8 +5,7 @@ const webpack = require('webpack');
 const autoprefixer = require('autoprefixer');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const CONFIG = require('./webpack.base');
-
-const {CLIENT_ENTRY, CLIENT_OUTPUT, PUBLIC_PATH} = CONFIG;
+const {CLIENT_ENTRY, CLIENT_OUTPUT, PUBLIC_PATH, VENDOR} = CONFIG;
 
 //  PLUGINS
 const plugins = [
@@ -90,18 +89,6 @@ const js = {
 
 const rules = [js, css, scss, json];
 
-const vendor = [
-  'react',
-  'react-dom',
-  'react-helmet',
-  'redux',
-  'react-redux',
-  'classnames',
-  'lodash',
-  'isomorphic-fetch',
-  'core-decorators'
-];
-
 // --------------------------------------------- MAIN WEBPACK CONFIG
 module.exports = {
   devtool: 'source-map',
@@ -111,7 +98,7 @@ module.exports = {
     main: [
       'webpack/hot/only-dev-server', 'webpack-hot-middleware/client', CLIENT_ENTRY
     ],
-    vendor
+    vendor: VENDOR
   },
   output: {
     path: path.join(__dirname, '/dist/'),

@@ -1,10 +1,14 @@
 $primary-yellow: #facb7a;
-$primary-red: #da7071;
+$primary-red: #DC886C;
 $primary-pink: #f9f7f6;
 $primary-black: #000;
 $primary-white: #fff;
 $secondary-black:#2f3238;
-$linear-background-primary: linear-gradient(to bottom, #f6f7fc 0%,#d5e1e8 40%);
+$navbar-background: #A9BAC2;
+$navbar-text: #586A6E;
+$text-dark: #586A6E;
+$button-background: #78B8DB;
+$linear-background-primary: linear-gradient(-180deg, #7C909B, #7E7767);
 
 // Animations
 $hover-transition: .15s;
@@ -12,6 +16,7 @@ $hover-transition: .15s;
 // Borders
 $border-radius: 3px;
 $border: 2px;
+$box-shadow: 0 15px 20px rgba(0, 0, 0, 0.2);
 
 // Custom break point (Min)
 $min-1800: 1800px;
