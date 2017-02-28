@@ -4,22 +4,17 @@
       "name": "Launch",
       "type": "node",
       "request": "launch",
-      "program": "${workspaceRoot}\\src\\api\\index.js",
+      "program": "${workspaceRoot}/src/api/index.js",
       "stopOnEntry": false,
       "args": [],
       "cwd": "${workspaceRoot}",
-      "preLaunchTask": null,
-      "runtimeExecutable": null,
       "runtimeArgs": [
-          "--no-lazy"
+        "--nolazy"
       ],
-      "env": {
-        "NODE_ENV": "development",
-        "BABEL_ENV": "debug"
-      },
-      "console": "internalConsole",
       "sourceMaps": true,
-      "outFiles": ["${workspaceRoot}/dist"]
+      "outFiles": [
+        "${workspaceRoot}/dist/**/*.js"
+      ]
     },
     {
       "name": "Attach",

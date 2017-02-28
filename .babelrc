@@ -7,9 +7,6 @@
   "sourceMaps": true,
   "retainLines": true,
   "env": {
-    "debug": {
-      "retainLines": true
-    },
     "production": {
       "presets": ["react-optimize"]
     }
