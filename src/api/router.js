@@ -19,11 +19,29 @@ export default function (app) {
   // API routes
   app.post('/signup', signup);
   app.post('/signin', requireSignin, signin);
-  app.get('admin')
   app.post('/api', requireAuth, (req, res) => {
     res.send('This is an route with required authentication API');
   });
   app.get('/test', (req, res) => {
     res.send('test');
+  });
+
+
+function isAdmin(req, res, next) {
+
+    // do any checks you want to in here
+    var test = typeof req.user.roles;
+    // CHECK THE USER STORED IN SESSION FOR A CUSTOM VARIABLE
+    // you can do this however you want with whatever variables you set up
+    if (req.user.roles.indexOf('admin') > -1)
+        return next();
+
+    // IF A USER ISN'T LOGGED IN, THEN REDIRECT THEM SOMEWHERE
+    res.redirect('/');
+}
+
+  // Admin routes
+  app.get('/admin', [requireAuth, isAdmin], (req, res) => {
+      res.send('admin route');
   });
 }

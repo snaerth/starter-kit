@@ -21,9 +21,9 @@ const schema = {
         type: String,
         required: true
     },
-    admin: {
-        type: Boolean,
-        required: false
+    roles: {
+        type: Array,
+        required: true
     },
     imageUrl: {
         type: String,

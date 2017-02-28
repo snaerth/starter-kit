@@ -16,6 +16,7 @@ const defaultMiddlewares = [
     bodyParser.urlencoded({extended: false}),
     // Initialize passport
     passport.initialize(),
+    passport.session(),
     // Prevent HTTP Parameter pollution. @note: Make sure body parser goes above the
     // hpp middleware
     hpp(),
