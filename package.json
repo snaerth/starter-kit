@@ -2,6 +2,7 @@
   "name": "react-redux-universal-starter",
   "version": "0.1.0",
   "scripts": {
+    "debug": "babel ./src/api --out-dir dist --watch --source-maps",
     "start": "concurrent --kill-others \"npm run start-server\" \"npm run start-api\"",
     "start-prod": "concurrent --kill-others \"npm run start-prod-server\" \"npm run start-prod-api\"",
     "start-prod-server": "better-npm-run start-prod-server",

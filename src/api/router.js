@@ -19,6 +19,7 @@ export default function (app) {
   // API routes
   app.post('/signup', signup);
   app.post('/signin', requireSignin, signin);
+  app.get('admin')
   app.post('/api', requireAuth, (req, res) => {
     res.send('This is an route with required authentication API');
   });
