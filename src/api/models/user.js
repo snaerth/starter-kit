@@ -6,8 +6,7 @@ import Promise from 'bluebird';
 // because mongoose promise library is deprecated
 mongoose.Promise = Promise;
 
-// Define user model
-const userSchema = new Schema({
+const schema = {
     email: {
         type: String,
         unique: true,
@@ -21,8 +20,23 @@ const userSchema = new Schema({
     message: {
         type: String,
         required: true
+    },
+    admin: {
+        type: Boolean,
+        required: false
+    },
+    imageUrl: {
+        type: String,
+        required: false
+    },
+    facebook: {
+        type: Object,
+        required: false
     }
-});
+};
+
+// Define user model
+const userSchema = new Schema(schema);
 
 // On save, encrypt password Before saving user model, run this function
 userSchema.pre('save', function (next) {

@@ -9,13 +9,17 @@
       "args": [],
       "cwd": "${workspaceRoot}",
       "preLaunchTask": null,
-      "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/babel-node.cmd",
-      "runtimeArgs": [],
+      "runtimeExecutable": null,
+      "runtimeArgs": [
+          "--no-lazy"
+      ],
       "env": {
-        "NODE_ENV": "development"
+        "NODE_ENV": "development",
+        "BABEL_ENV": "debug"
       },
       "console": "internalConsole",
-      "sourceMaps": true
+      "sourceMaps": true,
+      "outFiles": ["${workspaceRoot}/dist"]
     },
     {
       "name": "Attach",
