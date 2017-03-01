@@ -48,7 +48,12 @@ class Header extends Component {
 }
 
 function mapStateToProps(state) {
-    return { authenticated: state.auth.authenticated };
+    const {role, authenticated } = state.auth;
+    if(role === 'admin') {
+        return { authenticated,role};
+    }
+
+    return {authenticated};
 }
 
 export default connect(mapStateToProps)(Header);

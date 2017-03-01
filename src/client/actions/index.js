@@ -26,7 +26,7 @@ export function signinUser({email, password}) {
                     dispatch({type: AUTH_USER});
                 }
                 // Save token to localStorage
-                localStorage.setItem('token', response.data.token);
+                localStorage.setItem('user', response.data);
                 // Reroute user to home page
                 browserHistory.push('/');
             })
@@ -45,7 +45,7 @@ export function signupUser({email, password, message}) {
                 // Dispatch an actino to authReducer
                 dispatch({type: SIGNUP_USER});
                 // Save token to localStorage
-                localStorage.setItem('token', response.data.token);
+                localStorage.setItem('user', response.data);
                 // Reroute user to home page
                 browserHistory.push('/');
             })
@@ -63,7 +63,7 @@ export function signupUser({email, password, message}) {
  * @author Snær Seljan Þóroddsson
  */
 export function signoutUser() {
-    localStorage.removeItem('token');
+    localStorage.removeItem('user');
 
     return {type: UNAUTH_USER};
 }

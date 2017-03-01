@@ -1,7 +1,7 @@
 import React, {Component, PropTypes} from 'react';
 import {connect} from 'react-redux';
 
-export default function (ComposedComponent, requireAdmin) {
+export default function (ComposedComponent) {
     class Authentication extends Component {
         static propTypes = {
             authenticated: PropTypes.bool
@@ -35,15 +35,9 @@ export default function (ComposedComponent, requireAdmin) {
     }
 
     function mapStateToProps(state) {
-        let mappedObj = {
+        return {
             authenticated: state.auth.authenticated
         };
-
-        if(requireAdmin && state.auth.role) {
-            mappedObj.role = state.auth.role;
-        }
-        
-        return mappedObj;
     }
 
     return connect(mapStateToProps)(Authentication);
