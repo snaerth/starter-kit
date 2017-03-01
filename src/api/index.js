@@ -39,12 +39,14 @@ const sessionOptions = {
   cookie: {
     maxAge: 86400
   } //24 Hours
-}
+};
 
 // Production
 if (process.env.NODE_ENV === 'production') {
-  app.set('trust proxy', 1) // trust first proxy
-  sessionOptions.cookie.secure = true // serve secure cookies
+  // Trust proxy
+  app.set('trust proxy', 1); 
+  //Serve secure cookies
+  sessionOptions.cookie.secure = true; 
 }
 
 db(DB_URL, () => {

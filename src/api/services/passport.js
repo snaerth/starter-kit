@@ -1,3 +1,4 @@
+import passport from 'passport';
 import User from '../models/user';
 import {Strategy as JwtStrategy, ExtractJwt} from 'passport-jwt';
 import LocalStrategy from 'passport-local';
@@ -62,4 +63,19 @@ export const jwtLogin = new JwtStrategy(jwtOptions, (payload, done) => {
             done(null, false);
         }
     });
+});
+
+// Only the user ID is serialized to the session, 
+// keeping the amount of data stored within the session small
+passport.serializeUser((user, done) => {
+  done(null, user.id);
+});
+
+// When subsequent requests are received, 
+// this ID is used to find the user, 
+// which will be restored to req.user
+passport.deserializeUser((id, done) =>{
+  User.findById(id, (err, user) => {
+    done(err, user);
+  });
 });

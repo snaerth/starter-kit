@@ -1,4 +1,4 @@
-import { AUTH_USER, UNAUTH_USER, SIGNUP_USER, AUTH_ERROR } from '../actions/types';
+import { AUTH_USER, UNAUTH_USER, SIGNUP_USER, AUTH_ERROR, ADMIN_USER } from '../actions/types';
 
 export default function (state = {}, action) {
     switch (action.type) {
@@ -7,6 +7,12 @@ export default function (state = {}, action) {
                 ...state,
                 authenticated: true
             };
+        case ADMIN_USER:
+            return {
+                ...state,
+                authenticated: true,
+                role: action.payload
+            };            
         case UNAUTH_USER:
             return {
                 ...state,
@@ -16,7 +22,7 @@ export default function (state = {}, action) {
             return {
                 ...state,
                 authenticated: true
-            }
+            };
         case AUTH_ERROR:
             return {
                 ...state,
