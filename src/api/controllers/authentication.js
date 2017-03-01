@@ -53,7 +53,7 @@ export function signup(req, res, next) {
         }
 
         // If a user does not exist, create and save new user
-        const user = new User({ email: email, password: password, message: message });
+        const user = new User({ email: email, password: password, message: message, roles: ['user'] });
 
         user.save((error) => {
             if (error) {

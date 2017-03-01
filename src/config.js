@@ -17,5 +17,7 @@ export default() => {
         DB_PASSWORD: process.env.DB_PASSWORD || 'password',
         // Passport
         JWT_SECRET: process.env.JWT_SECRET || 'secret',
+        // Express session
+        SESSION_SECRET: process.env.SESSION_SECRET || 'secret'
     };
 };
