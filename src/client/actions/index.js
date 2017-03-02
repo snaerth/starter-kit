@@ -1,6 +1,6 @@
 import axios from 'axios';
 import {browserHistory} from 'react-router';
-import {AUTH_USER, UNAUTH_USER, AUTH_ERROR, SIGNUP_USER, ADMIN_USER} from './types';
+import {AUTH_USER, UNAUTH_USER, AUTH_ERROR, SIGNUP_USER} from './types';
 
 /**
  * Post request made to api with email and passwod
@@ -18,15 +18,11 @@ export function signinUser({email, password}) {
         axios
             .post('/api/signin', {email, password})
             .then(response => {
-                if (response.data.role && response.data.role === 'admin') {
-                    // Dispatch admin action to authReducer
-                    dispatch({type: ADMIN_USER, payload: response.data.role});
-                } else {
-                    // Dispatch an action to authReducer
-                    dispatch({type: AUTH_USER});
-                }
+                const payload = (response.data.role && response.data.role === 'admin') ? response.data.role : '';
+                // Dispatch admin action to authReducer
+                dispatch({type: AUTH_USER, payload});
                 // Save token to localStorage
-                localStorage.setItem('user', response.data);
+                localStorage.setItem('user', JSON.stringify(response.data));
                 // Reroute user to home page
                 browserHistory.push('/');
             })
@@ -42,10 +38,11 @@ export function signupUser({email, password, message}) {
         axios
             .post('/api/signup', {email, password, message})
             .then(response => {
-                // Dispatch an actino to authReducer
-                dispatch({type: SIGNUP_USER});
+                const payload = (response.data.role && response.data.role === 'admin') ? response.data.role : '';
+                // Dispatch admin action to authReducer
+                dispatch({type: SIGNUP_USER, payload});
                 // Save token to localStorage
-                localStorage.setItem('user', response.data);
+                localStorage.setItem('user', JSON.stringify(response.data));
                 // Reroute user to home page
                 browserHistory.push('/');
             })

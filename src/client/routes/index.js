@@ -21,7 +21,7 @@ export default (
     <Route path="signup" component={Signup} />
     <Route path="signout" component={Signout}  />
     <Route path="profile" component={requireAuth(Profile)} />
-    <Route path="admin" component={requireAuth(Admin, true)} />
+    <Route path="admin" component={requireAuth(Admin, 'admin')} />
     <Route path="*" component={NotFound} />
   </Route>
 );

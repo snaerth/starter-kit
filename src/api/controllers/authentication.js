@@ -89,14 +89,21 @@ export function signup(req, res, next) {
  * @author Snær Seljan Þóroddsson
  */
 export function signin(req, res) {
+    const {name, roles} = req.user;
+
     const data = {
         token: tokenForUser(req.user)
     };
 
-    if (req.user && req.user.roles.includes('admin')) {
-        data.role = 'admin';
+    if (req.user) {
+        if (roles.includes('admin')) {
+            data.role = 'admin';
+        }
+        if (name !== '') {
+            data.name = name;
+        }
     }
-    
+
     res.send(data);
 }
 
