@@ -39,6 +39,13 @@ const schema = {
     type: String,
     required: false
   },
+  resetPasswordToken: {
+    type: String,
+    required: false
+  },
+  resetPasswordExpires: {
+    type: Date
+  },
   facebook: {
     type: Object,
     required: false

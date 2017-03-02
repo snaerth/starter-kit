@@ -18,6 +18,11 @@ export default() => {
         // Passport
         JWT_SECRET: process.env.JWT_SECRET || 'secret',
         // Express session
-        SESSION_SECRET: process.env.SESSION_SECRET || 'secret'
+        SESSION_SECRET: process.env.SESSION_SECRET || 'secret',
+        // Email
+        USERNAME: process.env.USERNAME,
+        CLIENTID: process.env.CLIENTID,
+        CLIENTSECRET: process.env.CLIENTSECRET,
+        REFRESHTOKEN: process.env.REFRESHTOKEN
     };
 };

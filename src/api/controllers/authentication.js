@@ -108,19 +108,17 @@ export function signin(req, res) {
 }
 
 /**
- * Signin admin route
- * If users is authenticated responde with a token and role
+ * Forgot password route
+ * TODO describe info
  *
  * @param {Object} req
  * @param {Object} res
  * @returns {undefined}
  * @author Snær Seljan Þóroddsson
  */
-export function signinAdmin(req, res) {
-    res.send({
-        token: tokenForUser(req.user),
-        role: 'admin'
-    });
+export function forgotPassword(req, res) {
+    // TODO implement logic
+    res.send('Reset password route not implemented yet');
 }
 
 /**

@@ -125,11 +125,11 @@ function validate({email, password, name, message}) {
 
     // Name
     if (!name) {
-        errors.name = 'Name required';
+        errors.email = 'Name required';
     }
 
     if (!/[a-zA-Z]+\s+[a-zA-Z]+/g.test(name)) {
-        errors.name = 'Full name should at least have 2 words consisting of letters';
+        errors.email = 'Name has aleast two names 2 words consisting of letters';
     }
 
     // Message

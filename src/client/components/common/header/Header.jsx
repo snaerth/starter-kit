@@ -9,8 +9,7 @@ import classnames from 'classnames';
  */
 class Header extends Component {
     static propTypes = {
-        authenticated: PropTypes.bool.isRequired,
-        role: PropTypes.string
+        authenticated: PropTypes.bool
     }
 
     /**
@@ -21,18 +20,11 @@ class Header extends Component {
      */
     renderAuthLinks() {
         if (this.props.authenticated) {
-            const links = [
+
+            return [
                 <Link to="/profile" key="profile" activeClassName={styles.active} className={styles.link}>Profile</Link>,
                 <Link to="/signout" key="signout" activeClassName={styles.active} className={styles.link}>Sign out</Link>
             ];
-
-            // Add admin link if user role is admin
-            if(this.props.role && this.props.role === 'admin') {
-                const adminLink = <Link to="/admin" key="admin" activeClassName={styles.active} className={styles.link}>Admin</Link>;
-                links.unshift(adminLink);
-            }
-
-            return links;
         } else {
             return [
                 <Link to="/signin" key="signin" activeClassName={styles.active} className={styles.link}>Sign in</Link>,
@@ -57,13 +49,11 @@ class Header extends Component {
 }
 
 function mapStateToProps(state) {
-    const {role, authenticated } = state.auth;
+    const obj = 
 
-    if(role === 'admin') {
-        return { authenticated,role};
-    }
-
-    return {authenticated};
+    return { 
+        authenticated: state.auth.authenticated,
+    };
 }
 
 export default connect(mapStateToProps)(Header);
