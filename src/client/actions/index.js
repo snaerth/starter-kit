@@ -32,11 +32,11 @@ export function signinUser({email, password}) {
     };
 }
 
-export function signupUser({email, password, message}) {
+export function signupUser({email, password, name}) {
     return function (dispatch) {
         // Post email/password to api server to register user Get token back from server
         axios
-            .post('/api/signup', {email, password, message})
+            .post('/api/signup', {email, password, name})
             .then(response => {
                 const payload = (response.data.role && response.data.role === 'admin') ? response.data.role : '';
                 // Dispatch admin action to authReducer
@@ -76,7 +76,7 @@ export function forgotPassword({email}) {
     return function (dispatch) {
         // Post email to api server to retreive new password
         axios
-            .post('/api/forgotPassword', {email})
+            .post('/api/forgot', {email})
             .then(response => {
                 // Dispatch admin action to authReducer
                 dispatch({type: FORGOT_PASSWORD_SUCCESS, payload: response.data});
