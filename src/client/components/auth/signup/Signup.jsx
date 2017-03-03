@@ -30,11 +30,11 @@ class Signup extends Component {
      * @returns {undefined}
      * @author Snær Seljan Þóroddsson
      */
-    handleFormSubmit({email, password, message}) {
+    handleFormSubmit({email, password, name}) {
         this
             .props
             .actions
-            .signupUser({email, password, message});
+            .signupUser({email, password, name});
     }
 
     /**
@@ -62,7 +62,7 @@ class Signup extends Component {
                 <MainHeading text="SIGN UP"/> {this.renderError(errorMessage)}
                 <form onSubmit={handleSubmit(this.handleFormSubmit.bind(this))} noValidate>
                     <fieldset>
-                        <Field component={Input} name="name" id="name" type="text" label="Full name"/>
+                        <Field component={Input} name="name" id="name" type="text" label="Name"/>
                     </fieldset>
                     <fieldset>
                         <Field component={Input} name="email" id="email" type="email" label="Email"/>
@@ -125,11 +125,11 @@ function validate({email, password, name}) {
 
     // Name
     if (!name) {
-        errors.email = 'Name required';
+        errors.name = 'Name required';
     }
 
     if (!/[a-zA-Z]+\s+[a-zA-Z]+/g.test(name)) {
-        errors.email = 'Name has aleast two names 2 words consisting of letters';
+        errors.name = 'Name has aleast two names 2 words consisting of letters';
     }
 
     return errors;
@@ -162,7 +162,7 @@ function mapDispatchToProps(dispatch) {
 export default connect(mapStateToProps, mapDispatchToProps)(reduxForm({
     form: 'signup',
     fields: [
-        'email', 'password', 'name', 'message'
+        'name', 'email', 'password', 'message'
     ],
     validate
 })(Signup));

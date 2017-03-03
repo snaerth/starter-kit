@@ -26,7 +26,7 @@ class Header extends Component {
                 <Link to="/signout" key="signout" activeClassName={styles.active} className={styles.link}>Sign out</Link>
             ];
 
-            if(this.state.role === 'admin') {
+            if(this.props.role && this.props.role === 'admin') {
                 links.unshift(<Link to="/admin" key="admin" activeClassName={styles.active} className={styles.link}>Admin</Link>);
             }
 
@@ -55,12 +55,13 @@ class Header extends Component {
 }
 
 function mapStateToProps(state) {
+    const {authenticated, role} = state.auth;
     let newStateToProps = {
-        authenticated: state.auth.authenticated
+        authenticated
     };
 
-    if (state.auth.role) {
-        newStateToProps.role = state.auth.role;
+    if (role) {
+        newStateToProps.role = role;
     }
 
     return newStateToProps;
