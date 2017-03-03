@@ -25,7 +25,7 @@ const schema = {
   },
   message: {
     type: String,
-    required: true
+    required: false
   },
   createdAt: {
     type: Date,

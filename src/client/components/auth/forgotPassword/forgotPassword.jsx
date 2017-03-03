@@ -3,22 +3,21 @@ import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import {reduxForm, Field} from 'redux-form';
 import Input from '../../common/input';
-import Textarea from '../../common/textarea';
-import styles from './signup.scss';
+import styles from './forgotPassword.scss';
 import Button from '../../common/button';
 import MainHeading from './../../../components/common/mainheading';
 import Error from '../../common/error';
-import * as actionCreators from './../../../actions';
 import {validateEmail} from './../../../utils/validate';
+import * as actionCreators from './../../../actions';
 
 /**
- * Signup component
+ * Signin component
  */
-class Signup extends Component {
+class Signin extends Component {
     static propTypes = {
         fields: PropTypes.array.isRequired,
         handleSubmit: PropTypes.func.isRequired,
-        signupUser: PropTypes.func,
+        signinUser: PropTypes.func,
         actions: PropTypes.object.isRequired,
         errorMessage: PropTypes.string
     }
@@ -30,21 +29,22 @@ class Signup extends Component {
      * @returns {undefined}
      * @author Snær Seljan Þóroddsson
      */
-    handleFormSubmit({email, password, message}) {
+    handleFormSubmit({email}) {
         this
             .props
             .actions
-            .signupUser({email, password, message});
+            .forgotPassword({email});
     }
 
     /**
      * Renders error message box
      *
-     * @param {String} errorMessage - Error message
      * @returns {JSX}
      * @author Snær Seljan Þóroddsson
      */
-    renderError(errorMessage) {
+    renderError() {
+        const {errorMessage} = this.props;
+
         if (errorMessage) {
             return (
                 <fieldset>
@@ -55,32 +55,18 @@ class Signup extends Component {
     }
 
     render() {
-        const {handleSubmit, errorMessage} = this.props;
+        const {handleSubmit} = this.props;
 
         return (
             <div className={styles.container}>
-                <MainHeading text="SIGN UP"/> {this.renderError(errorMessage)}
+                <MainHeading text="Forgot password"/> {this.renderError()}
                 <form onSubmit={handleSubmit(this.handleFormSubmit.bind(this))} noValidate>
-                    <fieldset>
-                        <Field component={Input} name="name" id="name" type="text" label="Full name"/>
-                    </fieldset>
                     <fieldset>
                         <Field component={Input} name="email" id="email" type="email" label="Email"/>
                     </fieldset>
                     <fieldset>
-                        <Field
-                            component={Input}
-                            name="password"
-                            id="password"
-                            type="password"
-                            label="Password"/>
-                    </fieldset>
-                    <fieldset>
-                        <Field component={Textarea} name="message" id="message" label="Message"/>
-                    </fieldset>
-                    <fieldset>
                         <div>
-                            <Button text="Sign up" ariaLabel="Sign up" className="fullWidth"/>
+                            <Button text="Reset password" ariaLabel="Reset password" className="fullWidth"/>
                         </div>
                     </fieldset>
                 </form>
@@ -90,15 +76,13 @@ class Signup extends Component {
 }
 
 /**
- * Validates form inputs, both email, password and message
- *
+ * Validates form inputs, both email and password
+ * 
  * @param {String} email
- * @param {String} password
- * @param {String} name
  * @return {Object} errors
  * @author Snær Seljan Þóroddsson
  */
-function validate({email, password, name}) {
+function validate({email}) {
     const errors = {};
 
     // Email
@@ -108,28 +92,6 @@ function validate({email, password, name}) {
 
     if (!email) {
         errors.email = 'Email required';
-    }
-
-    // Password
-    if (!/[0-9]/.test(password) || !/[A-Z]/.test(password)) {
-        errors.password = 'Password must contain at least one number (0-9) and one uppercase letter (A-Z)';
-    }
-
-    if (password && password.length < 6) {
-        errors.password = 'The password must be of minimum length 6 characters';
-    }
-
-    if (!password) {
-        errors.password = 'Password required';
-    }
-
-    // Name
-    if (!name) {
-        errors.email = 'Name required';
-    }
-
-    if (!/[a-zA-Z]+\s+[a-zA-Z]+/g.test(name)) {
-        errors.email = 'Name has aleast two names 2 words consisting of letters';
     }
 
     return errors;
@@ -160,9 +122,7 @@ function mapDispatchToProps(dispatch) {
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(reduxForm({
-    form: 'signup',
-    fields: [
-        'email', 'password', 'name', 'message'
-    ],
+    form: 'signin',
+    fields: ['email'],
     validate
-})(Signup));
+})(Signin));

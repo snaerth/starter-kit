@@ -1,6 +1,6 @@
 import axios from 'axios';
 import {browserHistory} from 'react-router';
-import {AUTH_USER, UNAUTH_USER, AUTH_ERROR, SIGNUP_USER} from './types';
+import {AUTH_USER, UNAUTH_USER, AUTH_ERROR, SIGNUP_USER, FORGOT_PASSWORD_SUCCESS, FORGOT_PASSWORD_ERROR} from './types';
 
 /**
  * Post request made to api with email and passwod
@@ -64,6 +64,29 @@ export function signoutUser() {
 
     return {type: UNAUTH_USER};
 }
+
+/**
+ * Forgot password
+ *
+ * @param {String} email
+ * @returns {undefined}
+ * @author Snær Seljan Þóroddsson
+ */
+export function forgotPassword({email}) {
+    return function (dispatch) {
+        // Post email to api server to retreive new password
+        axios
+            .post('/api/forgotPassword', {email})
+            .then(response => {
+                // Dispatch admin action to authReducer
+                dispatch({type: FORGOT_PASSWORD_SUCCESS, payload: response.data});
+            })
+            .catch(error => {
+                dispatch({type: FORGOT_PASSWORD_ERROR, payload: error});
+            });
+    };
+}
+
 
 /**
  * Handles error from server

@@ -1,10 +1,9 @@
 "use strict";
 import nodemailer from 'nodemailer';
-import xoauth2 from 'xoauth2';
 import config from '../../config';
 
-const {USERNAME, CLIENTID, CLIENTSECRET, REFRESHTOKEN} = config;
-const generator = xoauth2.createXOAuth2Generator({user: USERNAME, clientId: CLIENTID, clientSecret: CLIENTSECRET, refreshToken: REFRESHTOKEN});
+const {EMAIL_USERNAME, EMAIL_PASSWORD} = config();
+
 
 /**
  * Sends email to requested recipient
@@ -18,16 +17,17 @@ const generator = xoauth2.createXOAuth2Generator({user: USERNAME, clientId: CLIE
  */
 export default function sendMail(to, subject, text, html, callback) {
     // Create transport
-    const transporter = nodemailer.createTransport(({
+    let transporter = nodemailer.createTransport({
         service: 'gmail',
         auth: {
-            xoauth2: generator
+            user: EMAIL_USERNAME,
+            pass: EMAIL_PASSWORD
         }
-    }));
+    });
 
     // Email options
     const mailOptions = {
-        from: USERNAME,
+        from: EMAIL_USERNAME,
         to: to,
         subject: subject,
         text: text,
@@ -42,4 +42,8 @@ export default function sendMail(to, subject, text, html, callback) {
 
         callback(null, info);
     });
+
+
+
+
 }

@@ -49,7 +49,10 @@ class Header extends Component {
 }
 
 function mapStateToProps(state) {
-    const obj = 
+    const {}
+    const obj = {
+
+    }
 
     return { 
         authenticated: state.auth.authenticated,

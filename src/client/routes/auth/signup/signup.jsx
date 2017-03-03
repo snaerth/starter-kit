@@ -1,17 +1,17 @@
 import React, {Component} from 'react';
-import SigninForm from './../../components/auth/signin';
+import SignupForm from './../../../components/auth/signup';
 
 /**
  * Signin component
  */
-class Signin extends Component {
+class Signup extends Component {
     render() {
         return (
             <div className="page">
-                <SigninForm/>
+                <SignupForm />
             </div>
         );
     }
 }
 
-export default Signin;
+export default Signup;

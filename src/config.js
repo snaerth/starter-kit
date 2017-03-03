@@ -20,9 +20,7 @@ export default() => {
         // Express session
         SESSION_SECRET: process.env.SESSION_SECRET || 'secret',
         // Email
-        USERNAME: process.env.USERNAME,
-        CLIENTID: process.env.CLIENTID,
-        CLIENTSECRET: process.env.CLIENTSECRET,
-        REFRESHTOKEN: process.env.REFRESHTOKEN
+        EMAIL_USERNAME: process.env.EMAIL_USERNAME,
+        EMAIL_PASSWORD: process.env.EMAIL_PASSWORD
     };
 };
