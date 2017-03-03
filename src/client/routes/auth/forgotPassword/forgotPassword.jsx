@@ -1,17 +1,17 @@
 import React, {Component} from 'react';
-import SignupForm from './../../components/auth/signup';
+import ForgotPassword from './../../../components/auth/forgotPassword';
 
 /**
  * Signin component
  */
-class Signup extends Component {
+class Signin extends Component {
     render() {
         return (
             <div className="page">
-                <SignupForm />
+                <ForgotPassword/>
             </div>
         );
     }
 }
 
-export default Signup;
+export default Signin;

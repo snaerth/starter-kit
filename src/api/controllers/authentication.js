@@ -1,77 +1,256 @@
-import { validateEmail } from '../services/utils';
+import {validateEmail} from '../services/utils';
+import sendMail from '../services/mailService';
 import User from '../models/user';
 import jwt from 'jwt-simple';
+import crypto from 'crypto';
 
-// SIGNUP
+/**
+ * Sign up route
+ * Sign user up to system. If no errors create user
+ *
+ * @param {Object} req
+ * @param {Object} res
+ * @param {Func} next
+ * @returns {undefined}
+ * @author Snær Seljan Þóroddsson
+ */
 export function signup(req, res, next) {
     if (!req.body) {
         return res
             .status(422)
-            .send({ error: 'No post data found' });
+            .send({error: 'No post data found'});
     }
 
-    const {email, password, message} = req.body;
+    const {email, password, message, name} = req.body;
 
-    if (!email || !password || !message) {
+    // Check if email, password or message exist in request
+    if (!email || !password || !name) {
         return res
             .status(422)
-            .send({ error: 'You must provide email, password and message' });
+            .send({error: 'You must provide name, email and password'});
     }
 
     // Validate email
     if (!validateEmail(email)) {
         return res
             .status(422)
-            .send({ error: `${email} is not a valid email` });
+            .send({error: `${email} is not a valid email`});
     }
 
     // Check if password length is longer then 6 characters
     if (password.length < 6) {
         return res
             .status(422)
-            .send({ error: 'Password must be of minimum length 6 characters' });
+            .send({error: 'Password must be of minimum length 6 characters'});
     }
 
+    // Check if password contains one number and one uppercase letter
     if (!/[0-9]/.test(password) || !/[A-Z]/.test(password)) {
         return res
             .status(422)
-            .send({ error: 'Password must contain at least one number (0-9) and one uppercase letter (A-Z)' });
+            .send({error: 'Password must contain at least one number (0-9) and one uppercase letter (A-Z)'});
+    }
+
+    // Name
+    if (!/[a-zA-Z]+\s+[a-zA-Z]+/g.test(name)) {
+        return res
+            .status(422)
+            .send({error: 'Name has aleast two names 2 words consisting of letters'});
     }
 
     // See if user with given email exists
     User.findOne({
         email
     }, (error, existingUser) => {
-        if (error)
+        if (error) {
             return next(error);
+        }
 
         // If a user does exist, return error
         if (existingUser) {
             return res
                 .status(422)
-                .send({ error: 'Email is in use' });
+                .send({error: 'Email is in use'});
         }
 
         // If a user does not exist, create and save new user
-        const user = new User({ email: email, password: password, message: message, roles: ['user'] });
+        const user = new User({name, email, password, message, roles: ['user']});
 
+        // Save user to databases
         user.save((error) => {
             if (error) {
                 return next(error);
             }
 
             // Respond to request that user was created
-            res.json({ token: tokenForUser(user) });
+            res.json({token: tokenForUser(user)});
         });
 
     });
 }
 
-// SIGNIN
+/**
+ * Signin route
+ * If users is authenticated responde with a token
+ *
+ * @param {Object} req
+ * @param {Object} res
+ * @returns {undefined}
+ * @author Snær Seljan Þóroddsson
+ */
 export function signin(req, res) {
-    res.send({
+    const {name, roles} = req.user;
+
+    const data = {
         token: tokenForUser(req.user)
+    };
+
+    if (req.user) {
+        if (roles.includes('admin')) {
+            data.role = 'admin';
+        }
+        if (name !== '') {
+            data.name = name;
+        }
+    }
+
+    res.send(data);
+}
+
+/**
+ * Forgot password route
+ * TODO describe info
+ *
+ * @param {Object} req
+ * @param {Object} res
+ * @returns {undefined}
+ * @author Snær Seljan Þóroddsson
+ */
+export function forgotPassword(req, res) {
+    const {email} = req.body;
+    const {host} = req.headers;
+
+    // Create token Save resetPasswordToken and resetPasswordExpires to user Send
+    // email to user
+    createRandomToken()
+        .then(token => attachTokenToUser({token, email}))
+        .then(({user, token}) => {
+            const url = `${host}/reset/${token}`;
+            const {email, name} = user;
+
+            return sendResetPasswordEmail({url, email, name});
+        })
+        .then(({email}) => {
+            res.send(`An e-mail has been sent to ${email} with further instructions.`);
+        })
+        .catch((error) => {
+            return res
+                .status(550)
+                .send({error: `Coundn't reset password at this time.`, err: error});
+        });
+}
+
+/**
+ * Generates uniq token
+ *
+ * @returns {Promise} promise - TOken
+ * @author Snær Seljan Þóroddsson
+ */
+function createRandomToken() {
+    return new Promise((resolve, reject) => {
+        crypto.randomBytes(20, (error, buffer) => {
+            if (error) {
+                reject(error);
+            }
+
+            const token = buffer.toString('hex');
+            resolve(token);
+        });
     });
+}
+
+/**
+ * Finds user by email,if user exist
+ * set resetPasswordToken and resetPasswordExpires props
+ * save those props to user
+ *
+ * @returns {Promise} promise - User
+ * @author Snær Seljan Þóroddsson
+ */
+function attachTokenToUser({token, email}) {
+    return new Promise((resolve, reject) => {
+        User.findOne({
+            email
+        }, (error, user) => {
+            if (error) {
+                reject(error);
+            }
+
+            user.resetPasswordToken = token;
+            user.resetPasswordExpires = Date.now() + 3600000; // 1 hour
+
+            // Save user to databases
+            user.save((error) => {
+                if (error) {
+                    reject(error);
+                }
+
+                resolve({user, token});
+            });
+        });
+    });
+}
+
+/**
+ * Send reset password email
+ *
+ * @returns {Promise} promise - User
+ * @author Snær Seljan Þóroddsson
+ */
+function sendResetPasswordEmail({url, email, name}) {
+    return new Promise((resolve, reject) => {
+        const mailOptions = {
+            to: email,
+            subject: 'Password reset',
+            text: 'Password reset',
+            html: `
+                    <p>Hi ${name}</p>
+                    <p>We've received a request to reset your password. If you didn't make the request</p>
+                    <p>just ignore this email. Otherwise you can reset your password using this link:</p>
+                    <a href="http://${url}">Click here to reset your password</a>
+                    <p>Thank you.</p>
+                `
+        };
+
+        const {to, subject, text, html} = mailOptions;
+
+        sendMail(to, subject, text, html, (error, info) => {
+            if (error) {
+                reject(error);
+            }
+
+            resolve({info, email});
+        });
+    });
+}
+
+/**
+ * Check whether user has admin roles
+ *
+ * @param {Object} req
+ * @param {Object} res
+ * @param {Func} next
+ * @returns {undefined
+ * @author Snær Seljan Þóroddsson
+ */
+export function isAdmin(req, res, next) {
+    if (req.user && req.user.roles.includes('admin')) {
+        return next();
+    }
+
+    return res
+        .status(401)
+        .send({error: 'Unauthorized'});
 }
 
 /**

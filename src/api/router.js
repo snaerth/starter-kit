@@ -1,5 +1,6 @@
 import passport from 'passport';
-import {signin, signup} from './controllers/authentication';
+import {signin, signup, forgotPassword, isAdmin} from './controllers/authentication';
+import {getNews, deleteNews, createNews, updateNews} from './controllers/news';
 import {jwtLogin, localLogin} from './services/passport';
 
 // Tell passport to use strategy
@@ -7,8 +8,8 @@ passport.use(jwtLogin);
 passport.use(localLogin);
 
 // Initialize require authentication helpers
-const requireAuth = passport.authenticate('jwt', {session: false});
-const requireSignin = passport.authenticate('local', {session: false});
+const requireAuth = passport.authenticate('jwt');
+const requireSignin = passport.authenticate('local');
 
 /**
  * Default API routes
@@ -16,32 +17,14 @@ const requireSignin = passport.authenticate('local', {session: false});
  * @returns {undefined}
  */
 export default function (app) {
-  // API routes
+  // Authentication
   app.post('/signup', signup);
   app.post('/signin', requireSignin, signin);
-  app.post('/api', requireAuth, (req, res) => {
-    res.send('This is an route with required authentication API');
-  });
-  app.get('/test', (req, res) => {
-    res.send('test');
-  });
+  app.post('/forgot', forgotPassword);
 
-
-function isAdmin(req, res, next) {
-
-    // do any checks you want to in here
-    var test = typeof req.user.roles;
-    // CHECK THE USER STORED IN SESSION FOR A CUSTOM VARIABLE
-    // you can do this however you want with whatever variables you set up
-    if (req.user.roles.indexOf('admin') > -1)
-        return next();
-
-    // IF A USER ISN'T LOGGED IN, THEN REDIRECT THEM SOMEWHERE
-    res.redirect('/');
-}
-
-  // Admin routes
-  app.get('/admin', [requireAuth, isAdmin], (req, res) => {
-      res.send('admin route');
-  });
+  // News
+  app.get('/api/news', [requireAuth, isAdmin], getNews);
+  app.put('/api/news', [requireAuth, isAdmin], updateNews);
+  app.delete('/api/news', [requireAuth, isAdmin], deleteNews);
+  app.post('/api/news', [requireAuth, isAdmin], createNews);
 }

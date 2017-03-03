@@ -20,6 +20,7 @@ class Header extends Component {
      */
     renderAuthLinks() {
         if (this.props.authenticated) {
+
             return [
                 <Link to="/profile" key="profile" activeClassName={styles.active} className={styles.link}>Profile</Link>,
                 <Link to="/signout" key="signout" activeClassName={styles.active} className={styles.link}>Sign out</Link>
@@ -48,7 +49,14 @@ class Header extends Component {
 }
 
 function mapStateToProps(state) {
-    return { authenticated: state.auth.authenticated };
+    const {}
+    const obj = {
+
+    }
+
+    return { 
+        authenticated: state.auth.authenticated,
+    };
 }
 
 export default connect(mapStateToProps)(Header);

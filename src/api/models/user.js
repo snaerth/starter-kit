@@ -19,13 +19,17 @@ const schema = {
     type: String,
     required: true
   },
-  createdAt: {
-    type: Date,
-    default: Date.now
+  name: {
+    type: String,
+    required: true
   },
   message: {
     type: String,
-    required: true
+    required: false
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now
   },
   roles: {
     type: Array,
@@ -34,6 +38,13 @@ const schema = {
   imageUrl: {
     type: String,
     required: false
+  },
+  resetPasswordToken: {
+    type: String,
+    required: false
+  },
+  resetPasswordExpires: {
+    type: Date
   },
   facebook: {
     type: Object,

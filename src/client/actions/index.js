@@ -1,6 +1,6 @@
 import axios from 'axios';
-import { browserHistory } from 'react-router';
-import { AUTH_USER, UNAUTH_USER, AUTH_ERROR, SIGNUP_USER } from './types';
+import {browserHistory} from 'react-router';
+import {AUTH_USER, UNAUTH_USER, AUTH_ERROR, SIGNUP_USER, FORGOT_PASSWORD_SUCCESS, FORGOT_PASSWORD_ERROR} from './types';
 
 /**
  * Post request made to api with email and passwod
@@ -14,15 +14,15 @@ import { AUTH_USER, UNAUTH_USER, AUTH_ERROR, SIGNUP_USER } from './types';
  */
 export function signinUser({email, password}) {
     return function (dispatch) {
-        // Post email/password to api server for sign in
-        // Get token back from server
+        // Post email/password to api server for sign in Get token back from server
         axios
-            .post('/api/signin', { email, password })
+            .post('/api/signin', {email, password})
             .then(response => {
-                // Dispatch an actino to authReducer
-                dispatch({ type: AUTH_USER });
+                const payload = (response.data.role && response.data.role === 'admin') ? response.data.role : '';
+                // Dispatch admin action to authReducer
+                dispatch({type: AUTH_USER, payload});
                 // Save token to localStorage
-                localStorage.setItem('token', response.data.token);
+                localStorage.setItem('user', JSON.stringify(response.data));
                 // Reroute user to home page
                 browserHistory.push('/');
             })
@@ -34,15 +34,15 @@ export function signinUser({email, password}) {
 
 export function signupUser({email, password, message}) {
     return function (dispatch) {
-        // Post email/password to api server to register user
-        // Get token back from server
+        // Post email/password to api server to register user Get token back from server
         axios
-            .post('/api/signup', { email, password, message })
+            .post('/api/signup', {email, password, message})
             .then(response => {
-                // Dispatch an actino to authReducer
-                dispatch({ type: SIGNUP_USER });
+                const payload = (response.data.role && response.data.role === 'admin') ? response.data.role : '';
+                // Dispatch admin action to authReducer
+                dispatch({type: SIGNUP_USER, payload});
                 // Save token to localStorage
-                localStorage.setItem('token', response.data.token);
+                localStorage.setItem('user', JSON.stringify(response.data));
                 // Reroute user to home page
                 browserHistory.push('/');
             })
@@ -60,10 +60,33 @@ export function signupUser({email, password, message}) {
  * @author Snær Seljan Þóroddsson
  */
 export function signoutUser() {
-    localStorage.removeItem('token');
+    localStorage.removeItem('user');
 
-    return { type: UNAUTH_USER };
+    return {type: UNAUTH_USER};
 }
+
+/**
+ * Forgot password
+ *
+ * @param {String} email
+ * @returns {undefined}
+ * @author Snær Seljan Þóroddsson
+ */
+export function forgotPassword({email}) {
+    return function (dispatch) {
+        // Post email to api server to retreive new password
+        axios
+            .post('/api/forgotPassword', {email})
+            .then(response => {
+                // Dispatch admin action to authReducer
+                dispatch({type: FORGOT_PASSWORD_SUCCESS, payload: response.data});
+            })
+            .catch(error => {
+                dispatch({type: FORGOT_PASSWORD_ERROR, payload: error});
+            });
+    };
+}
+
 
 /**
  * Handles error from server
@@ -73,8 +96,8 @@ export function signoutUser() {
  */
 export function authError(error) {
     if (error.response.status === 401) {
-        return { type: AUTH_ERROR, payload: 'Bad login credentials' };
+        return {type: AUTH_ERROR, payload: 'Bad login credentials'};
     }
 
-    return { type: AUTH_ERROR, payload: error.response.data.error };
+    return {type: AUTH_ERROR, payload: error.response.data.error};
 }
