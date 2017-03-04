@@ -235,6 +235,68 @@ function sendResetPasswordEmail({url, email, name}) {
 }
 
 /**
+ * Resets user password
+ * Finds user by resetPasswordToken property and resetPasswordExpires
+ *
+ * @param {Object} req
+ * @param {Object} res
+ * @returns {undefined}
+ * @author Snær Seljan Þóroddsson
+ */
+export function resetPassword(req, res) {
+    const token = req.params.token;
+    const password = req.body.password;
+
+    if (token && password) {
+        updateUserPassword({token, password})
+            .then(user => res.send({message: `Success! Your password has been changed for ${user.email}.`}))
+            .catch(() => res.send({error: 'Password reset token is invalid or has expired.'}));
+    } else {
+        res.send({error: 'Token and password are required'});
+    }
+}
+
+/**
+ * Finds user, updates properties (password, resetPasswordToken, resetPasswordExpires)
+ * and saves user with new propertys
+ *
+ * @param {String} token
+ * @param {String} password
+ * @returns {undefined}
+ * @author Snær Seljan Þóroddsson
+ */
+function updateUserPassword({token, password}) {
+    return new Promise((resolve, reject) => {
+        User.findOne({
+            resetPasswordToken: token,
+            resetPasswordExpires: {
+                $gt: Date.now()
+            }
+        }, (error, user) => {
+            if (!error) {
+                reject({error: 'Password reset token is invalid or has expired.'});
+            }
+
+            user.password = password;
+            user.resetPasswordToken = undefined;
+            user.resetPasswordExpires = undefined;
+
+            // Save user to databases
+            user.save((error) => {
+                if (error) {
+                    reject(error);
+                }
+
+                resolve(user);
+            });
+        });
+    });
+
+}
+
+resetPassword
+
+/**
  * Check whether user has admin roles
  *
  * @param {Object} req
