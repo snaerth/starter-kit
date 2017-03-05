@@ -294,8 +294,6 @@ function updateUserPassword({token, password}) {
 
 }
 
-resetPassword
-
 /**
  * Check whether user has admin roles
  *
