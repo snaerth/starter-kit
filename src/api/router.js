@@ -1,5 +1,5 @@
 import passport from 'passport';
-import {signin, signup, forgotPassword, isAdmin} from './controllers/authentication';
+import {signin, signup, forgotPassword, resetPassword, isAdmin} from './controllers/authentication';
 import {getNews, deleteNews, createNews, updateNews} from './controllers/news';
 import {jwtLogin, localLogin} from './services/passport';
 
@@ -21,6 +21,7 @@ export default function (app) {
   app.post('/signup', signup);
   app.post('/signin', requireSignin, signin);
   app.post('/forgot', forgotPassword);
+  app.post('/reset/:token', resetPassword);
 
   // News
   app.get('/api/news', [requireAuth, isAdmin], getNews);

@@ -19,13 +19,10 @@ class Signout extends Component {
 
     render() {
         return (
-            <div className="page">
-                <div className="container">
-                    <div>You are signed out. You can sign in again here</div>
-                    <Link to="/" className="underline">Home</Link>
-                </div>
+            <div className="container">
+                <div>You are signed out. You can sign in again here</div>
+                <Link to="/" className="underline">Home</Link>
             </div>
-
         );
     }
 }
