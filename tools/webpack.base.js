@@ -5,7 +5,6 @@ const vendor = [
   'react-dom',
   'react-helmet',
   'redux',
-  'redux-persist',
   'react-redux',
   'redux-thunk',
   'react-addons-css-transition-group',
