@@ -58,18 +58,21 @@ class Signin extends Component {
         const {handleSubmit} = this.props;
 
         return (
-            <div className={styles.container}>
-                <MainHeading text="Forgot password"/> {this.renderError()}
-                <form onSubmit={handleSubmit(this.handleFormSubmit.bind(this))} noValidate>
-                    <fieldset>
-                        <Field component={Input} name="email" id="email" type="email" label="Email"/>
-                    </fieldset>
-                    <fieldset>
-                        <div>
-                            <Button text="Reset password" ariaLabel="Reset password" className="fullWidth"/>
-                        </div>
-                    </fieldset>
-                </form>
+            <div>
+                <MainHeading text="Forgot password"/>
+                <div className={styles.container}>
+                    {this.renderError()}
+                    <form onSubmit={handleSubmit(this.handleFormSubmit.bind(this))} noValidate>
+                        <fieldset>
+                            <Field component={Input} name="email" id="email" type="email" label="Email"/>
+                        </fieldset>
+                        <fieldset>
+                            <div>
+                                <Button text="Reset password" ariaLabel="Reset password" className="fullWidth"/>
+                            </div>
+                        </fieldset>
+                    </form>
+                </div>
             </div>
         );
     }
@@ -77,7 +80,7 @@ class Signin extends Component {
 
 /**
  * Validates form inputs, both email and password
- * 
+ *
  * @param {String} email
  * @return {Object} errors
  * @author Snær Seljan Þóroddsson
@@ -121,8 +124,4 @@ function mapDispatchToProps(dispatch) {
     };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(reduxForm({
-    form: 'signin',
-    fields: ['email'],
-    validate
-})(Signin));
+export default connect(mapStateToProps, mapDispatchToProps)(reduxForm({form: 'signin', fields: ['email'], validate})(Signin));

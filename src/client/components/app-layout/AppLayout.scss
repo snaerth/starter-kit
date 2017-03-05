@@ -1,6 +1,7 @@
 :global {
-    @import "../../styles/base.scss";
     @import '../../styles/normalize.css';
+    @import "../../styles/base.scss";
+    @import "../../styles/flexboxgrid.css";
     @import '../../styles/pageLoad.scss';
     @import '../../styles/animate.scss';
 }

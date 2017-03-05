@@ -58,32 +58,35 @@ class Signup extends Component {
         const {handleSubmit, errorMessage} = this.props;
 
         return (
-            <div className={styles.container}>
-                <MainHeading text="SIGN UP"/> {this.renderError(errorMessage)}
-                <form onSubmit={handleSubmit(this.handleFormSubmit.bind(this))} noValidate>
-                    <fieldset>
-                        <Field component={Input} name="name" id="name" type="text" label="Name"/>
-                    </fieldset>
-                    <fieldset>
-                        <Field component={Input} name="email" id="email" type="email" label="Email"/>
-                    </fieldset>
-                    <fieldset>
-                        <Field
-                            component={Input}
-                            name="password"
-                            id="password"
-                            type="password"
-                            label="Password"/>
-                    </fieldset>
-                    <fieldset>
-                        <Field component={Textarea} name="message" id="message" label="Message"/>
-                    </fieldset>
-                    <fieldset>
-                        <div>
-                            <Button text="Sign up" ariaLabel="Sign up" className="fullWidth"/>
-                        </div>
-                    </fieldset>
-                </form>
+            <div>
+                <MainHeading text="SIGN UP"/>
+                <div className={styles.container}>
+                    {this.renderError(errorMessage)}
+                    <form onSubmit={handleSubmit(this.handleFormSubmit.bind(this))} noValidate>
+                        <fieldset>
+                            <Field component={Input} name="name" id="name" type="text" label="Name"/>
+                        </fieldset>
+                        <fieldset>
+                            <Field component={Input} name="email" id="email" type="email" label="Email"/>
+                        </fieldset>
+                        <fieldset>
+                            <Field
+                                component={Input}
+                                name="password"
+                                id="password"
+                                type="password"
+                                label="Password"/>
+                        </fieldset>
+                        <fieldset>
+                            <Field component={Textarea} name="message" id="message" label="Message"/>
+                        </fieldset>
+                        <fieldset>
+                            <div>
+                                <Button text="Sign up" ariaLabel="Sign up" className="fullWidth"/>
+                            </div>
+                        </fieldset>
+                    </form>
+                </div>
             </div>
         );
     }

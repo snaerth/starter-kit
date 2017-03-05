@@ -1,5 +1,3 @@
-import News from '../models/news';
-
 /**
  * Creates news
  *

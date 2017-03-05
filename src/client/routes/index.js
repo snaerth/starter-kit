@@ -1,7 +1,7 @@
 import React from 'react';
 import { Route, IndexRoute } from 'react-router';
-import requireAuth from './../components/auth/requireAuth';
-import PageWrapper from './pageWrapper';
+import requireAuth from './../containers/requireAuth';
+import pageWrapper from './../containers/pageWrapper';
 import App from './../components';
 import NotFound from './notfound';
 import Home from './home';
@@ -19,12 +19,12 @@ export {
 export default (
   <Route path="/" component={App}>
     <IndexRoute component={Home}  />
-    <Route path="signin" component={PageWrapper(Signin)}  />
-    <Route path="signup" component={PageWrapper(Signup)} />
-    <Route path="signout" component={PageWrapper(Signout)}  />
-    <Route path="forgotpassword" component={PageWrapper(ForgotPassword)}  />
-    <Route path="profile" component={requireAuth(PageWrapper(Profile))} />
-    <Route path="admin" component={requireAuth(PageWrapper(Admin), 'admin')} />
-    <Route path="*" component={PageWrapper(NotFound)} />
+    <Route path="signin" component={pageWrapper(Signin)}  />
+    <Route path="signup" component={pageWrapper(Signup)} />
+    <Route path="signout" component={pageWrapper(Signout)}  />
+    <Route path="forgotpassword" component={pageWrapper(ForgotPassword)}  />
+    <Route path="profile" component={requireAuth(pageWrapper(Profile))} />
+    <Route path="admin" component={requireAuth(pageWrapper(Admin), 'admin')} />
+    <Route path="*" component={pageWrapper(NotFound)} />
   </Route>
 );

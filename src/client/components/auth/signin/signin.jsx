@@ -1,4 +1,5 @@
 import React, {PropTypes, Component} from 'react';
+import {Link} from 'react-router';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import {reduxForm, Field} from 'redux-form';
@@ -9,6 +10,7 @@ import MainHeading from './../../../components/common/mainheading';
 import Error from '../../common/error';
 import {validateEmail} from './../../../utils/validate';
 import * as actionCreators from './../../../actions';
+import {Row, Col} from 'react-flexbox-grid';
 
 /**
  * Signin component
@@ -58,26 +60,34 @@ class Signin extends Component {
         const {handleSubmit} = this.props;
 
         return (
-            <div className={styles.container}>
-                <MainHeading text="SIGN IN"/> {this.renderError()}
-                <form onSubmit={handleSubmit(this.handleFormSubmit.bind(this))} noValidate>
-                    <fieldset>
-                        <Field component={Input} name="email" id="email" type="email" label="Email"/>
-                    </fieldset>
-                    <fieldset>
-                        <Field
-                            component={Input}
-                            name="password"
-                            id="password"
-                            type="password"
-                            label="Password"/>
-                    </fieldset>
-                    <fieldset>
-                        <div>
-                            <Button text="Send" ariaLabel="Send" className="fullWidth"/>
-                        </div>
-                    </fieldset>
-                </form>
+            <div>
+                <MainHeading text="SIGN IN"/>
+                <div className={styles.container}>
+                    {this.renderError()}
+                    <form onSubmit={handleSubmit(this.handleFormSubmit.bind(this))} noValidate>
+                        <fieldset>
+                            <Field component={Input} name="email" id="email" type="email" label="Email"/>
+                        </fieldset>
+                        <fieldset>
+                            <Field
+                                component={Input}
+                                name="password"
+                                id="password"
+                                type="password"
+                                label="Password"/>
+                        </fieldset>
+                        <fieldset>
+                            <Row>
+                                <Col xs={6} md={6}>
+                                    <Link to="forgotpassword">Forgot password?</Link>
+                                </Col>
+                                <Col xs={6} md={6}>
+                                    <Button text="Send" ariaLabel="Send" className="fullWidth"/>
+                                </Col>
+                            </Row>
+                        </fieldset>
+                    </form>
+                </div>
             </div>
         );
     }
@@ -85,7 +95,7 @@ class Signin extends Component {
 
 /**
  * Validates form inputs, both email and password
- * 
+ *
  * @param {String} email
  * @param {String} password
  * @return {Object} errors
@@ -145,6 +155,8 @@ function mapDispatchToProps(dispatch) {
 
 export default connect(mapStateToProps, mapDispatchToProps)(reduxForm({
     form: 'signin',
-    fields: ['email', 'password'],
+    fields: [
+        'email', 'password'
+    ],
     validate
 })(Signin));

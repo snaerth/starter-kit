@@ -45,7 +45,8 @@ const css = {
       }
     },
     'postcss-loader'
-  ]
+  ],
+  include: /flexboxgrid/
 };
 
 const scss = {

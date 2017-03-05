@@ -1,2 +1,2 @@
-import MainHeading from './mainHeading.jsx';
+import MainHeading from './MainHeading.jsx';
 export default MainHeading;
