@@ -193,7 +193,7 @@ function attachTokenToUser({token, email}) {
             }
 
             user.resetPasswordToken = token;
-            user.resetPasswordExpires = Date.now() + 3600000; // 1 hour
+            user.resetPasswordExpires = Date.now() + (60*60*1000); // 1 hour
 
             // Save user to databases
             user.save((error) => {
@@ -276,10 +276,10 @@ function updateUserPassword({token, password}) {
         User.findOne({
             resetPasswordToken: token,
             resetPasswordExpires: {
-                $gt: Date.now()
+                $lt: Date.now() - (60*60*1000)
             }
         }, (error, user) => {
-            if (error) {
+            if (error || !user) {
                 reject({error: 'Password reset token is invalid or has expired.'});
             }
 
