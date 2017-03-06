@@ -1,6 +1,14 @@
 @import '../../../styles/variables.scss';
 
 .container {
-    max-width: $max-480;
+    max-width: $max-440;
     margin:0 auto;
+}
+
+.fullWidth {
+  width: 100%;
+}
+
+.centerLink {
+    margin-top: 9px;
 }

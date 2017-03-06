@@ -1,7 +1,9 @@
 import React, {Component, PropTypes} from 'react';
 import {connect} from 'react-redux';
 import {Link} from 'react-router';
-import * as actions from '../../../actions';
+import Button from '../../../components/common/button';
+import Banner from '../../../components/common/banner';
+import * as actions from '../../../components/auth/actions';
 
 /**
  * Signout component
@@ -20,8 +22,10 @@ class Signout extends Component {
     render() {
         return (
             <div className="container">
-                <div>You are signed out. You can sign in again here</div>
-                <Link to="/" className="underline">Home</Link>
+                <Banner text="SIGN OUT"/>
+                <div>You have successfully been signed out. You can <Link to="signin" className="link-slideright">sign in</Link> again at any time.</div>
+                <br/>
+                <Link to="/"><Button text="Back to home" ariaLabel="Back to home"/></Link>
             </div>
         );
     }

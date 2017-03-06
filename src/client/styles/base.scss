@@ -16,7 +16,7 @@ html {
 }
 
 body {
-    @include responsive-font(1.5vw, 16px, 20px);
+    @include responsive-font(1.5vw, 16px, 18px);
     background: $linear-background-primary;
     position: relative;
     margin: 0;
@@ -34,7 +34,7 @@ img {
 }
 
 h1 {
-    @include responsive-font(13vw, 40px, 70px);
+    @include responsive-font(13vw, 40px, 60px);
 }
 
 a::link,
@@ -48,35 +48,45 @@ a::hover {
     color: $primary-red;
 }
 
-a.underline {
-    display: inline-block;
-    vertical-align: middle;
-    transform: translateZ(0);
-    box-shadow: 0 0 1px rgba(0, 0, 0, 0);
-    backface-visibility: hidden;
-    -moz-osx-font-smoothing: grayscale;
+a.link-slideright {
+    color: $link-color;
     position: relative;
+    display: inline-block;
+    outline: none;
+    vertical-align: bottom;
+    text-decoration: none;
+    white-space: nowrap;
     overflow: hidden;
-    line-height: 25px;
 }
 
-a.underline::before {
-    content: "";
+a.link-slideright::before,
+a.link-slideright::after {
+    content: '';
     position: absolute;
     z-index: -1;
-    left: 50%;
-    right: 50%;
-    bottom: 0;
-    background: $primary-black;
+    width: 100%;
     height: 1px;
-    transition-property: left, right;
-    transition-duration: 0.2s;
-    transition-timing-function: ease-out;
+    background: $link-color;
+    transition: transform 0.3s;
 }
 
-a.underline:hover::before {
+a.link-slideright::before {
+    bottom: 0;
     left: 0;
+    transform: scaleY(0.618) translateX(-100%);
+}
+
+a.link-slideright::after {
+    top: 0;
     right: 0;
+    transform: scaleY(0.618) translateX(100%);
+}
+
+a.link-slideright:hover::before,
+a.link-slideright:focus::before,
+a.link-slideright:hover::after,
+a.link-slideright:focus::after {
+    transform: scaleY(0.618) translateX(0);
 }
 
 fieldset {
@@ -86,7 +96,7 @@ fieldset {
 .page {
     position: absolute;
     width: 100%;
-    padding: 2em 0;
+    padding: 0 0 2em;
 }
 
 .container {

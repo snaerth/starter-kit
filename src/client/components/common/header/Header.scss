@@ -10,10 +10,9 @@
 }
 
 a.link {
-    @include responsive-font(1.5vw, 18px, 20px);
+    @include responsive-font(1.5vw, 16px, 18px);
     text-decoration: none;
     outline: none;
-    font-weight: bold;
     margin: 0 0.5em;
     pointer-events: visible;
     color:$navbar-text;
@@ -50,6 +49,6 @@ a.active {
 
 @media only screen and (min-width: $max-768) {
     .container {
-        padding: 1em;
+        padding: 0.6em;
     }
 }

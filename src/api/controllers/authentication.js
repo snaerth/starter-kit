@@ -3,6 +3,13 @@ import sendMail from '../services/mailService';
 import User from '../models/user';
 import jwt from 'jwt-simple';
 import crypto from 'crypto';
+import config from '../../config';
+
+// VARIABLES
+const {
+  PORT,
+  HOST
+} = config();
 
 /**
  * Sign up route
@@ -128,14 +135,13 @@ export function signin(req, res) {
  */
 export function forgotPassword(req, res) {
     const {email} = req.body;
-    const {host} = req.headers;
 
     // Create token Save resetPasswordToken and resetPasswordExpires to user Send
     // email to user
     createRandomToken()
         .then(token => attachTokenToUser({token, email}))
         .then(({user, token}) => {
-            const url = `${host}/reset/${token}`;
+            const url = `${HOST}:${PORT}/reset/${token}`;
             const {email, name} = user;
 
             return sendResetPasswordEmail({url, email, name});
@@ -273,7 +279,7 @@ function updateUserPassword({token, password}) {
                 $gt: Date.now()
             }
         }, (error, user) => {
-            if (!error) {
+            if (error) {
                 reject({error: 'Password reset token is invalid or has expired.'});
             }
 

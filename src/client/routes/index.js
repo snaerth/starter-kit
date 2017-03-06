@@ -9,6 +9,7 @@ import Signin from './../components/auth/signin';
 import Signup from './../components/auth/signup';
 import Signout from './auth/signout';
 import ForgotPassword from './../components/auth/forgotPassword';
+import ResetPassword from './../components/auth/resetPassword';
 import Profile from './profile';
 import Admin from './admin';
 
@@ -23,6 +24,7 @@ export default (
     <Route path="signup" component={pageWrapper(Signup)} />
     <Route path="signout" component={pageWrapper(Signout)}  />
     <Route path="forgotpassword" component={pageWrapper(ForgotPassword)}  />
+    <Route path="reset/:token" component={pageWrapper(ResetPassword)}  />
     <Route path="profile" component={requireAuth(pageWrapper(Profile))} />
     <Route path="admin" component={requireAuth(pageWrapper(Admin), 'admin')} />
     <Route path="*" component={pageWrapper(NotFound)} />

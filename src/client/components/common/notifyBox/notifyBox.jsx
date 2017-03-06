@@ -1,6 +1,6 @@
 import React, {Component, PropTypes} from 'react';
 import ReactDOM from 'react-dom';
-import styles from './error.scss';
+import styles from './notifyBox.scss';
 import classnames from 'classnames';
 import {TweenMax} from 'gsap';
 
@@ -13,11 +13,22 @@ class Error extends Component {
         TweenMax.fromTo(node, 0.5, {y: 10}, {y: 0});
     }
 
+    checkBoxType(type) {
+        switch(type) {
+            case 'error':
+                return styles.error;
+            case 'success':
+                return styles.success;
+            default: 
+                return styles.error;
+        }
+    }
+
     render() {
-        const {text, strongText} = this.props;
+        const {text, strongText, type} = this.props;
 
         return (
-            <div className={classnames(styles.error)}>
+            <div className={classnames(styles.box,this.checkBoxType(type))}>
                 <strong>{strongText}</strong>
                 {text}
             </div>
@@ -28,7 +39,8 @@ class Error extends Component {
 
 Error.propTypes = {
     strongText: PropTypes.string,
-    text: PropTypes.string
+    text: PropTypes.string,
+    type: PropTypes.string.isRequired
 };
 
 export default Error;

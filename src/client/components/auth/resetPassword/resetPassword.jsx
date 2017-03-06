@@ -1,28 +1,27 @@
 import React, {PropTypes, Component} from 'react';
-import {Link} from 'react-router';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import {reduxForm, Field} from 'redux-form';
 import Input from '../../common/input';
-import styles from './signin.scss';
+import styles from './resetPassword.scss';
 import Button from '../../common/button';
 import Banner from './../../../components/common/banner';
 import NotifyBox from '../../common/notifyBox';
-import {validateEmail} from './../../../utils/validate';
 import * as actionCreators from '../actions';
-import {Row, Col} from 'react-flexbox-grid';
-import classnames from 'classnames';
 
 /**
  * Signin component
  */
-class Signin extends Component {
+class ResetPassword extends Component {
     static propTypes = {
         fields: PropTypes.array.isRequired,
         handleSubmit: PropTypes.func.isRequired,
-        signinUser: PropTypes.func,
+        resetPassword: PropTypes.func,
         actions: PropTypes.object.isRequired,
-        errorMessage: PropTypes.string
+        errorMessage: PropTypes.string,
+        message: PropTypes.string,
+        token: PropTypes.string,
+        params: PropTypes.object,
     }
 
     /**
@@ -32,26 +31,34 @@ class Signin extends Component {
      * @returns {undefined}
      * @author Snær Seljan Þóroddsson
      */
-    handleFormSubmit({email, password}) {
+    handleFormSubmit({password}) {
+        const token = this.props.params.token;
+
         this
             .props
             .actions
-            .signinUser({email, password});
+            .resetPassword({password, token});
     }
 
     /**
-     * Renders error message box
+     * Renders messages in a notifycation box
      *
      * @returns {JSX}
      * @author Snær Seljan Þóroddsson
      */
-    renderError() {
-        const {errorMessage} = this.props;
+    renderMessages() {
+        const {errorMessage, message} = this.props;
 
         if (errorMessage) {
             return (
                 <fieldset>
                     <NotifyBox strongText="Error: " text={errorMessage} type="error"/>
+                </fieldset>
+            );
+        } else if(message) {
+            return (
+                <fieldset>
+                    <NotifyBox strongText="Success: " text={message} type="success"/>
                 </fieldset>
             );
         }
@@ -62,30 +69,20 @@ class Signin extends Component {
 
         return (
             <div>
-                <Banner text="SIGN IN"/>
+                <Banner text="Reset password"/>
                 <div className={styles.container}>
-                    {this.renderError()}
+                    {this.renderMessages()}
                     <form onSubmit={handleSubmit(this.handleFormSubmit.bind(this))} noValidate>
-                        <fieldset>
-                            <Field component={Input} name="email" id="email" type="email" label="Email"/>
-                        </fieldset>
                         <fieldset>
                             <Field
                                 component={Input}
                                 name="password"
                                 id="password"
                                 type="password"
-                                label="Password"/>
+                                label="New password"/>
                         </fieldset>
                         <fieldset>
-                            <Row>
-                                <Col xs={6} md={6}>
-                                    <Link to="forgotpassword" className={classnames('link-slideright',styles.centerLink)}>Forgot password?</Link>
-                                </Col>
-                                <Col xs={6} md={6}>
-                                    <Button text="Send" ariaLabel="Send" className="fullWidth"/>
-                                </Col>
-                            </Row>
+                            <Button text="Reset password" ariaLabel="Reset password" className="fullWidth"/>
                         </fieldset>
                     </form>
                 </div>
@@ -95,24 +92,14 @@ class Signin extends Component {
 }
 
 /**
- * Validates form inputs, both email and password
+ * Validates password input
  *
- * @param {String} email
  * @param {String} password
  * @return {Object} errors
  * @author Snær Seljan Þóroddsson
  */
-function validate({email, password}) {
+function validate({password}) {
     const errors = {};
-
-    // Email
-    if (!validateEmail(email)) {
-        errors.email = `Email ${email} is not valid email`;
-    }
-
-    if (!email) {
-        errors.email = 'Email required';
-    }
 
     // Password
     if (!/[0-9]/.test(password) || !/[A-Z]/.test(password)) {
@@ -138,7 +125,10 @@ function validate({email, password}) {
  * @author Snær Seljan Þóroddsson
  */
 function mapStateToProps(state) {
-    return {errorMessage: state.auth.error};
+    return {
+        errorMessage: state.auth.error,
+        message: state.auth.message
+    };
 }
 
 /**
@@ -154,10 +144,4 @@ function mapDispatchToProps(dispatch) {
     };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(reduxForm({
-    form: 'signin',
-    fields: [
-        'email', 'password'
-    ],
-    validate
-})(Signin));
+export default connect(mapStateToProps, mapDispatchToProps)(reduxForm({form: 'signin', fields: ['password'], validate})(ResetPassword));

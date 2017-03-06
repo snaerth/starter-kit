@@ -4,8 +4,7 @@
     position: relative;
     z-index: 1;
     display: inline-block;
-    margin: 0 1em;
-    width: calc(100% - 2em);
+    width: 100%;
     vertical-align: top;
 }
 
@@ -36,7 +35,6 @@
     padding: 0 1em;
     width: 40%;
     color: $primary-white;
-    font-weight: bold;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     -webkit-touch-callout: none;
@@ -83,12 +81,5 @@
     to {
         box-shadow: 0px 0px 100px 50px;
         opacity: 0;
-    }
-}
-
-@media only screen and (max-width: $max-768) {
-    .input {
-        width: 100%;
-        margin: 0;
     }
 }

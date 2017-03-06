@@ -6,9 +6,9 @@ import Input from '../../common/input';
 import Textarea from '../../common/textarea';
 import styles from './signup.scss';
 import Button from '../../common/button';
-import MainHeading from './../../../components/common/mainheading';
-import Error from '../../common/error';
-import * as actionCreators from './../../../actions';
+import Banner from './../../../components/common/banner';
+import NotifyBox from '../../common/notifyBox';
+import * as actionCreators from '../actions';
 import {validateEmail} from './../../../utils/validate';
 
 /**
@@ -48,7 +48,7 @@ class Signup extends Component {
         if (errorMessage) {
             return (
                 <fieldset>
-                    <Error strongText="Error: " text={errorMessage}/>
+                    <NotifyBox strongText="Error: " text={errorMessage} type="error"/>
                 </fieldset>
             );
         }
@@ -59,7 +59,7 @@ class Signup extends Component {
 
         return (
             <div>
-                <MainHeading text="SIGN UP"/>
+                <Banner text="SIGN UP"/>
                 <div className={styles.container}>
                     {this.renderError(errorMessage)}
                     <form onSubmit={handleSubmit(this.handleFormSubmit.bind(this))} noValidate>

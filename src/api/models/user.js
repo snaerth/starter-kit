@@ -79,9 +79,10 @@ userSchema.pre('save', function(next) {
 // Compare password to encrypted password
 userSchema.methods.comparePassword = function(candidatePassword, callback) {
   bcrypt
-    .compare(candidatePassword, this.password, function(err, isMatch) {
-      if (err)
-        return callback(err);
+    .compare(candidatePassword, this.password, function(error, isMatch) {
+      if (error) {
+        return callback(error);
+      }
       callback(null, isMatch);
     });
 };

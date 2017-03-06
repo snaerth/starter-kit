@@ -1,5 +1,6 @@
 $primary-yellow: #facb7a;
 $primary-red: #DC886C;
+$primary-green: #9ccc65;
 $primary-pink: #f9f7f6;
 $primary-black: #000;
 $primary-white: #fff;
@@ -7,8 +8,11 @@ $secondary-black:#2f3238;
 $navbar-background: #A9BAC2;
 $navbar-text: #586A6E;
 $text-dark: #586A6E;
-$button-background: #78B8DB;
+$button-background: #A9BAC2;
+$button-color: #586A6E;
+$button-color-hover: #2f3238;
 $linear-background-primary: linear-gradient(-180deg, #7C909B, #7E7767);
+$link-color: #404d5b;
 
 // Animations
 $hover-transition: .15s;
@@ -43,3 +47,4 @@ $max-320: 320px;
 // Containers max width
 $max-width: 1920px;
 $max-480: 480px;
+$max-440: 480px;

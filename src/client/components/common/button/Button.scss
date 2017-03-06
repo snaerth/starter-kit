@@ -8,25 +8,24 @@
   padding: 11px 20px;
   cursor: pointer;
   transition: box-shadow .25s ease-out, transform .20s ease-out, opacity .10s ease-out, background .15s ease-out, color .2s ease-out;
-  color: $primary-white;
-  font-weight: bold;
+  color: $button-color;
 
   &:hover {
     opacity: 0.9;
     box-shadow: $box-shadow;
+    color: $button-color-hover;
     transform: translate3d(0, -4px, 0);
-    color: $secondary-black;
   }
 
   &:focus {
     outline: 0;
+    color: $button-color-hover;
     background: darken($button-background, 5%);
   }
 }
 
 .fullWidth {
-  margin: 0 1em;
-  width: calc(100% - 2em);
+  width: 100%;
 }
 
 .default {
@@ -35,11 +34,4 @@
   &:hover {
     background: lighten($button-background, 5%);
   }
-}
-
-@media only screen and (max-width: $max-768) {
-    .button {
-        width: 100%;
-        margin: 0;
-    }
 }

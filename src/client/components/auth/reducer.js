@@ -4,8 +4,10 @@ import {
     SIGNUP_USER,
     AUTH_ERROR,
     FORGOT_PASSWORD_SUCCESS,
-    FORGOT_PASSWORD_ERROR
-} from '../actions/types';
+    FORGOT_PASSWORD_ERROR,
+    RESET_PASSWORD_SUCCESS,
+    RESET_PASSWORD_ERROR
+} from './types';
 
 const user = JSON.parse(localStorage.getItem('user'));
 
@@ -54,6 +56,18 @@ export default function (state = initialState, action) {
                 message: action.payload
             };
         case FORGOT_PASSWORD_ERROR:
+            return {
+                ...state,
+                isFetching: false,
+                error: action.payload
+            };
+        case RESET_PASSWORD_SUCCESS:
+            return {
+                ...state,
+                isFetching: false,
+                message: action.payload
+            };
+        case RESET_PASSWORD_ERROR:
             return {
                 ...state,
                 isFetching: false,

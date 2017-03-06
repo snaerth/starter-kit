@@ -5,10 +5,10 @@ import {reduxForm, Field} from 'redux-form';
 import Input from '../../common/input';
 import styles from './forgotPassword.scss';
 import Button from '../../common/button';
-import MainHeading from './../../../components/common/mainheading';
-import Error from '../../common/error';
+import Banner from './../../../components/common/banner';
+import NotifyBox from '../../common/notifyBox';
 import {validateEmail} from './../../../utils/validate';
-import * as actionCreators from './../../../actions';
+import * as actionCreators from '../actions';
 
 /**
  * Signin component
@@ -19,7 +19,8 @@ class Signin extends Component {
         handleSubmit: PropTypes.func.isRequired,
         signinUser: PropTypes.func,
         actions: PropTypes.object.isRequired,
-        errorMessage: PropTypes.string
+        errorMessage: PropTypes.string,
+        message: PropTypes.string
     }
 
     /**
@@ -37,18 +38,24 @@ class Signin extends Component {
     }
 
     /**
-     * Renders error message box
+     * Renders messages in a notifycation box
      *
      * @returns {JSX}
      * @author Snær Seljan Þóroddsson
      */
-    renderError() {
-        const {errorMessage} = this.props;
+    renderMessages() {
+        const {errorMessage, message} = this.props;
 
         if (errorMessage) {
             return (
                 <fieldset>
-                    <Error strongText="Error: " text={errorMessage}/>
+                    <NotifyBox strongText="Error: " text={errorMessage} type="error"/>
+                </fieldset>
+            );
+        } else if (message) {
+            return (
+                <fieldset>
+                    <NotifyBox strongText="Success: " text={message} type="success"/>
                 </fieldset>
             );
         }
@@ -59,9 +66,10 @@ class Signin extends Component {
 
         return (
             <div>
-                <MainHeading text="Forgot password"/>
+                <Banner text="Forgot password"/>
+
                 <div className={styles.container}>
-                    {this.renderError()}
+                    {this.renderMessages()}
                     <form onSubmit={handleSubmit(this.handleFormSubmit.bind(this))} noValidate>
                         <fieldset>
                             <Field component={Input} name="email" id="email" type="email" label="Email"/>
@@ -108,7 +116,7 @@ function validate({email}) {
  * @author Snær Seljan Þóroddsson
  */
 function mapStateToProps(state) {
-    return {errorMessage: state.auth.error};
+    return {errorMessage: state.auth.error, message: state.auth.message};
 }
 
 /**

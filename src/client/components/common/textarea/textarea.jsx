@@ -1,5 +1,5 @@
 import React, {PropTypes} from 'react';
-import styles from './textarea.scss';
+import styles from '../input/input.scss';
 import ErrorText from '../errorText';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 
