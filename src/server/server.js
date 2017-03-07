@@ -53,6 +53,6 @@ server.listen(port, error => {
     if (error) {
         console.error(error);
     }
-    console.info('----\n==> ✅  %s is running, talking to API server on %s.', APIHOST, APIPORT);
+    console.info('==> ✅  %s is running, talking to API server on %s.', APIHOST, APIPORT);
     console.info('==> 💻  Open http://%s:%s in a browser to view the app.', HOST, PORT);
 });

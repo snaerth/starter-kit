@@ -6,6 +6,7 @@
   ],
   "sourceMaps": true,
   "retainLines": true,
+  "plugins": ["transform-async-to-generator"],
   "env": {
     "production": {
       "presets": ["react-optimize"]

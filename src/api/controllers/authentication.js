@@ -1,5 +1,6 @@
 import {validateEmail} from '../services/utils';
 import sendMail from '../services/mailService';
+import {saveImage, isImage} from '../services/imageService';
 import User from '../models/user';
 import jwt from 'jwt-simple';
 import crypto from 'crypto';
@@ -21,7 +22,7 @@ const {
  * @returns {undefined}
  * @author Snær Seljan Þóroddsson
  */
-export function signup(req, res, next) {
+export async function signup(req, res, next) {
     if (!req.body) {
         return res
             .status(422)
@@ -29,6 +30,23 @@ export function signup(req, res, next) {
     }
 
     const {email, password, message, name} = req.body;
+    const file = req.file;
+
+    // Check for image file in request
+    if(file) {
+        try {
+            const isImage = await isImage;
+            const saveImage = await saveImage;
+        } catch (error) {
+            return res.status(422).send({error});
+        }
+        // isImage
+        // .then(() => saveImage(data, path))
+        // .then(data => saveImage(data, path))
+        // .catch(error => {
+        //     return res.status(422).send({error});
+        // });
+    }
 
     // Check if email, password or message exist in request
     if (!email || !password || !name) {

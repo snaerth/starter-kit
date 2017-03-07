@@ -42,8 +42,4 @@ export default function sendMail(to, subject, text, html, callback) {
 
         callback(null, info);
     });
-
-
-
-
 }
