@@ -131,7 +131,7 @@ function validate({email, password, name}) {
         errors.name = 'Name required';
     }
 
-    if (!/[a-zA-Z]+\s+[a-zA-Z]+/g.test(name)) {
+    if (!/^([^0-9]*)$/.test(name) || name.trim().split(' ').length < 2) {
         errors.name = 'Name has aleast two names 2 words consisting of letters';
     }
 

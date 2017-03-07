@@ -7,10 +7,7 @@ import crypto from 'crypto';
 import config from '../../config';
 
 // VARIABLES
-const {
-  PORT,
-  HOST
-} = config();
+const {PORT, HOST} = config();
 
 /**
  * Sign up route
@@ -22,7 +19,7 @@ const {
  * @returns {undefined}
  * @author Snær Seljan Þóroddsson
  */
-export async function signup(req, res, next) {
+export function signup(req, res) {
     if (!req.body) {
         return res
             .status(422)
@@ -33,84 +30,99 @@ export async function signup(req, res, next) {
     const file = req.file;
 
     // Check for image file in request
-    if(file) {
-        try {
-            const isImage = await isImage;
-            const saveImage = await saveImage;
-        } catch (error) {
-            return res.status(422).send({error});
-        }
-        // isImage
-        // .then(() => saveImage(data, path))
-        // .then(data => saveImage(data, path))
-        // .catch(error => {
-        //     return res.status(422).send({error});
-        // });
+    if (file) {
+        isImage(file)
+        .then(() => saveImage(file.path, './assets/images/users'))
+        .then(() => validateSignup({email, password, name}))
+        .then(() => findUserByEmailAndSave({name, email, password, message}))
+        .then(data => res.json(data))
+        .catch(error => res.status(422).send({error}));
+    } else {
+        validateSignup({email, password, name})
+        .then(() => findUserByEmailAndSave({name, email, password, message}))
+        .then(data => res.json(data))
+        .catch(error => res.status(422).send({error}));
     }
 
-    // Check if email, password or message exist in request
-    if (!email || !password || !name) {
-        return res
-            .status(422)
-            .send({error: 'You must provide name, email and password'});
-    }
+}
 
-    // Validate email
-    if (!validateEmail(email)) {
-        return res
-            .status(422)
-            .send({error: `${email} is not a valid email`});
-    }
-
-    // Check if password length is longer then 6 characters
-    if (password.length < 6) {
-        return res
-            .status(422)
-            .send({error: 'Password must be of minimum length 6 characters'});
-    }
-
-    // Check if password contains one number and one uppercase letter
-    if (!/[0-9]/.test(password) || !/[A-Z]/.test(password)) {
-        return res
-            .status(422)
-            .send({error: 'Password must contain at least one number (0-9) and one uppercase letter (A-Z)'});
-    }
-
-    // Name
-    if (!/[a-zA-Z]+\s+[a-zA-Z]+/g.test(name)) {
-        return res
-            .status(422)
-            .send({error: 'Name has aleast two names 2 words consisting of letters'});
-    }
-
-    // See if user with given email exists
-    User.findOne({
-        email
-    }, (error, existingUser) => {
-        if (error) {
-            return next(error);
-        }
-
-        // If a user does exist, return error
-        if (existingUser) {
-            return res
-                .status(422)
-                .send({error: 'Email is in use'});
-        }
-
-        // If a user does not exist, create and save new user
-        const user = new User({name, email, password, message, roles: ['user']});
-
-        // Save user to databases
-        user.save((error) => {
+/**
+ * Find user by email. If user is found then save user to db
+ * else reject promise with error
+ *
+ * @param {Object} fields - Object with props name, email, password, message
+ * @returns {Promise}
+ * @author Snær Seljan Þóroddsson
+ */
+function findUserByEmailAndSave({name, email, password, message}) {
+    return new Promise((resolve, reject) => {
+        // See if user with given email exists
+        User.findOne({
+            email
+        }, (error, existingUser) => {
             if (error) {
-                return next(error);
+                return reject(error);
             }
 
-            // Respond to request that user was created
-            res.json({token: tokenForUser(user)});
-        });
+            // If a user does exist, return error
+            if (existingUser) {
+                return reject('Email is in use');
+            }
 
+            // If a user does not exist, create and save new user
+            const user = new User({name, email, password, message, roles: ['user']});
+
+            // Save user to databases
+            user.save((error) => {
+                if (error) {
+                    return reject(error);
+                }
+
+                resolve({
+                    token: tokenForUser(user),
+                    user
+                });
+            });
+        });
+    });
+}
+
+/**
+ * Validates email, password and name from post request
+ * If error then send response with error and status 422
+ *
+ * @param {String} email
+ * @param {String} password
+ * @param {String} name
+ * @param {Object} res
+ * @returns {Object} res
+ * @author Snær Seljan Þóroddsson
+ */
+function validateSignup({email, password, name}) {
+    return new Promise((resolve, reject) => {
+        // Check if email, password or message exist in request
+        if (!email || !password || !name) {
+            return reject('You must provide name, email and password');
+        } 
+        // Validate email
+        if (!validateEmail(email)) { 
+            return reject(`${email} is not a valid email`);
+        } 
+        // Check if password length is longer then 6 characters
+        if (password.length < 6) { 
+            return reject('Password must be of minimum length 6 characters');
+        } 
+        // Check if password contains one number and one uppercase letter
+        if (!/[0-9]/.test(password) || !/[A-Z]/.test(password)) { 
+            return reject('Password must contain at least one number (0-9) and one uppercase letter (A-Z)');
+        } 
+
+        // Name has to have aleast two names
+        if (!/^([^0-9]*)$/.test(name) || name.trim().split(' ').length < 2) {
+            return reject('Name has aleast two 2 names consisting of letters');
+        }
+
+        return resolve();
     });
 }
 
@@ -211,7 +223,7 @@ function attachTokenToUser({token, email}) {
             }
 
             user.resetPasswordToken = token;
-            user.resetPasswordExpires = Date.now() + (60*60*1000); // 1 hour
+            user.resetPasswordExpires = Date.now() + (60 * 60 * 1000); // 1 hour
 
             // Save user to databases
             user.save((error) => {
@@ -294,7 +306,7 @@ function updateUserPassword({token, password}) {
         User.findOne({
             resetPasswordToken: token,
             resetPasswordExpires: {
-                $lt: Date.now() - (60*60*1000)
+                $lt: Date.now() - (60 * 60 * 1000)
             }
         }, (error, user) => {
             if (error || !user) {

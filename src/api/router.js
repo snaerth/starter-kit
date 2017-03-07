@@ -2,9 +2,9 @@ import passport from 'passport';
 import {signin, signup, forgotPassword, resetPassword, isAdmin} from './controllers/authentication';
 import {getNews, deleteNews, createNews, updateNews} from './controllers/news';
 import {jwtLogin, localLogin} from './services/passport';
-import * as multer from 'multer';
+import multer from 'multer';
 
-const upload = multer({ dest: '../../assets/' });
+const upload = multer({ dest: 'uploads/' });
 
 // Tell passport to use strategy
 passport.use(jwtLogin);

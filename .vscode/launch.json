@@ -9,8 +9,6 @@
       "args": [],
       "cwd": "${workspaceRoot}",
       "runtimeArgs": [
-        "--harmony",
-        "--no-deprecation",
         "--nolazy"
       ],
       "sourceMaps": true,
