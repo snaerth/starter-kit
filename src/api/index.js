@@ -49,19 +49,31 @@ if (process.env.NODE_ENV === 'production') {
   sessionOptions.cookie.secure = true; 
 }
 
-db(DB_URL, () => {
-  // Hide all software information
-  app.disable('x-powered-by');
+// db(DB_URL, () => {
+//   // Hide all software information
+//   app.disable('x-powered-by');
 
-  // Apply middleware to app
-  app.use(middleware([apiLimiter, session(sessionOptions)]));
+//   // Apply middleware to app
+//   app.use(middleware([apiLimiter, session(sessionOptions)]));
 
-  // Api routes
-  routes(app);
+//   // Api routes
+//   routes(app);
 
-  // Error Handler middlewares.
-  app.use(...errorHandlers);
-});
+//   // Error Handler middlewares.
+//   app.use(...errorHandlers);
+// });
+
+// Hide all software information
+app.disable('x-powered-by');
+
+// Apply middleware to app
+app.use(middleware([apiLimiter, session(sessionOptions)]));
+
+// Api routes
+routes(app);
+
+// Error Handler middlewares.
+app.use(...errorHandlers);
 
 // Start API
 server.listen(APIPORT, error => {

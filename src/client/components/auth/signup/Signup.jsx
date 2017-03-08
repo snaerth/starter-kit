@@ -1,7 +1,7 @@
-import React, {PropTypes, Component} from 'react';
-import {bindActionCreators} from 'redux';
-import {connect} from 'react-redux';
-import {reduxForm, Field} from 'redux-form';
+import React, { PropTypes, Component } from 'react';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import { reduxForm, Field } from 'redux-form';
 import Input from '../../common/input';
 import Textarea from '../../common/textarea';
 import styles from './signup.scss';
@@ -9,7 +9,8 @@ import Button from '../../common/button';
 import Banner from './../../../components/common/banner';
 import NotifyBox from '../../common/notifyBox';
 import * as actionCreators from '../actions';
-import {validateEmail} from './../../../utils/validate';
+import { validateEmail } from './../../../utils/validate';
+import Dropzone from 'react-dropzone';
 
 /**
  * Signup component
@@ -34,7 +35,7 @@ class Signup extends Component {
         this
             .props
             .actions
-            .signupUser({email, password, name});
+            .signupUser({ email, password, name });
     }
 
     /**
@@ -48,10 +49,15 @@ class Signup extends Component {
         if (errorMessage) {
             return (
                 <fieldset>
-                    <NotifyBox strongText="Error: " text={errorMessage} type="error"/>
+                    <NotifyBox strongText="Error: " text={errorMessage} type="error" />
                 </fieldset>
             );
         }
+    }
+
+    onDrop(acceptedFiles, rejectedFiles) {
+        console.log('Accepted files: ', acceptedFiles);
+        console.log('Rejected files: ', rejectedFiles);
     }
 
     render() {
@@ -59,15 +65,15 @@ class Signup extends Component {
 
         return (
             <div>
-                <Banner text="SIGN UP"/>
+                <Banner text="SIGN UP" />
                 <div className={styles.container}>
                     {this.renderError(errorMessage)}
                     <form onSubmit={handleSubmit(this.handleFormSubmit.bind(this))} noValidate>
                         <fieldset>
-                            <Field component={Input} name="name" id="name" type="text" label="Name"/>
+                            <Field component={Input} name="name" id="name" type="text" label="Name" />
                         </fieldset>
                         <fieldset>
-                            <Field component={Input} name="email" id="email" type="email" label="Email"/>
+                            <Field component={Input} name="email" id="email" type="email" label="Email" />
                         </fieldset>
                         <fieldset>
                             <Field
@@ -75,14 +81,19 @@ class Signup extends Component {
                                 name="password"
                                 id="password"
                                 type="password"
-                                label="Password"/>
+                                label="Password" />
                         </fieldset>
                         <fieldset>
-                            <Field component={Textarea} name="message" id="message" label="Message"/>
+                            <Field component={Textarea} name="message" id="message" label="Message" />
+                        </fieldset>
+                        <fieldset>
+                            <Dropzone onDrop={this.onDrop} multiple="false" accept="image/*">
+                                <div>Try dropping some files here, or click to select files to upload.</div>
+                            </Dropzone>
                         </fieldset>
                         <fieldset>
                             <div>
-                                <Button text="Sign up" ariaLabel="Sign up" className="fullWidth"/>
+                                <Button text="Sign up" ariaLabel="Sign up" className="fullWidth" />
                             </div>
                         </fieldset>
                     </form>
@@ -131,7 +142,7 @@ function validate({email, password, name}) {
         errors.name = 'Name required';
     }
 
-    if (!/^([^0-9]*)$/.test(name) || name.trim().split(' ').length < 2) {
+    if (!/^([^0-9]*)$/.test(name) || (name && name.trim().split(' ').length < 2)) {
         errors.name = 'Name has aleast two names 2 words consisting of letters';
     }
 
@@ -146,7 +157,7 @@ function validate({email, password, name}) {
  * @author Snær Seljan Þóroddsson
  */
 function mapStateToProps(state) {
-    return {errorMessage: state.auth.error};
+    return { errorMessage: state.auth.error };
 }
 
 /**

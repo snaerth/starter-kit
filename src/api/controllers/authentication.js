@@ -31,9 +31,9 @@ export function signup(req, res) {
 
     // Check for image file in request
     if (file) {
-        isImage(file)
+        validateSignup({email, password, name})
+        .then(() => isImage(file))
         .then(() => saveImage(file.path, './assets/images/users'))
-        .then(() => validateSignup({email, password, name}))
         .then(() => findUserByEmailAndSave({name, email, password, message}))
         .then(data => res.json(data))
         .catch(error => res.status(422).send({error}));
@@ -43,7 +43,6 @@ export function signup(req, res) {
         .then(data => res.json(data))
         .catch(error => res.status(422).send({error}));
     }
-
 }
 
 /**

@@ -1,16 +1,15 @@
-import React, {PropTypes, Component} from 'react';
-import {Link} from 'react-router';
-import {bindActionCreators} from 'redux';
-import {connect} from 'react-redux';
-import {reduxForm, Field} from 'redux-form';
+import React, { PropTypes, Component } from 'react';
+import { Link } from 'react-router';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import { reduxForm, Field } from 'redux-form';
 import Input from '../../common/input';
 import styles from './signin.scss';
 import Button from '../../common/button';
 import Banner from './../../../components/common/banner';
 import NotifyBox from '../../common/notifyBox';
-import {validateEmail} from './../../../utils/validate';
+import { validateEmail } from './../../../utils/validate';
 import * as actionCreators from '../actions';
-import {Row, Col} from 'react-flexbox-grid';
 import classnames from 'classnames';
 
 /**
@@ -36,7 +35,7 @@ class Signin extends Component {
         this
             .props
             .actions
-            .signinUser({email, password});
+            .signinUser({ email, password });
     }
 
     /**
@@ -51,7 +50,7 @@ class Signin extends Component {
         if (errorMessage) {
             return (
                 <fieldset>
-                    <NotifyBox strongText="Error: " text={errorMessage} type="error"/>
+                    <NotifyBox strongText="Error: " text={errorMessage} type="error" />
                 </fieldset>
             );
         }
@@ -62,12 +61,12 @@ class Signin extends Component {
 
         return (
             <div>
-                <Banner text="SIGN IN"/>
+                <Banner text="SIGN IN" />
                 <div className={styles.container}>
                     {this.renderError()}
                     <form onSubmit={handleSubmit(this.handleFormSubmit.bind(this))} noValidate>
                         <fieldset>
-                            <Field component={Input} name="email" id="email" type="email" label="Email"/>
+                            <Field component={Input} name="email" id="email" type="email" label="Email" />
                         </fieldset>
                         <fieldset>
                             <Field
@@ -75,17 +74,15 @@ class Signin extends Component {
                                 name="password"
                                 id="password"
                                 type="password"
-                                label="Password"/>
+                                label="Password" />
                         </fieldset>
                         <fieldset>
-                            <Row>
-                                <Col xs={6} md={6}>
-                                    <Link to="forgotpassword" className={classnames('link-slideright',styles.centerLink)}>Forgot password?</Link>
-                                </Col>
-                                <Col xs={6} md={6}>
-                                    <Button text="Send" ariaLabel="Send" className="fullWidth"/>
-                                </Col>
-                            </Row>
+                            <div>
+                                <Link to="forgotpassword" className={classnames('link-slideright', styles.centerLink)}>Forgot password?</Link>
+                            </div>
+                            <div>
+                                <Button text="Send" ariaLabel="Send" className="fullWidth" />
+                            </div>
                         </fieldset>
                     </form>
                 </div>
@@ -138,7 +135,7 @@ function validate({email, password}) {
  * @author Snær Seljan Þóroddsson
  */
 function mapStateToProps(state) {
-    return {errorMessage: state.auth.error};
+    return { errorMessage: state.auth.error };
 }
 
 /**
