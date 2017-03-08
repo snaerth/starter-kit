@@ -11,6 +11,7 @@ import NotifyBox from '../../common/notifyBox';
 import * as actionCreators from '../actions';
 import { validateEmail } from './../../../utils/validate';
 import Dropzone from 'react-dropzone';
+import UploadPhoto from './uploadPhoto.svg';
 
 /**
  * Signup component
@@ -88,7 +89,10 @@ class Signup extends Component {
                         </fieldset>
                         <fieldset>
                             <Dropzone onDrop={this.onDrop} multiple="false" accept="image/*">
-                                <div>Try dropping some files here, or click to select files to upload.</div>
+                                <div className={styles.centerVertical}>
+                                    <UploadPhoto width="50" height="50" className={styles.svg} />
+                                    <div>Drop image here or click to select image to upload.</div>
+                                </div>
                             </Dropzone>
                         </fieldset>
                         <fieldset>

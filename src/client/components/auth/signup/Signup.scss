@@ -1,6 +1,16 @@
 @import '../../../styles/variables.scss';
-
 .container {
-    max-width: $max-440;
-    margin:0 auto;
+  max-width: $max-440;
+  margin: 0 auto;
+}
+
+.svg {
+  fill: $border-color;
+  width: 100%;
+}
+
+.centerVertical {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }

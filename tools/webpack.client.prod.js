@@ -46,6 +46,16 @@ const json = {
   use: 'json-loader'
 };
 
+const file = {
+  test: /\.(woff2?|jpe?g|png|gif|ico)$/,
+  loader: 'file-loader',
+};
+
+const svg = {
+  test: /\.svg$/,
+  loaders: ['react-svgdom-loader', 'svgo-loader'],
+};
+
 const css = {
   test: /\.css$/,
   use: ExtractTextPlugin.extract({
@@ -101,7 +111,7 @@ const js = {
   }
 };
 
-const rules = [js, css, scss, json];
+const rules = [js, css, scss, json, file, svg];
 
 // Main webpack config
 module.exports = {

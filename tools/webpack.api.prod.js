@@ -52,7 +52,9 @@ module.exports = {
     __filename: true,
     __dirname: true
   },
-  externals: externals(),
+  externals: externals({
+    whitelist: [/\.(eot|woff|woff2|ttf|otf)$/, /\.(svg|png|jpg|jpeg|gif|ico|webm)$/, /\.(mp4|mp3|ogg|swf|webp)$/, /\.(css|scss|sass|less|styl)$/]
+  }),
   plugins,
   module: {
     rules

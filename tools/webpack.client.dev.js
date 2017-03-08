@@ -5,14 +5,22 @@ const webpack = require('webpack');
 const autoprefixer = require('autoprefixer');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const CONFIG = require('./webpack.base');
-const {CLIENT_ENTRY, CLIENT_OUTPUT, PUBLIC_PATH, VENDOR} = CONFIG;
+const {
+  CLIENT_ENTRY,
+  CLIENT_OUTPUT,
+  PUBLIC_PATH,
+  VENDOR
+} = CONFIG;
 
 //  PLUGINS
 const plugins = [
-  new ExtractTextPlugin({filename: 'styles.css', allChunks: true}),
+  new ExtractTextPlugin({
+    filename: 'styles.css',
+    allChunks: true
+  }),
   new webpack
-    .optimize
-    .OccurrenceOrderPlugin(),
+  .optimize
+  .OccurrenceOrderPlugin(),
   new webpack.HotModuleReplacementPlugin(),
   new webpack.DefinePlugin({
     'process.env.NODE_ENV': JSON.stringify('development')
@@ -23,14 +31,28 @@ const plugins = [
     }
   }),
   new webpack
-    .optimize
-    .CommonsChunkPlugin({name: 'vendor', minChunks: Infinity, filename: 'vendor.js'})
+  .optimize
+  .CommonsChunkPlugin({
+    name: 'vendor',
+    minChunks: Infinity,
+    filename: 'vendor.js'
+  })
 ];
 
 // RULES
 const json = {
   test: /\.json?$/,
   loader: 'json-loader'
+};
+
+const file = {
+  test: /\.(woff2?|jpe?g|png|gif|ico)$/,
+  loader: 'file-loader',
+};
+
+const svg = {
+  test: /\.svg$/,
+  loaders: ['react-svgdom-loader', 'svgo-loader'],
 };
 
 const css = {
@@ -68,27 +90,25 @@ const scss = {
 const js = {
   test: /\.(js|jsx)$/,
   exclude: /node_modules/,
-  loaders: [
-    {
-      loader: 'babel-loader',
-      query: {
-        presets: [
-          [
-            'es2015', {
-              modules: false
-            }
-          ],
-          'react',
-          'stage-0',
-          'react-hmre'
+  loaders: [{
+    loader: 'babel-loader',
+    query: {
+      presets: [
+        [
+          'es2015', {
+            modules: false
+          }
         ],
-        plugins: ['transform-decorators-legacy']
-      }
+        'react',
+        'stage-0',
+        'react-hmre'
+      ],
+      plugins: ['transform-decorators-legacy']
     }
-  ]
+  }]
 };
 
-const rules = [js, css, scss, json];
+const rules = [js, css, scss, json, file, svg];
 
 // --------------------------------------------- MAIN WEBPACK CONFIG
 module.exports = {
