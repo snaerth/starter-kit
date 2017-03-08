@@ -85,13 +85,13 @@ class Signup extends Component {
                                 label="Password" />
                         </fieldset>
                         <fieldset>
-                            <Field component={Textarea} name="message" id="message" label="Message" />
+                            <Field component={Textarea} name="message" id="message" label="Message" lassName={styles.dropzoneContainer} />
                         </fieldset>
                         <fieldset>
-                            <Dropzone onDrop={this.onDrop} multiple="false" accept="image/*">
-                                <div className={styles.centerVertical}>
+                            <Dropzone onDrop={this.onDrop} multiple={false} accept="image/*" className={styles.dropzoneContainer}>
+                                <div className={styles.dropzoneContainerInner}>
                                     <UploadPhoto width="50" height="50" className={styles.svg} />
-                                    <div>Drop image here or click to select image to upload.</div>
+                                    <div className={styles.dropzoneBoxText}>Drop image here or click to select image to upload.</div>
                                 </div>
                             </Dropzone>
                         </fieldset>

@@ -7,10 +7,43 @@
 .svg {
   fill: $border-color;
   width: 100%;
+  margin-bottom: 15px;
+  transition: fill .2s ease-out;
 }
 
-.centerVertical {
+.dropzoneContainer {
+  width: 200px;
+  height: 200px;
+  margin-bottom: 1em;
+  border-width: 2px;
+  border-color: $border-color;
+  border-style: dashed;
+  border-radius: $border-radius;
+  transition: box-shadow .25s ease-out, transform .20s ease-out, opacity .10s ease-out, border-color .2s ease-out;
+  &:hover {
+    border-color: $primary-white;
+    transform: translate3d(0, -4px, 0);
+    box-shadow: $box-shadow;
+    .svg {
+      fill: $primary-white;
+    }
+    .dropzoneBoxText {
+      color: $primary-white;
+    }
+  }
+}
+
+.dropzoneContainerInner {
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-direction: column;
+  height: 100%;
+  cursor: pointer;
+  transition: color .2s ease-out;
+}
+
+.dropzoneBoxText {
+  text-align: center;
+  width: calc(100% - 1em);
 }
