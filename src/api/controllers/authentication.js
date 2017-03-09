@@ -1,6 +1,5 @@
 import {validateEmail} from '../services/utils';
 import sendMail from '../services/mailService';
-import {saveImage, isImage} from '../services/imageService';
 import User from '../models/user';
 import jwt from 'jwt-simple';
 import crypto from 'crypto';
@@ -21,28 +20,21 @@ const {PORT, HOST} = config();
  */
 export function signup(req, res) {
     if (!req.body) {
-        return res
-            .status(422)
-            .send({error: 'No post data found'});
+        return res.send(422, {error: 'No post data found'});
     }
 
     const {email, password, message, name} = req.body;
     const file = req.file;
 
-    // Check for image file in request
-    if (file) {
-        validateSignup({email, password, name})
-        .then(() => isImage(file))
-        .then(() => saveImage(file.path, './assets/images/users'))
-        .then(() => findUserByEmailAndSave({name, email, password, message}))
-        .then(data => res.json(data))
-        .catch(error => res.status(422).send({error}));
-    } else {
-        validateSignup({email, password, name})
-        .then(() => findUserByEmailAndSave({name, email, password, message}))
-        .then(data => res.json(data))
-        .catch(error => res.status(422).send({error}));
+    // Path to image on disk
+    let imageUrl;
+    if(file && file.path) {
+        imageUrl = file.path.substring(file.path.indexOf("assets")).replace(' ', '');
     }
+
+    validateSignup({email, password, name}).then(() => findUserByEmailAndSave({name, email, password, message, imageUrl}))
+        .then(data => res.json(data))
+        .catch(error => res.send(422, {error}));
 }
 
 /**
@@ -53,7 +45,7 @@ export function signup(req, res) {
  * @returns {Promise}
  * @author Snær Seljan Þóroddsson
  */
-function findUserByEmailAndSave({name, email, password, message}) {
+function findUserByEmailAndSave({name, email, password, message, imageUrl}) {
     return new Promise((resolve, reject) => {
         // See if user with given email exists
         User.findOne({
@@ -68,8 +60,21 @@ function findUserByEmailAndSave({name, email, password, message}) {
                 return reject('Email is in use');
             }
 
+            const newUser = {
+                name,
+                email,
+                password,
+                message,
+                roles: ['user']
+            };
+
+            if(imageUrl) {
+                newUser.imageUrl = imageUrl;
+            }
+
+
             // If a user does not exist, create and save new user
-            const user = new User({name, email, password, message, roles: ['user']});
+            const user = new User(newUser);
 
             // Save user to databases
             user.save((error) => {
@@ -77,10 +82,7 @@ function findUserByEmailAndSave({name, email, password, message}) {
                     return reject(error);
                 }
 
-                resolve({
-                    token: tokenForUser(user),
-                    user
-                });
+                resolve({token: tokenForUser(user), user});
             });
         });
     });
@@ -102,19 +104,19 @@ function validateSignup({email, password, name}) {
         // Check if email, password or message exist in request
         if (!email || !password || !name) {
             return reject('You must provide name, email and password');
-        } 
+        }
         // Validate email
-        if (!validateEmail(email)) { 
+        if (!validateEmail(email)) {
             return reject(`${email} is not a valid email`);
-        } 
+        }
         // Check if password length is longer then 6 characters
-        if (password.length < 6) { 
+        if (password.length < 6) {
             return reject('Password must be of minimum length 6 characters');
-        } 
+        }
         // Check if password contains one number and one uppercase letter
-        if (!/[0-9]/.test(password) || !/[A-Z]/.test(password)) { 
+        if (!/[0-9]/.test(password) || !/[A-Z]/.test(password)) {
             return reject('Password must contain at least one number (0-9) and one uppercase letter (A-Z)');
-        } 
+        }
 
         // Name has to have aleast two names
         if (!/^([^0-9]*)$/.test(name) || name.trim().split(' ').length < 2) {

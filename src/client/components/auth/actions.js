@@ -22,7 +22,7 @@ export function setPreviewUserImage(image) {
     return {
         type: SET_PREVIEW_USER_IMAGE,
         payload: image
-    }
+    };
 }
 
 

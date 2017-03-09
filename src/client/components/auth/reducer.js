@@ -78,7 +78,7 @@ export default function (state = initialState, action) {
             return {
                 ...state,
                 image: action.payload
-            }
+            };
     }
 
     return state;

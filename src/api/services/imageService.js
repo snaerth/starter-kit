@@ -1,29 +1,29 @@
-import fs from 'fs';
+import multer from 'multer';
 
 /**
- * Saves image to file system
+ * Returns multer setup object for image uploading
  *
- * @param {Object} data - Image binary data
- * @param {String} imagePath - Path to image in file system
- * @returns {Promise}
+ * @param {String} folderDest - Path to folder where images are stored
+ * @param {Int} megabytes - Megabytes
+ * @returns {Object} multer
  * @author Snær Seljan Þóroddsson
  */
-export function saveImage(data, imagePath) {
-  return new Promise((reject, resolve) => {
-    fs.writeFile(data, imagePath, 'binary', (error, data) => {
-      if (error) {
-        reject(error);
-      }
+export function imageStorageHelper(folderDest, megabytes) {
+  megabytes = megabytes || 2;
 
-      resolve(data);
-    });
+  return multer.diskStorage({
+    destination: (req, file, cb) => {
+      cb(null, folderDest);
+    },
+    filename: (req, file, cb) => {
+      cb(null, Date.now() + file.originalname);
+    },
+    limits: {
+      files: 1,
+      fileSize: megabytes * 1024 * 1024
+    }
   });
 }
-
-// export function saveImages(path, images) {     async.map(images, (data,
-// callback) => {         fs.writeFile(data, , 'binary', error => {
-// if(error) {                 throw err;             }
-// console.log('Image Saved');         });     }); }
 
 /**
  * Checks if file is image
