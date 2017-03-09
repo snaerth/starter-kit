@@ -39,6 +39,18 @@ class Signup extends Component {
             .signupUser({ email, password, name });
     }
 
+    onDrop(acceptedFiles, rejectedFiles) {
+        console.log('Rejected files: ', rejectedFiles);
+
+        if (acceptedFiles.length > 0) {
+            console.log('Accepted files: ', acceptedFiles);
+            this
+                .props
+                .actions
+                .setPreviewUserImage(acceptedFiles[0]);
+        }
+    }
+
     /**
      * Renders error message box
      *
@@ -56,14 +68,9 @@ class Signup extends Component {
         }
     }
 
-    onDrop(acceptedFiles, rejectedFiles) {
-        console.log('Accepted files: ', acceptedFiles);
-        console.log('Rejected files: ', rejectedFiles);
-    }
-
     render() {
         const {handleSubmit, errorMessage} = this.props;
-
+        console.log(this.props);
         return (
             <div>
                 <Banner text="SIGN UP" />
@@ -88,12 +95,16 @@ class Signup extends Component {
                             <Field component={Textarea} name="message" id="message" label="Message" lassName={styles.dropzoneContainer} />
                         </fieldset>
                         <fieldset>
-                            <Dropzone onDrop={this.onDrop} multiple={false} accept="image/*" className={styles.dropzoneContainer}>
+                            <Dropzone onDrop={this.onDrop.bind(this)} multiple={false} accept="image/*" className={styles.dropzoneContainer}>
                                 <div className={styles.dropzoneContainerInner}>
                                     <UploadPhoto width="50" height="50" className={styles.svg} />
                                     <div className={styles.dropzoneBoxText}>Drop image here or click to select image to upload.</div>
                                 </div>
                             </Dropzone>
+                            {this.props.image ? <div>
+                                <h2>Uploading image...</h2>
+                                <img src={this.props.image.preview} />
+                            </div> : null}
                         </fieldset>
                         <fieldset>
                             <div>
@@ -161,7 +172,10 @@ function validate({email, password, name}) {
  * @author Snær Seljan Þóroddsson
  */
 function mapStateToProps(state) {
-    return { errorMessage: state.auth.error };
+    return {
+        errorMessage: state.auth.error,
+        image: state.auth.image
+    };
 }
 
 /**

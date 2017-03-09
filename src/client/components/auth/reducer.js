@@ -6,7 +6,8 @@ import {
     FORGOT_PASSWORD_SUCCESS,
     FORGOT_PASSWORD_ERROR,
     RESET_PASSWORD_SUCCESS,
-    RESET_PASSWORD_ERROR
+    RESET_PASSWORD_ERROR,
+    SET_PREVIEW_USER_IMAGE
 } from './types';
 
 const user = JSON.parse(localStorage.getItem('user'));
@@ -73,6 +74,11 @@ export default function (state = initialState, action) {
                 isFetching: false,
                 error: action.payload
             };
+        case SET_PREVIEW_USER_IMAGE:
+            return {
+                ...state,
+                image: action.payload
+            }
     }
 
     return state;

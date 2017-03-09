@@ -1,6 +1,30 @@
 import axios from 'axios';
 import {browserHistory} from 'react-router';
-import {AUTH_USER, UNAUTH_USER, AUTH_ERROR, SIGNUP_USER, FORGOT_PASSWORD_SUCCESS, FORGOT_PASSWORD_ERROR, RESET_PASSWORD_SUCCESS, RESET_PASSWORD_ERROR} from './types';
+import {
+    AUTH_USER, 
+    UNAUTH_USER, 
+    AUTH_ERROR, 
+    SIGNUP_USER, 
+    FORGOT_PASSWORD_SUCCESS, 
+    FORGOT_PASSWORD_ERROR, 
+    RESET_PASSWORD_SUCCESS, 
+    RESET_PASSWORD_ERROR, 
+    SET_PREVIEW_USER_IMAGE} from './types';
+
+/**
+ * Stores user image for preview
+ *
+ * @param {Object} image
+ * @returns {Object}
+ * @author Snær Seljan Þóroddsson
+ */
+export function setPreviewUserImage(image) {
+    return {
+        type: SET_PREVIEW_USER_IMAGE,
+        payload: image
+    }
+}
+
 
 /**
  * Post request made to api with email and passwod
