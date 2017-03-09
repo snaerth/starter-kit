@@ -11,9 +11,15 @@
   transition: fill .2s ease-out;
 }
 
+.uploadPhotoContainer {
+    display:flex;
+    justify-content: center;
+}
+
 .dropzoneContainer {
   width: 200px;
   height: 200px;
+  padding-right: 1em;
   margin-bottom: 1em;
   border-width: 2px;
   border-color: $border-color;
@@ -39,6 +45,7 @@
   justify-content: center;
   flex-direction: column;
   height: 100%;
+  min-height: 200px;
   cursor: pointer;
   transition: color .2s ease-out;
 }
@@ -47,4 +54,10 @@
   color: $border-color;
   text-align: center;
   width: calc(100% - 1em);
+}
+
+.imagePreviewContainer {
+    width: 200px;
+    height: 200px;
+    padding-left: 1em;
 }

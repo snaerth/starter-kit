@@ -70,7 +70,7 @@ class Signup extends Component {
 
     render() {
         const {handleSubmit, errorMessage} = this.props;
-        console.log(this.props);
+
         return (
             <div>
                 <Banner text="SIGN UP" />
@@ -95,16 +95,19 @@ class Signup extends Component {
                             <Field component={Textarea} name="message" id="message" label="Message" lassName={styles.dropzoneContainer} />
                         </fieldset>
                         <fieldset>
-                            <Dropzone onDrop={this.onDrop.bind(this)} multiple={false} accept="image/*" className={styles.dropzoneContainer}>
-                                <div className={styles.dropzoneContainerInner}>
-                                    <UploadPhoto width="50" height="50" className={styles.svg} />
-                                    <div className={styles.dropzoneBoxText}>Drop image here or click to select image to upload.</div>
+                            <div className={styles.uploadPhotoContainer}>
+                                <Dropzone onDrop={this.onDrop.bind(this)} multiple={false} accept="image/*" className={styles.dropzoneContainer}>
+                                    <div className={styles.dropzoneContainerInner}>
+                                        <UploadPhoto width="50" height="50" className={styles.svg} />
+                                        <div className={styles.dropzoneBoxText}>Drop image here or click to select image to upload.</div>
+                                    </div>
+                                </Dropzone>
+                                {this.props.image ? <div>
+                                    <img src={this.props.image.preview} className={styles.imagePreviewContainer} />
+                                    <ReactCrop src={this.props.image.preview} crop={crop} />
                                 </div>
-                            </Dropzone>
-                            {this.props.image ? <div>
-                                <h2>Uploading image...</h2>
-                                <img src={this.props.image.preview} />
-                            </div> : null}
+                                    : null}
+                            </div>
                         </fieldset>
                         <fieldset>
                             <div>
