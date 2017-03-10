@@ -7,11 +7,9 @@ import config from '../../config';
 import multer from 'multer';
 import { uploadLimits, saveImageToDisk } from '../services/imageService';
 
-
-const userImageUpload = multer({ storage: multer.memoryStorage(), limits: uploadLimits(1, 2) }).single('image');
-
 // VARIABLES
 const { PORT, HOST } = config();
+const userImageUpload = multer({ storage: multer.memoryStorage(), limits: uploadLimits(1, 2) }).single('image');
 
 /**
  * Sign up route
@@ -30,6 +28,10 @@ export function signup(req, res) {
 
     const { email, password, message, name } = req.body;
 
+    // Validate post request inputs
+    // Save User Image if exists
+    // Check for if user exists by email, if not save user
+    // Send response object with user token and user information
     validateSignup({ email, password, name })
         .then(() => saveUserImage(req, res))
         .then(imageUrl => findUserByEmailAndSave({ name, email, password, message, imageUrl }))
