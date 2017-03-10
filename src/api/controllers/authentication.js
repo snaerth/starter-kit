@@ -1,12 +1,17 @@
-import {validateEmail} from '../services/utils';
+import { validateEmail } from '../services/utils';
 import sendMail from '../services/mailService';
 import User from '../models/user';
 import jwt from 'jwt-simple';
 import crypto from 'crypto';
 import config from '../../config';
+import multer from 'multer';
+import { uploadLimits, saveImageToDisk } from '../services/imageService';
+
+
+const userImageUpload = multer({ storage: multer.memoryStorage(), limits: uploadLimits(1, 2) }).single('image');
 
 // VARIABLES
-const {PORT, HOST} = config();
+const { PORT, HOST } = config();
 
 /**
  * Sign up route
@@ -20,21 +25,47 @@ const {PORT, HOST} = config();
  */
 export function signup(req, res) {
     if (!req.body) {
-        return res.send(422, {error: 'No post data found'});
+        return res.status(422).send({ error: 'No post data found' });
     }
 
-    const {email, password, message, name} = req.body;
-    const file = req.file;
+    const { email, password, message, name } = req.body;
+
+    validateSignup({ email, password, name })
+        .then(() => saveUserImage(req, res))
+        .then(imageUrl => findUserByEmailAndSave({ name, email, password, message, imageUrl }))
+        .then(data => res.json(data))
+        .catch(error => res.status(422).send({ error }));
+
 
     // Path to image on disk
-    let imageUrl;
-    if(file && file.path) {
-        imageUrl = file.path.substring(file.path.indexOf("assets")).replace(' ', '');
-    }
+    // let imageUrl;
+    // if (file && file.path) {
+    //     imageUrl = file.path.substring(file.path.indexOf("assets")).replace(' ', '');
+    // }
+}
 
-    validateSignup({email, password, name}).then(() => findUserByEmailAndSave({name, email, password, message, imageUrl}))
-        .then(data => res.json(data))
-        .catch(error => res.send(422, {error}));
+/**
+ * Saves image to file system
+ *
+ * @param {Object} req
+ * @param {Object} res
+ * @returns {Promise}
+ * @author Snær Seljan Þóroddsson
+ */
+function saveUserImage(req, res) {
+    return new Promise((resolve, reject) => {
+        userImageUpload(req, res, error => {
+            const file = req.file;
+
+            if (error || !file) {
+                reject('Error uploading file');
+            }
+
+            saveImageToDisk(file.buffer.toString(), 'assets/images/users')
+                .then(() => resolve())
+                .catch(error => reject(error));
+        });
+    });
 }
 
 /**
@@ -45,7 +76,7 @@ export function signup(req, res) {
  * @returns {Promise}
  * @author Snær Seljan Þóroddsson
  */
-function findUserByEmailAndSave({name, email, password, message, imageUrl}) {
+function findUserByEmailAndSave({ name, email, password, message, imageUrl }) {
     return new Promise((resolve, reject) => {
         // See if user with given email exists
         User.findOne({
@@ -68,7 +99,7 @@ function findUserByEmailAndSave({name, email, password, message, imageUrl}) {
                 roles: ['user']
             };
 
-            if(imageUrl) {
+            if (imageUrl) {
                 newUser.imageUrl = imageUrl;
             }
 
@@ -82,7 +113,7 @@ function findUserByEmailAndSave({name, email, password, message, imageUrl}) {
                     return reject(error);
                 }
 
-                resolve({token: tokenForUser(user), user});
+                resolve({ token: tokenForUser(user), user });
             });
         });
     });
@@ -99,7 +130,7 @@ function findUserByEmailAndSave({name, email, password, message, imageUrl}) {
  * @returns {Object} res
  * @author Snær Seljan Þóroddsson
  */
-function validateSignup({email, password, name}) {
+function validateSignup({ email, password, name }) {
     return new Promise((resolve, reject) => {
         // Check if email, password or message exist in request
         if (!email || !password || !name) {
@@ -137,7 +168,7 @@ function validateSignup({email, password, name}) {
  * @author Snær Seljan Þóroddsson
  */
 export function signin(req, res) {
-    const {name, roles} = req.user;
+    const { name, roles } = req.user;
 
     const data = {
         token: tokenForUser(req.user)
@@ -165,25 +196,25 @@ export function signin(req, res) {
  * @author Snær Seljan Þóroddsson
  */
 export function forgotPassword(req, res) {
-    const {email} = req.body;
+    const { email } = req.body;
 
     // Create token Save resetPasswordToken and resetPasswordExpires to user Send
     // email to user
     createRandomToken()
-        .then(token => attachTokenToUser({token, email}))
-        .then(({user, token}) => {
+        .then(token => attachTokenToUser({ token, email }))
+        .then(({ user, token }) => {
             const url = `${HOST}:${PORT}/reset/${token}`;
-            const {email, name} = user;
+            const { email, name } = user;
 
-            return sendResetPasswordEmail({url, email, name});
+            return sendResetPasswordEmail({ url, email, name });
         })
-        .then(({email}) => {
+        .then(({ email }) => {
             res.send(`An e-mail has been sent to ${email} with further instructions.`);
         })
         .catch((error) => {
             return res
                 .status(550)
-                .send({error: `Coundn't reset password at this time.`, err: error});
+                .send({ error: `Coundn't reset password at this time.`, err: error });
         });
 }
 
@@ -214,7 +245,7 @@ function createRandomToken() {
  * @returns {Promise} promise - User
  * @author Snær Seljan Þóroddsson
  */
-function attachTokenToUser({token, email}) {
+function attachTokenToUser({ token, email }) {
     return new Promise((resolve, reject) => {
         User.findOne({
             email
@@ -232,7 +263,7 @@ function attachTokenToUser({token, email}) {
                     reject(error);
                 }
 
-                resolve({user, token});
+                resolve({ user, token });
             });
         });
     });
@@ -244,7 +275,7 @@ function attachTokenToUser({token, email}) {
  * @returns {Promise} promise - User
  * @author Snær Seljan Þóroddsson
  */
-function sendResetPasswordEmail({url, email, name}) {
+function sendResetPasswordEmail({ url, email, name }) {
     return new Promise((resolve, reject) => {
         const mailOptions = {
             to: email,
@@ -259,14 +290,14 @@ function sendResetPasswordEmail({url, email, name}) {
                 `
         };
 
-        const {to, subject, text, html} = mailOptions;
+        const { to, subject, text, html } = mailOptions;
 
         sendMail(to, subject, text, html, (error, info) => {
             if (error) {
                 reject(error);
             }
 
-            resolve({info, email});
+            resolve({ info, email });
         });
     });
 }
@@ -285,11 +316,11 @@ export function resetPassword(req, res) {
     const password = req.body.password;
 
     if (token && password) {
-        updateUserPassword({token, password})
-            .then(user => res.send({message: `Success! Your password has been changed for ${user.email}.`}))
-            .catch(() => res.send({error: 'Password reset token is invalid or has expired.'}));
+        updateUserPassword({ token, password })
+            .then(user => res.send({ message: `Success! Your password has been changed for ${user.email}.` }))
+            .catch(() => res.send({ error: 'Password reset token is invalid or has expired.' }));
     } else {
-        res.send({error: 'Token and password are required'});
+        res.send({ error: 'Token and password are required' });
     }
 }
 
@@ -302,7 +333,7 @@ export function resetPassword(req, res) {
  * @returns {undefined}
  * @author Snær Seljan Þóroddsson
  */
-function updateUserPassword({token, password}) {
+function updateUserPassword({ token, password }) {
     return new Promise((resolve, reject) => {
         User.findOne({
             resetPasswordToken: token,
@@ -311,7 +342,7 @@ function updateUserPassword({token, password}) {
             }
         }, (error, user) => {
             if (error || !user) {
-                reject({error: 'Password reset token is invalid or has expired.'});
+                reject({ error: 'Password reset token is invalid or has expired.' });
             }
 
             user.password = password;
@@ -347,7 +378,7 @@ export function isAdmin(req, res, next) {
 
     return res
         .status(401)
-        .send({error: 'Unauthorized'});
+        .send({ error: 'Unauthorized' });
 }
 
 /**
