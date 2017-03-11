@@ -4,6 +4,9 @@ import User from '../models/user';
 import jwt from 'jwt-simple';
 import crypto from 'crypto';
 import config from '../../config';
+import formidable from 'formidable';
+import fs from 'fs';
+import path from 'path';
 import multer from 'multer';
 import { uploadLimits, saveImageToDisk } from '../services/imageService';
 
@@ -22,63 +25,73 @@ const userImageUpload = multer({ storage: multer.memoryStorage(), limits: upload
  * @author Snær Seljan Þóroddsson
  */
 export function signup(req, res) {
-    if (!req.body) {
-        return res.status(422).send({ error: 'No post data found' });
-    }
+    const form = formidable.IncomingForm({
+        uploadDir: __dirname + './../../../assets/images/users/'
+    });
 
-    const { email, password, message, name } = req.body;
+    form.on('error', () => {
+        return res.status(500).send({ error: 'An error has occured with form upload' });
+    });
 
-    // Validate post request inputs
-    // Save User Image if exists
-    // Check for if user exists by email, if not save user
-    // Send response object with user token and user information
-    validateSignup({ email, password, name })
-        .then(() => saveUserImage(req, res))
-        .then(imageUrl => findUserByEmailAndSave({ name, email, password, message, imageUrl }))
-        .then(data => res.json(data))
-        .catch(error => res.status(422).send({ error }));
+    form.parse(req, (err, fields, files) => {
+        if (!fields) {
+            return res.status(422).send({ error: 'No post data found' });
+        }
 
+        const { email, password, message, name } = fields;
 
-    // Path to image on disk
-    // let imageUrl;
-    // if (file && file.path) {
-    //     imageUrl = file.path.substring(file.path.indexOf("assets")).replace(' ', '');
-    // }
+        // Validate post request inputs
+        // Save User Image if exists
+        // Check for if user exists by email, if not save user
+        // Send response object with user token and user information
+        validateSignup({ email, password, name })
+            .then(() => findUserByEmail(email))
+            .then(() => {
+                const image = files.image;
+                if (image) {
+                    return saveUserImage(form, image, name);
+                }
+
+                return new Promise();
+            })
+            .then(imagePath => saveUser({ email, password, message, name, imagePath }))
+            .then(data => res.json(data))
+            .catch(error => res.status(422).send({ error }));
+    });
 }
 
 /**
  * Saves image to file system
  *
- * @param {Object} req
- * @param {Object} res
+ * @param {Object} form - Form object from formidable library
+ * @param {Object} image - Image object from formidable library
+ * @param {String} name - User name
  * @returns {Promise}
  * @author Snær Seljan Þóroddsson
  */
-function saveUserImage(req, res) {
+function saveUserImage(form, image, name) {
     return new Promise((resolve, reject) => {
-        userImageUpload(req, res, error => {
-            const file = req.file;
+        const ext = path.extname(image.name);
+        const imgPath = `${form.uploadDir}/${name.replace(' ', '_')}-${Date.now() + ext}`;
 
-            if (error || !file) {
-                reject('Error uploading file');
+        fs.rename(image.path, imgPath, error => {
+            if (error) {
+                return reject('An error has occured with form upload');
             }
-
-            saveImageToDisk(file.buffer.toString(), 'assets/images/users')
-                .then(() => resolve())
-                .catch(error => reject(error));
+            
+            return resolve(imgPath);
         });
     });
 }
 
 /**
- * Find user by email. If user is found then save user to db
- * else reject promise with error
+ * Find user by email. If user is found then return user
  *
- * @param {Object} fields - Object with props name, email, password, message
+ * @param {String} email
  * @returns {Promise}
  * @author Snær Seljan Þóroddsson
  */
-function findUserByEmailAndSave({ name, email, password, message, imageUrl }) {
+function findUserByEmail(email) {
     return new Promise((resolve, reject) => {
         // See if user with given email exists
         User.findOne({
@@ -93,30 +106,42 @@ function findUserByEmailAndSave({ name, email, password, message, imageUrl }) {
                 return reject('Email is in use');
             }
 
-            const newUser = {
-                name,
-                email,
-                password,
-                message,
-                roles: ['user']
-            };
+            resolve();
+        });
+    });
+}
 
-            if (imageUrl) {
-                newUser.imageUrl = imageUrl;
+/**
+ * Create new user and save to database
+ *
+ * @param {Object} fields - Object with props name, email, password, message
+ * @returns {Promise}
+ * @author Snær Seljan Þóroddsson
+ */
+function saveUser({ name, email, password, message, imagePath }) {
+    return new Promise((resolve, reject) => {
+        const newUser = {
+            name,
+            email,
+            password,
+            message,
+            roles: ['user']
+        };
+
+        if (imagePath) {
+            newUser.imageUrl = imagePath;
+        }
+
+        // If a user does not exist, create and save new user
+        const user = new User(newUser);
+
+        // Save user to databases
+        user.save((error) => {
+            if (error) {
+                return reject(error);
             }
 
-
-            // If a user does not exist, create and save new user
-            const user = new User(newUser);
-
-            // Save user to databases
-            user.save((error) => {
-                if (error) {
-                    return reject(error);
-                }
-
-                resolve({ token: tokenForUser(user), user });
-            });
+            resolve({ token: tokenForUser(user), user });
         });
     });
 }
