@@ -8,6 +8,7 @@ import errorHandlers from '../server/middleware/errorHandlers';
 import middleware from './middleware';
 import config from '../config';
 import db from './db';
+import {createDefaultDirectorys} from './services/fileService';
 
 // VARIABLES
 const {
@@ -16,6 +17,9 @@ const {
   DB_URL,
   SESSION_SECRET
 } = config();
+
+// Create default directorys if not exist
+createDefaultDirectorys();
 
 // Intialize and setup server
 const app = express();
@@ -44,9 +48,9 @@ const sessionOptions = {
 // Production
 if (process.env.NODE_ENV === 'production') {
   // Trust proxy
-  app.set('trust proxy', 1); 
+  app.set('trust proxy', 1);
   //Serve secure cookies
-  sessionOptions.cookie.secure = true; 
+  sessionOptions.cookie.secure = true;
 }
 
 db(DB_URL, () => {

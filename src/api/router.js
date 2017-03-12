@@ -1,11 +1,7 @@
 import passport from 'passport';
-import { signin, signup, forgotPassword, resetPassword, isAdmin } from './controllers/authentication';
+import { signin, signup, forgotPassword, resetPassword, isAdmin, uploadUserImage } from './controllers/authentication';
 import { getNews, deleteNews, createNews, updateNews } from './controllers/news';
 import { jwtLogin, localLogin } from './services/passport';
-import multer from 'multer';
-import { imageStorageHelper } from './services/imageService';
-
-const userImageUpload = multer({ storage: imageStorageHelper('assets/images/users', 2) }).single('image');
 
 // Tell passport to use strategy
 passport.use(jwtLogin);
@@ -26,6 +22,9 @@ export default function (app) {
   app.post('/signin', requireSignin, signin);
   app.post('/forgot', forgotPassword);
   app.post('/reset/:token', resetPassword);
+
+  // Upload images
+  app.post('/userimage', requireAuth, uploadUserImage);
 
   // News
   app.get('/api/news', [

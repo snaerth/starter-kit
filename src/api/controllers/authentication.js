@@ -1,5 +1,6 @@
 import { validateEmail } from '../services/utils';
 import sendMail from '../services/mailService';
+import { resizeImage } from '../services/imageService';
 import User from '../models/user';
 import jwt from 'jwt-simple';
 import crypto from 'crypto';
@@ -7,12 +8,10 @@ import config from '../../config';
 import formidable from 'formidable';
 import fs from 'fs';
 import path from 'path';
-import multer from 'multer';
-import { uploadLimits, saveImageToDisk } from '../services/imageService';
 
 // VARIABLES
 const { PORT, HOST } = config();
-const userImageUpload = multer({ storage: multer.memoryStorage(), limits: uploadLimits(1, 2) }).single('image');
+
 
 /**
  * Sign up route
@@ -20,67 +19,62 @@ const userImageUpload = multer({ storage: multer.memoryStorage(), limits: upload
  *
  * @param {Object} req
  * @param {Object} res
- * @param {Func} next
+ * @returns {Object} res
  * @returns {undefined}
  * @author Snær Seljan Þóroddsson
  */
 export function signup(req, res) {
-    const form = formidable.IncomingForm({
-        uploadDir: __dirname + './../../../assets/images/users/'
-    });
+    if (!req.body) {
+        return res.status(422).send({ error: 'No post data found' });
+    }
 
-    form.on('error', () => {
-        return res.status(500).send({ error: 'An error has occured with form upload' });
-    });
+    const { email, password, message, name } = req.body;
 
-    form.parse(req, (err, fields, files) => {
-        if (!fields) {
-            return res.status(422).send({ error: 'No post data found' });
-        }
-
-        const { email, password, message, name } = fields;
-
-        // Validate post request inputs
-        // Save User Image if exists
-        // Check for if user exists by email, if not save user
-        // Send response object with user token and user information
-        validateSignup({ email, password, name })
-            .then(() => findUserByEmail(email))
-            .then(() => {
-                const image = files.image;
-                if (image) {
-                    return saveUserImage(form, image, name);
-                }
-
-                return new Promise();
-            })
-            .then(imagePath => saveUser({ email, password, message, name, imagePath }))
-            .then(data => res.json(data))
-            .catch(error => res.status(422).send({ error }));
-    });
+    // Validate post request inputs
+    // Check for if user exists by email, 
+    // Save user in database
+    // Send response object with user token and user information
+    validateSignup({ email, password, name })
+        .then(() => findUserByEmail(email))
+        .then(() => saveUser({ email, password, message, name }))
+        .then(data => res.json(data))
+        .catch(error => res.status(422).send({ error }));
 }
 
 /**
- * Saves image to file system
+ * Upload user image to file system
  *
- * @param {Object} form - Form object from formidable library
- * @param {Object} image - Image object from formidable library
- * @param {String} name - User name
- * @returns {Promise}
+ * @param {Object} req
+ * @param {Object} res
+ * @returns {Object} res
  * @author Snær Seljan Þóroddsson
  */
-function saveUserImage(form, image, name) {
-    return new Promise((resolve, reject) => {
-        const ext = path.extname(image.name);
-        const imgPath = `${form.uploadDir}/${name.replace(' ', '_')}-${Date.now() + ext}`;
+export function uploadUserImage(req, res) {
 
-        fs.rename(image.path, imgPath, error => {
-            if (error) {
-                return reject('An error has occured with form upload');
-            }
-            
-            return resolve(imgPath);
-        });
+    const { email, name } = req.user;
+    const form = formidable.IncomingForm({
+        uploadDir: process.cwd() + '/assets/images/users'
+    });
+
+    form.on('error', () => {
+        return res.status(500).send({ error: 'An error has occured with image upload' });
+    });
+
+    form.parse(req, (err, fields, files) => {
+        const image = files.image;
+        if (image) {
+            const ext = path.extname(image.name);
+            const fileName = `${name.replace(' ', '_')}-${Date.now() + ext}`;
+            const imgPath = `${form.uploadDir}/${fileName}`;
+
+            resizeImage(image.path, imgPath, 400)
+                .then(info => {
+                    res.status(200).send(info);
+                })
+                .catch(error => res.status(422).send({ error }));
+        } else {
+            return res.status(422).send({ error: 'Image required' });
+        }
     });
 }
 
@@ -118,7 +112,7 @@ function findUserByEmail(email) {
  * @returns {Promise}
  * @author Snær Seljan Þóroddsson
  */
-function saveUser({ name, email, password, message, imagePath }) {
+function saveUser({ name, email, password, message, fileName }) {
     return new Promise((resolve, reject) => {
         const newUser = {
             name,
@@ -128,8 +122,8 @@ function saveUser({ name, email, password, message, imagePath }) {
             roles: ['user']
         };
 
-        if (imagePath) {
-            newUser.imageUrl = imagePath;
+        if (fileName) {
+            newUser.imageUrl = fileName;
         }
 
         // If a user does not exist, create and save new user

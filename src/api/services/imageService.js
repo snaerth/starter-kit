@@ -1,41 +1,24 @@
-import multer from 'multer';
 import fs from 'fs';
-
+import Jimp from 'jimp';
 /**
- * Returns multer setup object for image uploading
+ * Resizes image and saves to file system
  *
- * @param {String} folderDest - Path to folder where images are stored
- * @param {Int} megabytes - Megabytes
- * @returns {Object} multer
- * @author Snær Seljan Þóroddsson
- */
-export function imageStorageHelper(folderDest, megabytes) {
-  megabytes = megabytes || 2;
-
-  return multer.diskStorage({
-    destination: (req, file, cb) => {
-      cb(null, folderDest);
-    },
-    filename: (req, file, cb) => {
-      cb(null, Date.now() + file.originalname);
-    },
-    limits: uploadLimits(1, megabytes)
-  });
-}
-
-/**
- * Returns limits object for multer setup object
- *
- * @param {Int} fileCount - Number of files to upload
- * @param {Int} megabytes - Megabytes
+ * @param {Int} width
+ * @param {Int} height
  * @returns {Object} limits
  * @author Snær Seljan Þóroddsson
  */
-export function uploadLimits(fileCount, megabytes) {
-  return {
-    files: fileCount,
-    fileSize: megabytes * 1024 * 1024
-  };
+export function resizeImage(orginalPath, newPath, width) {
+  return new Promise((resolve, reject) => {
+    Jimp
+      .read(orginalPath)
+      .then(image =>  {
+          image
+            .resize(width, Jimp.AUTO)    // resize
+            .write(newPath, resolve);    // save
+      })
+      .catch(error => reject(error));
+  });
 }
 
 /**
@@ -67,7 +50,7 @@ export function isImage(file) {
 export function saveImageToDisk(data, path) {
   return new Promise((resolve, reject) => {
     fs.writeFile(path, data, 'binary', error => {
-      if(error) {
+      if (error) {
         return reject('Cound not save image');
       }
 
