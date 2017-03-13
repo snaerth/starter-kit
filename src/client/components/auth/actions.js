@@ -63,7 +63,7 @@ export function signinUser({email, password}) {
  * @returns {undefined}
  * @author Snær Seljan Þóroddsson
  */
-export function signupUser({email, password, name, image}) {
+export function signupUser({email, password, name, formData}) {
     return function (dispatch) {
         // Post email/password to api server to register user Get token back from server
         axios
@@ -77,16 +77,15 @@ export function signupUser({email, password, name, image}) {
                 // Save token to localStorage
                 localStorage.setItem('user', JSON.stringify(response.data));
 
-                if (image) {
+                if (formData) {
                     const config = {
                         headers: {
-                            'content-type': 'multipart/form-data',
                             authorization: response.data.token
                         }
                     };
                     // Upload user image
                     return axios.post('/api/userimage', {
-                        image
+                        formData
                     }, config);
                 } else {
                     // Reroute user to home page
