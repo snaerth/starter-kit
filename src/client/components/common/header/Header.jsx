@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { Link, IndexLink } from 'react-router';
-import styles from './header.scss';
+import styles from './Header.scss';
 import classnames from 'classnames';
 
 /**

@@ -1,5 +1,5 @@
 import React, { PropTypes } from 'react';
-import styles from './button.scss';
+import styles from './Button.scss';
 import classnames from 'classnames';
 
 /**

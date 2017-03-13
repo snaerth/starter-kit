@@ -1,5 +1,5 @@
 import React, {PropTypes} from 'react';
-import styles from './mainHeading.scss';
+import styles from './MainHeading.scss';
 
 /**
  * Main heading component
