@@ -1,15 +1,16 @@
 import axios from 'axios';
 import {browserHistory} from 'react-router';
 import {
-    AUTH_USER, 
-    UNAUTH_USER, 
-    AUTH_ERROR, 
-    SIGNUP_USER, 
-    FORGOT_PASSWORD_SUCCESS, 
-    FORGOT_PASSWORD_ERROR, 
-    RESET_PASSWORD_SUCCESS, 
-    RESET_PASSWORD_ERROR, 
-    SET_PREVIEW_USER_IMAGE} from './types';
+    AUTH_USER,
+    UNAUTH_USER,
+    AUTH_ERROR,
+    SIGNUP_USER,
+    FORGOT_PASSWORD_SUCCESS,
+    FORGOT_PASSWORD_ERROR,
+    RESET_PASSWORD_SUCCESS,
+    RESET_PASSWORD_ERROR,
+    SET_PREVIEW_USER_IMAGE
+} from './types';
 
 /**
  * Stores user image for preview
@@ -19,20 +20,15 @@ import {
  * @author Snær Seljan Þóroddsson
  */
 export function setPreviewUserImage(image) {
-    return {
-        type: SET_PREVIEW_USER_IMAGE,
-        payload: image
-    };
+    return {type: SET_PREVIEW_USER_IMAGE, payload: image};
 }
-
 
 /**
  * Post request made to api with email and passwod
  * Stores token in localStorage if response success and dispatches action AUTH_USER
- * if auth error dispatch erro auth
+ * if auth error dispatch error auth
  *
- * @param {String} email
- * @param {String} password
+ * @param {Object} email, password
  * @returns {undefined}
  * @author Snær Seljan Þóroddsson
  */
@@ -42,7 +38,9 @@ export function signinUser({email, password}) {
         axios
             .post('/api/signin', {email, password})
             .then(response => {
-                const payload = (response.data.role && response.data.role === 'admin') ? response.data.role : '';
+                const payload = (response.data.role && response.data.role === 'admin')
+                    ? response.data.role
+                    : '';
                 // Dispatch admin action to authReducer
                 dispatch({type: AUTH_USER, payload});
                 // Save token to localStorage
@@ -50,19 +48,55 @@ export function signinUser({email, password}) {
                 // Reroute user to home page
                 browserHistory.push('/');
             })
-            .catch(error => {
-                dispatch(authError(error));
-            });
+            .catch(error => dispatch(authError(error)));
     };
 }
 
-export function signupUser({email, password, name}) {
+/**
+ * Signup Post request
+ * Post request to /api/signup to signup user
+ * Post request to /api/userimage to save user image
+ * Stores token in localStorage if response success and dispatches action AUTH_USER
+ * if auth error dispatch error auth
+ *
+ * @param {Object} email, password, name, image
+ * @returns {undefined}
+ * @author Snær Seljan Þóroddsson
+ */
+export function signupUser({email, password, name, image}) {
     return function (dispatch) {
         // Post email/password to api server to register user Get token back from server
         axios
             .post('/api/signup', {email, password, name})
             .then(response => {
-                const payload = (response.data.role && response.data.role === 'admin') ? response.data.role : '';
+                const payload = (response.data.role && response.data.role === 'admin')
+                    ? response.data.role
+                    : '';
+                // Dispatch admin action to authReducer
+                dispatch({type: SIGNUP_USER, payload});
+                // Save token to localStorage
+                localStorage.setItem('user', JSON.stringify(response.data));
+
+                if (image) {
+                    const config = {
+                        headers: {
+                            'content-type': 'multipart/form-data',
+                            authorization: response.data.token
+                        }
+                    };
+                    // Upload user image
+                    return axios.post('/api/userimage', {
+                        image
+                    }, config);
+                } else {
+                    // Reroute user to home page
+                    browserHistory.push('/');
+                }
+            })
+            .then(response => {
+                const payload = (response.data.role && response.data.role === 'admin')
+                    ? response.data.role
+                    : '';
                 // Dispatch admin action to authReducer
                 dispatch({type: SIGNUP_USER, payload});
                 // Save token to localStorage
@@ -70,9 +104,7 @@ export function signupUser({email, password, name}) {
                 // Reroute user to home page
                 browserHistory.push('/');
             })
-            .catch(error => {
-                dispatch(authError(error));
-            });
+            .catch(error => dispatch(authError(error)));
     };
 }
 
@@ -105,9 +137,7 @@ export function forgotPassword({email}) {
                 // Dispatch admin action to authReducer
                 dispatch({type: FORGOT_PASSWORD_SUCCESS, payload: response.data});
             })
-            .catch(error => {
-                dispatch({type: FORGOT_PASSWORD_ERROR, payload: error});
-            });
+            .catch(error => dispatch({type: FORGOT_PASSWORD_ERROR, payload: error}));
     };
 }
 
@@ -127,12 +157,9 @@ export function resetPassword({password, token}) {
                 // Dispatch admin action to authReducer
                 dispatch({type: RESET_PASSWORD_SUCCESS, payload: response.data});
             })
-            .catch(error => {
-                dispatch({type: RESET_PASSWORD_ERROR, payload: error});
-            });
+            .catch(error => dispatch({type: RESET_PASSWORD_ERROR, payload: error}));
     };
 }
-
 
 /**
  * Handles error from server

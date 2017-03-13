@@ -1,7 +1,14 @@
 import passport from 'passport';
-import { signin, signup, forgotPassword, resetPassword, isAdmin, uploadUserImage } from './controllers/authentication';
-import { getNews, deleteNews, createNews, updateNews } from './controllers/news';
-import { jwtLogin, localLogin } from './services/passport';
+import {
+  signin,
+  signup,
+  forgotPassword,
+  resetPassword,
+  isAdmin,
+  uploadUserImage
+} from './controllers/authentication';
+import {getNews, deleteNews, createNews, updateNews} from './controllers/news';
+import {jwtLogin, localLogin} from './services/passport';
 
 // Tell passport to use strategy
 passport.use(jwtLogin);

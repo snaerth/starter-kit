@@ -3,19 +3,25 @@ import Jimp from 'jimp';
 /**
  * Resizes image and saves to file system
  *
+ * @param {String} orginalPath - orginal image path
+ * @param {String} newPath - New image path
  * @param {Int} width
  * @param {Int} height
- * @returns {Object} limits
+ * @returns {Promise}
  * @author Snær Seljan Þóroddsson
  */
-export function resizeImage(orginalPath, newPath, width) {
+export function resizeImage(orginalPath, newPath, width, height) {
+  width = width || Jimp.AUTO;
+  height = height || Jimp.AUTO;
+
   return new Promise((resolve, reject) => {
     Jimp
       .read(orginalPath)
-      .then(image =>  {
-          image
-            .resize(width, Jimp.AUTO)    // resize
-            .write(newPath, resolve);    // save
+      .then(image => {
+        image
+          .cover(width, height, Jimp.HORIZONTAL_ALIGN_CENTER, Jimp.VERTICAL_ALIGN_MIDDLE)    // resize
+          .quality(100)             // set JPEG quality
+          .write(newPath, resolve(image)); // save
       })
       .catch(error => reject(error));
   });

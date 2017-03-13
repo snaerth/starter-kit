@@ -1,6 +1,5 @@
 import fs from 'fs';
 
-
 const directorys = ['assets', 'assets/images', 'assets/images/users'];
 
 /**
@@ -22,4 +21,24 @@ export function createDefaultDirectorys() {
             }
         });
     }
+}
+
+/**
+ * Deletes file from file system
+ * 
+ * @param {String} path - Path to file to delete
+ * @returns {Promise}
+ * @author Snær Seljan Þóroddsson
+ */
+export function deleteFile(path) {
+    return new Promise((resolve, reject) => {
+        fs.unlink(path, error => {
+            if (error) {
+                return reject(error);
+            }
+
+            return resolve();
+        });
+    });
+
 }

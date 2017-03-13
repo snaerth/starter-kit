@@ -23,10 +23,6 @@ const schema = {
     type: String,
     required: true
   },
-  message: {
-    type: String,
-    required: false
-  },
   createdAt: {
     type: Date,
     default: Date.now

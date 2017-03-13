@@ -1,17 +1,16 @@
-import { validateEmail } from '../services/utils';
+import {validateEmail} from '../services/utils';
 import sendMail from '../services/mailService';
-import { resizeImage } from '../services/imageService';
+import {resizeImage} from '../services/imageService';
+import {deleteFile} from '../services/fileService';
 import User from '../models/user';
 import jwt from 'jwt-simple';
 import crypto from 'crypto';
 import config from '../../config';
 import formidable from 'formidable';
-import fs from 'fs';
 import path from 'path';
 
 // VARIABLES
-const { PORT, HOST } = config();
-
+const {PORT, HOST} = config();
 
 /**
  * Sign up route
@@ -25,20 +24,20 @@ const { PORT, HOST } = config();
  */
 export function signup(req, res) {
     if (!req.body) {
-        return res.status(422).send({ error: 'No post data found' });
+        return res
+            .status(422)
+            .send({error: 'No post data found'});
     }
 
-    const { email, password, message, name } = req.body;
+    const {email, password, message, name} = req.body;
 
-    // Validate post request inputs
-    // Check for if user exists by email, 
-    // Save user in database
-    // Send response object with user token and user information
-    validateSignup({ email, password, name })
+    // Validate post request inputs Check for if user exists by email, Save user in
+    // database Send response object with user token and user information
+    validateSignup({email, password, name})
         .then(() => findUserByEmail(email))
-        .then(() => saveUser({ email, password, message, name }))
-        .then(data => res.json(data))
-        .catch(error => res.status(422).send({ error }));
+        .then(() => saveUser({email, password, message, name}))
+        .then(data => res.status(200).json(data))
+        .catch(error => res.status(422).send({error}));
 }
 
 /**
@@ -50,30 +49,34 @@ export function signup(req, res) {
  * @author Snær Seljan Þóroddsson
  */
 export function uploadUserImage(req, res) {
-
-    const { email, name } = req.user;
+    const {name, email} = req.user;
     const form = formidable.IncomingForm({
         uploadDir: process.cwd() + '/assets/images/users'
     });
 
     form.on('error', () => {
-        return res.status(500).send({ error: 'An error has occured with image upload' });
+        return res.status(500).send({error: 'An error has occured with image upload'});
     });
 
     form.parse(req, (err, fields, files) => {
         const image = files.image;
+        
         if (image) {
             const ext = path.extname(image.name);
-            const fileName = `${name.replace(' ', '_')}-${Date.now() + ext}`;
+            const fileName = `${name.replace(/\s/g, '_')}-${Date.now() + ext}`;
             const imgPath = `${form.uploadDir}/${fileName}`;
 
-            resizeImage(image.path, imgPath, 400)
-                .then(info => {
-                    res.status(200).send(info);
+            resizeImage(image.path, imgPath, 400, 400)
+                .then(() => deleteFile(image.path))
+                .then(() => findUserByEmail(email))
+                .then(user => {
+                    const {name, email, password, message, fileName} = user;
+                    return saveUser({name, email, password, message, fileName});
                 })
-                .catch(error => res.status(422).send({ error }));
+                .then(data => res.status(200).json(data))
+                .catch(error => res.status(422).send({error}));
         } else {
-            return res.status(422).send({ error: 'Image required' });
+            return res.status(422).send({error: 'Image required'});
         }
     });
 }
@@ -90,17 +93,17 @@ function findUserByEmail(email) {
         // See if user with given email exists
         User.findOne({
             email
-        }, (error, existingUser) => {
+        }, (error, user) => {
             if (error) {
                 return reject(error);
             }
 
             // If a user does exist, return error
-            if (existingUser) {
+            if (user) {
                 return reject('Email is in use');
             }
 
-            resolve();
+            resolve(user);
         });
     });
 }
@@ -112,7 +115,7 @@ function findUserByEmail(email) {
  * @returns {Promise}
  * @author Snær Seljan Þóroddsson
  */
-function saveUser({ name, email, password, message, fileName }) {
+function saveUser({name, email, password, message, fileName}) {
     return new Promise((resolve, reject) => {
         const newUser = {
             name,
@@ -135,7 +138,13 @@ function saveUser({ name, email, password, message, fileName }) {
                 return reject(error);
             }
 
-            resolve({ token: tokenForUser(user), user });
+            const exposedUserProps = {
+                name: user.name,
+                email: user.email,
+                roles: user.roles
+            };
+
+            resolve({token: tokenForUser(user), user: exposedUserProps});
         });
     });
 }
@@ -151,7 +160,7 @@ function saveUser({ name, email, password, message, fileName }) {
  * @returns {Object} res
  * @author Snær Seljan Þóroddsson
  */
-function validateSignup({ email, password, name }) {
+function validateSignup({email, password, name}) {
     return new Promise((resolve, reject) => {
         // Check if email, password or message exist in request
         if (!email || !password || !name) {
@@ -189,7 +198,7 @@ function validateSignup({ email, password, name }) {
  * @author Snær Seljan Þóroddsson
  */
 export function signin(req, res) {
-    const { name, roles } = req.user;
+    const {name, roles} = req.user;
 
     const data = {
         token: tokenForUser(req.user)
@@ -217,25 +226,25 @@ export function signin(req, res) {
  * @author Snær Seljan Þóroddsson
  */
 export function forgotPassword(req, res) {
-    const { email } = req.body;
+    const {email} = req.body;
 
     // Create token Save resetPasswordToken and resetPasswordExpires to user Send
     // email to user
     createRandomToken()
-        .then(token => attachTokenToUser({ token, email }))
-        .then(({ user, token }) => {
+        .then(token => attachTokenToUser({token, email}))
+        .then(({user, token}) => {
             const url = `${HOST}:${PORT}/reset/${token}`;
-            const { email, name } = user;
+            const {email, name} = user;
 
-            return sendResetPasswordEmail({ url, email, name });
+            return sendResetPasswordEmail({url, email, name});
         })
-        .then(({ email }) => {
+        .then(({email}) => {
             res.send(`An e-mail has been sent to ${email} with further instructions.`);
         })
         .catch((error) => {
             return res
                 .status(550)
-                .send({ error: `Coundn't reset password at this time.`, err: error });
+                .send({error: `Coundn't reset password at this time.`, err: error});
         });
 }
 
@@ -266,7 +275,7 @@ function createRandomToken() {
  * @returns {Promise} promise - User
  * @author Snær Seljan Þóroddsson
  */
-function attachTokenToUser({ token, email }) {
+function attachTokenToUser({token, email}) {
     return new Promise((resolve, reject) => {
         User.findOne({
             email
@@ -284,7 +293,7 @@ function attachTokenToUser({ token, email }) {
                     reject(error);
                 }
 
-                resolve({ user, token });
+                resolve({user, token});
             });
         });
     });
@@ -296,7 +305,7 @@ function attachTokenToUser({ token, email }) {
  * @returns {Promise} promise - User
  * @author Snær Seljan Þóroddsson
  */
-function sendResetPasswordEmail({ url, email, name }) {
+function sendResetPasswordEmail({url, email, name}) {
     return new Promise((resolve, reject) => {
         const mailOptions = {
             to: email,
@@ -311,14 +320,14 @@ function sendResetPasswordEmail({ url, email, name }) {
                 `
         };
 
-        const { to, subject, text, html } = mailOptions;
+        const {to, subject, text, html} = mailOptions;
 
         sendMail(to, subject, text, html, (error, info) => {
             if (error) {
                 reject(error);
             }
 
-            resolve({ info, email });
+            resolve({info, email});
         });
     });
 }
@@ -337,11 +346,11 @@ export function resetPassword(req, res) {
     const password = req.body.password;
 
     if (token && password) {
-        updateUserPassword({ token, password })
-            .then(user => res.send({ message: `Success! Your password has been changed for ${user.email}.` }))
-            .catch(() => res.send({ error: 'Password reset token is invalid or has expired.' }));
+        updateUserPassword({token, password})
+            .then(user => res.send({message: `Success! Your password has been changed for ${user.email}.`}))
+            .catch(() => res.send({error: 'Password reset token is invalid or has expired.'}));
     } else {
-        res.send({ error: 'Token and password are required' });
+        res.send({error: 'Token and password are required'});
     }
 }
 
@@ -354,7 +363,7 @@ export function resetPassword(req, res) {
  * @returns {undefined}
  * @author Snær Seljan Þóroddsson
  */
-function updateUserPassword({ token, password }) {
+function updateUserPassword({token, password}) {
     return new Promise((resolve, reject) => {
         User.findOne({
             resetPasswordToken: token,
@@ -363,7 +372,7 @@ function updateUserPassword({ token, password }) {
             }
         }, (error, user) => {
             if (error || !user) {
-                reject({ error: 'Password reset token is invalid or has expired.' });
+                reject({error: 'Password reset token is invalid or has expired.'});
             }
 
             user.password = password;
@@ -399,7 +408,7 @@ export function isAdmin(req, res, next) {
 
     return res
         .status(401)
-        .send({ error: 'Unauthorized' });
+        .send({error: 'Unauthorized'});
 }
 
 /**

@@ -39,7 +39,7 @@ app.disable('x-powered-by');
 app.use(middleware());
 
 // Serve static content for the app from the assets directory and build directory
-app.use(express.static('.assets'));
+app.use(express.static('assets'));
 app.use(express.static('./build'));
 
 // Handle all requests
