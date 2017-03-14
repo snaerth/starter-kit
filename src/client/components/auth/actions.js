@@ -84,9 +84,7 @@ export function signupUser({email, password, name, formData}) {
                         }
                     };
                     // Upload user image
-                    return axios.post('/api/userimage', {
-                        formData
-                    }, config);
+                    return axios.post('/api/userimage', formData, config);
                 } else {
                     // Reroute user to home page
                     browserHistory.push('/');

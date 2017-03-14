@@ -33,13 +33,17 @@ class Signup extends Component {
      * @author Snær Seljan Þóroddsson
      */
     handleFormSubmit({email, password, name}) {
-        const formData = new FormData();
-        formData.append('image', this.props.image);
+        let formData = null;
         
+        if (this.props.image) {
+            formData = new FormData();
+            formData.append('image', this.props.image);
+        }
+
         this
             .props
             .actions
-            .signupUser({email, password, name, image: formData ? formData : undefined});
+            .signupUser({email, password, name, formData});
     }
 
     onDrop(acceptedFiles) {

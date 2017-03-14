@@ -29,13 +29,13 @@ export function signup(req, res) {
             .send({error: 'No post data found'});
     }
 
-    const {email, password, message, name} = req.body;
+    const {email, password, name} = req.body;
 
     // Validate post request inputs Check for if user exists by email, Save user in
     // database Send response object with user token and user information
     validateSignup({email, password, name})
-        .then(() => findUserByEmail(email))
-        .then(() => saveUser({email, password, message, name}))
+        .then(() => checkUserByEmail(email))
+        .then(() => saveUser({email, password, name}))
         .then(data => res.status(200).json(data))
         .catch(error => res.status(422).send({error}));
 }
@@ -55,28 +55,34 @@ export function uploadUserImage(req, res) {
     });
 
     form.on('error', () => {
-        return res.status(500).send({error: 'An error has occured with image upload'});
+        return res
+            .status(500)
+            .send({error: 'An error has occured with image upload'});
     });
 
     form.parse(req, (err, fields, files) => {
         const image = files.image;
-        
+
         if (image) {
             const ext = path.extname(image.name);
             const fileName = `${name.replace(/\s/g, '_')}-${Date.now() + ext}`;
             const imgPath = `${form.uploadDir}/${fileName}`;
+            let updatedUser = {};
 
-            resizeImage(image.path, imgPath, 400, 400)
-                .then(() => deleteFile(image.path))
-                .then(() => findUserByEmail(email))
+            findUserByEmail(email)
                 .then(user => {
-                    const {name, email, password, message, fileName} = user;
-                    return saveUser({name, email, password, message, fileName});
+                    updatedUser = user;
+                    updatedUser.imageUrl = fileName;
+                    return resizeImage(image.path, imgPath, 400, 400);
                 })
+                .then(() => deleteFile(image.path))
+                .then(() => updateUser(updatedUser))
                 .then(data => res.status(200).json(data))
                 .catch(error => res.status(422).send({error}));
         } else {
-            return res.status(422).send({error: 'Image required'});
+            return res
+                .status(422)
+                .send({error: 'Image required'});
         }
     });
 }
@@ -98,12 +104,57 @@ function findUserByEmail(email) {
                 return reject(error);
             }
 
+            resolve(user);
+        });
+    });
+}
+
+/**
+ * Checks if user exist by email. 
+ * If user is found notify that email is in use
+ *
+ * @param {String} email
+ * @returns {Promise}
+ * @author Snær Seljan Þóroddsson
+ */
+function checkUserByEmail(email) {
+    return new Promise((resolve, reject) => {
+        // See if user with given email exists
+        User.findOne({
+            email
+        }, (error, existingUser) => {
+            if (error) {
+                return reject(error);
+            }
+
             // If a user does exist, return error
-            if (user) {
+            if (existingUser) {
                 return reject('Email is in use');
             }
 
-            resolve(user);
+            resolve();
+        });
+    });
+}
+
+/**
+ * Updates user and save to database
+ *
+ * @param {Object} props - User properties
+ * @returns {Promise}
+ * @author Snær Seljan Þóroddsson
+ */
+function updateUser(user) {
+    return new Promise((resolve, reject) => {
+        // Save new user to databases
+        user.save((error) => {
+            if (error) {
+                return reject(error);
+            }
+
+            let {name, email, imageUrl, roles} = user;
+
+            resolve({token: tokenForUser(user), user: {name, email, imageUrl, roles}});
         });
     });
 }
@@ -138,13 +189,9 @@ function saveUser({name, email, password, message, fileName}) {
                 return reject(error);
             }
 
-            const exposedUserProps = {
-                name: user.name,
-                email: user.email,
-                roles: user.roles
-            };
+            let {name, email, imageUrl, roles} = user;
 
-            resolve({token: tokenForUser(user), user: exposedUserProps});
+            resolve({token: tokenForUser(user), user: {name, email, imageUrl, roles}});
         });
     });
 }
