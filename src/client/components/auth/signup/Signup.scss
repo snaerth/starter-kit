@@ -19,6 +19,7 @@
 }
 
 .dropzoneContainer {
+  display:grid;
   border-width: 2px;
   border-color: $border-color;
   border-style: dashed;
@@ -38,8 +39,6 @@
 }
 
 .dropzoneContainerInner {
-  display: grid;
-  grid-template-rows: auto;
   cursor: pointer;
   transition: color .2s ease-out;
 }
