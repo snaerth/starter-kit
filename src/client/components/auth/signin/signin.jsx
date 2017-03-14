@@ -4,6 +4,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { reduxForm, Field } from 'redux-form';
 import Input from '../../common/input';
+import Password from '../../common/password';
 import styles from './signin.scss';
 import Button from '../../common/button';
 import Banner from './../../../components/common/banner';
@@ -70,7 +71,7 @@ class Signin extends Component {
                         </fieldset>
                         <fieldset>
                             <Field
-                                component={Input}
+                                component={Password}
                                 name="password"
                                 id="password"
                                 type="password"

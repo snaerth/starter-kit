@@ -1,16 +1,18 @@
-import React, {PropTypes, Component} from 'react';
-import {bindActionCreators} from 'redux';
-import {connect} from 'react-redux';
-import {reduxForm, Field} from 'redux-form';
+import React, { PropTypes, Component } from 'react';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import { reduxForm, Field } from 'redux-form';
 import Input from '../../common/input';
+import Password from '../../common/password';
 import styles from './Signup.scss';
 import Button from '../../common/button';
 import Banner from './../../../components/common/banner';
 import NotifyBox from '../../common/notifyBox';
 import * as actionCreators from '../actions';
-import {validateEmail} from './../../../utils/validate';
+import { validateEmail } from './../../../utils/validate';
 import Dropzone from 'react-dropzone';
 import UploadPhoto from './uploadPhoto.svg';
+
 
 /**
  * Signup component
@@ -25,6 +27,13 @@ class Signup extends Component {
         image: PropTypes.object
     }
 
+    constructor(props) {
+        super(props);
+
+        this.handleFormSubmit = this.handleFormSubmit.bind(this);
+        this.onDrop = this.onDrop.bind(this);
+     }
+
     /**
      * Handles form submit event
      *
@@ -32,9 +41,9 @@ class Signup extends Component {
      * @returns {undefined}
      * @author Snær Seljan Þóroddsson
      */
-    handleFormSubmit({email, password, name}) {
+    handleFormSubmit({ email, password, name }) {
         let formData = null;
-        
+
         if (this.props.image) {
             formData = new FormData();
             formData.append('image', this.props.image);
@@ -43,10 +52,14 @@ class Signup extends Component {
         this
             .props
             .actions
-            .signupUser({email, password, name, formData});
+            .signupUser({ email, password, name, formData });
     }
 
-    onDrop(acceptedFiles) {
+    onDrop(acceptedFiles, rejectedFiles) {
+        if (rejectedFiles.length > 0) {
+            this.props.errorMessage = 'Only images allowed.';
+            return;
+        }
         if (acceptedFiles.length > 0) {
             this
                 .props
@@ -66,59 +79,57 @@ class Signup extends Component {
         if (errorMessage) {
             return (
                 <fieldset>
-                    <NotifyBox strongText="Error: " text={errorMessage} type="error"/>
+                    <NotifyBox strongText="Error: " text={errorMessage} type="error" />
                 </fieldset>
             );
         }
     }
 
     render() {
-        const {handleSubmit, errorMessage} = this.props;
+        const { handleSubmit, errorMessage } = this.props;
 
         return (
             <div>
-                <Banner text="SIGN UP"/>
+                <Banner text="SIGN UP" />
                 <div className={styles.container}>
                     {this.renderError(errorMessage)}
-                    <form onSubmit={handleSubmit(this.handleFormSubmit.bind(this))} noValidate>
+                    <form onSubmit={handleSubmit(this.handleFormSubmit)} noValidate autoComplete="off">
                         <fieldset>
-                            <Field component={Input} name="name" id="name" type="text" label="Name"/>
+                            <Field component={Input} name="name" id="name" type="text" label="Name" />
                         </fieldset>
                         <fieldset>
-                            <Field component={Input} name="email" id="email" type="email" label="Email"/>
+                            <Field component={Input} name="email" id="email" type="email" label="Email" />
                         </fieldset>
                         <fieldset>
                             <Field
-                                component={Input}
+                                component={Password}
                                 name="password"
                                 id="password"
                                 type="password"
-                                label="Password"/>
+                                label="Password" />
                         </fieldset>
                         <fieldset>
                             <div className={styles.uploadPhotoContainer}>
                                 <Dropzone
-                                    onDrop={this
-                                    .onDrop
-                                    .bind(this)}
+                                    onDrop={this.onDrop}
                                     multiple={false}
                                     accept="image/*"
                                     className={styles.dropzoneContainer}>
                                     <div className={styles.dropzoneContainerInner}>
-                                        <UploadPhoto width="50" height="50" className={styles.svg}/>
+                                        <UploadPhoto width="50" height="50" className={styles.svg} />
                                         <div className={styles.dropzoneBoxText}>Drop image here or click to select image to upload.</div>
                                     </div>
                                 </Dropzone>
                                 {this.props.image
                                     ? <div>
-                                            <img src={this.props.image.preview} className={styles.imagePreviewContainer}/> {/*<ReactCrop src={this.props.image.preview} crop={crop} />*/}
-                                        </div>
+                                        <img src={this.props.image.preview} className={styles.imagePreviewContainer} />
+                                    </div>
                                     : null}
                             </div>
                         </fieldset>
                         <fieldset>
                             <div>
-                                <Button text="Sign up" ariaLabel="Sign up" className="fullWidth"/>
+                                <Button text="Sign up" ariaLabel="Sign up" className="fullWidth" />
                             </div>
                         </fieldset>
                     </form>
@@ -137,7 +148,7 @@ class Signup extends Component {
  * @return {Object} errors
  * @author Snær Seljan Þóroddsson
  */
-function validate({email, password, name}) {
+function validate({ email, password, name }) {
     const errors = {};
 
     // Email
@@ -182,7 +193,10 @@ function validate({email, password, name}) {
  * @author Snær Seljan Þóroddsson
  */
 function mapStateToProps(state) {
-    return {errorMessage: state.auth.error, image: state.auth.image};
+    return { 
+        errorMessage: state.auth.error, 
+        image: state.auth.image
+    };
 }
 
 /**

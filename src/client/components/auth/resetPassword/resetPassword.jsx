@@ -2,7 +2,7 @@ import React, {PropTypes, Component} from 'react';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import {reduxForm, Field} from 'redux-form';
-import Input from '../../common/input';
+import Password from '../../common/password';
 import styles from './resetPassword.scss';
 import Button from '../../common/button';
 import Banner from './../../../components/common/banner';
@@ -72,10 +72,10 @@ class ResetPassword extends Component {
                 <Banner text="Reset password"/>
                 <div className={styles.container}>
                     {this.renderMessages()}
-                    <form onSubmit={handleSubmit(this.handleFormSubmit.bind(this))} noValidate>
+                    <form onSubmit={handleSubmit(this.handleFormSubmit.bind(this))} noValidate autoComplete="off">
                         <fieldset>
                             <Field
-                                component={Input}
+                                component={Password}
                                 name="password"
                                 id="password"
                                 type="password"

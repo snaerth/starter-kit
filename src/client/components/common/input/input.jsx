@@ -22,7 +22,8 @@ const Input = props => {
                     className={styles.inputField}
                     id={props.id}
                     name={props.id}
-                    placeholder={props.placeholder}/>
+                    placeholder={props.placeholder}
+                    autoComplete={props.autocomplete || 'off'}/>
                 <label className={styles.inputLabel} htmlFor={props.id}>
                     <span className={styles.inputLabelContent}>{props.label}</span>
                 </label>
@@ -40,7 +41,8 @@ Input.propTypes = {
     error: PropTypes.string,
     placeholder: PropTypes.string,
     touched: PropTypes.bool,
-    meta: PropTypes.object
+    meta: PropTypes.object,
+    autocomplete: PropTypes.string
 };
 
 export default Input;
