@@ -75,9 +75,7 @@ const css = {
         loader: 'postcss-loader'
       }
     ]
-  }),  
-  include: /flexboxgrid/
-
+  })
 };
 
 const scss = {

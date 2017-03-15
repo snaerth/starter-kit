@@ -9,7 +9,9 @@ const {
   CLIENT_ENTRY,
   CLIENT_OUTPUT,
   PUBLIC_PATH,
-  VENDOR
+  VENDOR,
+  RULES_DEV,
+  RULES_COMMON
 } = CONFIG;
 
 //  PLUGINS
@@ -40,74 +42,16 @@ const plugins = [
 ];
 
 // RULES
-const json = {
-  test: /\.json?$/,
-  loader: 'json-loader'
-};
-
-const file = {
-  test: /\.(woff2?|jpe?g|png|gif|ico)$/,
-  loader: 'file-loader',
-};
-
-const svg = {
-  test: /\.svg$/,
-  loaders: ['react-svgdom-loader', 'svgo-loader'],
-};
-
-const css = {
-  test: /\.css$/,
-  use: [
-    'style-loader', {
-      loader: 'css-loader',
-      query: {
-        modules: true,
-        sourceMap: false,
-        localIdentName: '[hash:base64:5]'
-      }
-    },
-    'postcss-loader'
-  ],
-  include: /flexboxgrid/
-};
-
-const scss = {
-  test: /\.scss$/,
-  use: [
-    'style-loader', {
-      loader: 'css-loader',
-      query: {
-        modules: true,
-        sourceMap: false,
-        localIdentName: '[hash:base64:5]'
-      }
-    },
-    'postcss-loader',
-    'sass-loader'
-  ]
-};
-
-const js = {
-  test: /\.(js|jsx)$/,
-  exclude: /node_modules/,
-  loaders: [{
-    loader: 'babel-loader',
-    query: {
-      presets: [
-        [
-          'es2015', {
-            modules: false
-          }
-        ],
-        'react',
-        'stage-0',
-        'react-hmre'
-      ],
-      plugins: ['transform-decorators-legacy']
-    }
-  }]
-};
-
+const {
+  file,
+  json,
+  svg
+} = RULES_COMMON;
+const {
+  scss,
+  js,
+  css
+} = RULES_DEV;
 const rules = [js, css, scss, json, file, svg];
 
 // --------------------------------------------- MAIN WEBPACK CONFIG
