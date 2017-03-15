@@ -116,7 +116,9 @@ class Signup extends Component {
                                     accept="image/*"
                                     className={styles.dropzoneContainer}>
                                     <div className={styles.dropzoneContainerInner}>
-                                        <UploadPhoto width="50" height="50" className={styles.svg} />
+                                        <div className={styles.dropzoneBoxImage}>
+                                            <UploadPhoto width="50" height="50" className={styles.svg} />
+                                        </div>
                                         <div className={styles.dropzoneBoxText}>Drop image here or click to select image to upload.</div>
                                     </div>
                                 </Dropzone>
