@@ -1,18 +1,25 @@
 $primary-yellow: #facb7a;
 $primary-red: #DC886C;
 $primary-green: #9ccc65;
-$primary-pink: #f9f7f6;
+$primary-pink: #ff2178;
 $primary-black: #000;
 $primary-white: #fff;
+$primary-card: #e9ebee;
+$primary-background: #ffffff;
 $secondary-black:#2f3238;
 $navbar-background: #A9BAC2;
 $navbar-text: #586A6E;
-$text-dark: #586A6E;
-$button-background: #A9BAC2;
-$button-color: #586A6E;
-$button-color-hover: #2f3238;
+$text-dark: #666666;
 $linear-background-primary: linear-gradient(-180deg, #7C909B, #7E7767);
+
+// Link
 $link-color: #404d5b;
+
+// Button
+$button-background: #ff2178;
+$button-color: #ffffff;
+$button-color-hover: #ffffff;
+
 
 // Animations
 $hover-transition: .15s;

@@ -1,62 +1,85 @@
 @import '../../../styles/variables.scss';
-.container {
-  max-width: $max-440;
-  margin: 0 auto;
-}
 
 .svg {
-  fill: $border-color;
-  width: 100%;
-  transition: fill .2s ease-out;
+    fill: $border-color;
+    width: 100%;
+    transition: fill .2s ease-out;
 }
 
 .uploadPhotoContainer {
-    display:grid;
+    display: grid;
     grid-template-columns: 1fr 1fr;
     justify-items: center;
-    grid-column-gap: 20px;
+    grid-column-gap: 1em;
 }
 
 .dropzoneContainer {
-  display:grid;
-  border-width: 2px;
-  border-color: $border-color;
-  border-style: dashed;
-  border-radius: $border-radius;
-  transition: box-shadow .25s ease-out, transform .20s ease-out, opacity .10s ease-out, border-color .2s ease-out;
-  &:hover {
-    border-color: $primary-white;
-    transform: translate3d(0, -4px, 0);
-    box-shadow: $box-shadow;
-    .svg {
-      fill: $primary-white;
+    display: grid;
+    border-width: 2px;
+    border-color: $border-color;
+    border-style: dashed;
+    border-radius: $border-radius;
+    transition: box-shadow .25s ease-out, transform .20s ease-out, opacity .10s ease-out, border-color .2s ease-out;
+    &:hover {
+        border-color: $primary-black;
+        transform: translate3d(0, -4px, 0);
+        box-shadow: $box-shadow;
+        .svg {
+            fill: $primary-black;
+        }
+        .dropzoneBoxText {
+            color: $primary-black;
+        }
     }
-    .dropzoneBoxText {
-      color: $primary-white;
-    }
-  }
 }
 
 .dropzoneContainerInner {
-  display: grid;
-  grid-template-rows: 1fr 1fr;
-  padding: 2em;
-  cursor: pointer;
-  transition: color .2s ease-out;
+    display: grid;
+    grid-template-rows: 1fr 1fr;
+    padding: .6em;
+    cursor: pointer;
+    transition: color .2s ease-out;
 }
 
 .dropzoneBoxImage {
-  align-self: center;
+    align-self: center;
 }
 
 .dropzoneBoxText {
-  color: $border-color;
-  text-align: center;
-  align-self: center;
+    color: $border-color;
+    text-align: center;
+    align-self: center;
 }
 
 .imagePreviewContainer {
-    width: 100%;
     max-height: 291px;
-    height: 100%;
+}
+
+.fieldsetButton {
+    margin-top: 1em;
+}
+
+.fakeFrame {
+    border: $border solid $border-color;
+    width: 100%;
+    display: grid;
+    align-content: center;
+}
+
+.imageContainer {
+    display: grid;
+    width: 100%;
+}
+
+@media screen and (max-width: $max-768) {
+    .uploadPhotoContainer {
+        grid-template-columns: 1fr;
+        grid-row-gap: 1em;
+    }
+    .dropzoneContainerInner {
+        padding: 3em;
+    }
+    .fakeFrame {
+        display: none;
+    }
 }

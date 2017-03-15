@@ -1,12 +1,12 @@
 @import '../../../styles/variables.scss';
 .heading {
-    color: $primary-white;
+    color: $text-dark;
     text-align: center;
     margin: 0;
 }
 
 @media only screen and (min-width: $min-320) {
     .heading {
-        padding: 1em 0;
+        padding: 0;
     }
 }

@@ -3,9 +3,8 @@ import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import {reduxForm, Field} from 'redux-form';
 import Password from '../../common/password';
-import styles from './forgotPassword.scss';
 import Button from '../../common/button';
-import Banner from './../../../components/common/banner';
+import MainHeading from '../../common/mainheading';
 import NotifyBox from '../../common/notifyBox';
 import {validateEmail} from './../../../utils/validate';
 import * as actionCreators from '../actions';
@@ -65,22 +64,21 @@ class Signin extends Component {
         const {handleSubmit} = this.props;
 
         return (
-            <div>
-                <Banner text="Forgot password"/>
-
-                <div className={styles.container}>
-                    {this.renderMessages()}
-                    <form onSubmit={handleSubmit(this.handleFormSubmit.bind(this))} noValidate autoComplete="off">
-                        <fieldset>
-                            <Field component={Password} name="email" id="email" type="email" label="Email"/>
-                        </fieldset>
-                        <fieldset>
-                            <div>
-                                <Button text="Reset password" ariaLabel="Reset password" className="fullWidth"/>
-                            </div>
-                        </fieldset>
-                    </form>
-                </div>
+            <div className="card">
+                <MainHeading text="Forgot password"/> {this.renderMessages()}
+                <form
+                    onSubmit={handleSubmit(this.handleFormSubmit.bind(this))}
+                    noValidate
+                    autoComplete="off">
+                    <fieldset>
+                        <Field component={Password} name="email" id="email" type="email" label="Email"/>
+                    </fieldset>
+                    <fieldset>
+                        <div>
+                            <Button text="Reset password" ariaLabel="Reset password" className="fullWidth"/>
+                        </div>
+                    </fieldset>
+                </form>
             </div>
         );
     }

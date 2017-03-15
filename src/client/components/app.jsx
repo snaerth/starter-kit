@@ -10,7 +10,7 @@ const App = ({children, location}) => (
       component="div"
       transitionName="fadeInScale"
       transitionEnterTimeout={700}
-      transitionLeaveTimeout={350}>
+      transitionLeaveTimeout={700}>
       {React.cloneElement(children, {key: location.pathname})}
     </ReactCSSTransitionGroup>
   </AppLayout>

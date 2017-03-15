@@ -17,7 +17,7 @@ html {
 
 body {
     @include responsive-font(1.5vw, 16px, 18px);
-    background: $linear-background-primary;
+    background: $primary-background;
     position: relative;
     margin: 0;
     font-family: "Helvetica Neue", "Helvetica", "Arial", sans-serif;
@@ -99,7 +99,18 @@ fieldset {
     padding: 0 0 2em;
 }
 
+.card {
+    max-width: $max-480;
+    margin: 2em auto 0;
+    background: $primary-card;
+    padding: 2em;
+}
+
 .container {
     max-width: $max-1280;
     margin: 0 auto;
+}
+
+.visually-hidden {
+  @extend %visuallyhidden;
 }

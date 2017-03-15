@@ -23,8 +23,7 @@ const Input = props => {
                     id={props.id}
                     name={props.id}
                     placeholder={props.placeholder}
-                    autoComplete={props.autocomplete || 'off'}
-                    value=""/>
+                    autoComplete={props.autocomplete || 'off'}/>
                 <label className={styles.inputLabel} htmlFor={props.id}>
                     <span className={styles.inputLabelContent}>{props.label}</span>
                 </label>

@@ -5,7 +5,7 @@ import {reduxForm, Field} from 'redux-form';
 import Password from '../../common/password';
 import styles from './resetPassword.scss';
 import Button from '../../common/button';
-import Banner from './../../../components/common/banner';
+import MainHeading from '../../common/mainheading';
 import NotifyBox from '../../common/notifyBox';
 import * as actionCreators from '../actions';
 
@@ -21,7 +21,7 @@ class ResetPassword extends Component {
         errorMessage: PropTypes.string,
         message: PropTypes.string,
         token: PropTypes.string,
-        params: PropTypes.object,
+        params: PropTypes.object
     }
 
     /**
@@ -55,7 +55,7 @@ class ResetPassword extends Component {
                     <NotifyBox strongText="Error: " text={errorMessage} type="error"/>
                 </fieldset>
             );
-        } else if(message) {
+        } else if (message) {
             return (
                 <fieldset>
                     <NotifyBox strongText="Success: " text={message} type="success"/>
@@ -68,24 +68,24 @@ class ResetPassword extends Component {
         const {handleSubmit} = this.props;
 
         return (
-            <div>
-                <Banner text="Reset password"/>
-                <div className={styles.container}>
-                    {this.renderMessages()}
-                    <form onSubmit={handleSubmit(this.handleFormSubmit.bind(this))} noValidate autoComplete="off">
-                        <fieldset>
-                            <Field
-                                component={Password}
-                                name="password"
-                                id="password"
-                                type="password"
-                                label="New password"/>
-                        </fieldset>
-                        <fieldset>
-                            <Button text="Reset password" ariaLabel="Reset password" className="fullWidth"/>
-                        </fieldset>
-                    </form>
-                </div>
+            <div className="card">
+                <MainHeading text="Reset password"/> {this.renderMessages()}
+                <form
+                    onSubmit={handleSubmit(this.handleFormSubmit.bind(this))}
+                    noValidate
+                    autoComplete="off">
+                    <fieldset>
+                        <Field
+                            component={Password}
+                            name="password"
+                            id="password"
+                            type="password"
+                            label="New password"/>
+                    </fieldset>
+                    <fieldset>
+                        <Button text="Reset password" ariaLabel="Reset password" className="fullWidth"/>
+                    </fieldset>
+                </form>
             </div>
         );
     }
@@ -125,10 +125,7 @@ function validate({password}) {
  * @author Snær Seljan Þóroddsson
  */
 function mapStateToProps(state) {
-    return {
-        errorMessage: state.auth.error,
-        message: state.auth.message
-    };
+    return {errorMessage: state.auth.error, message: state.auth.message};
 }
 
 /**

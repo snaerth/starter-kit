@@ -1,19 +1,19 @@
-import React, { PropTypes, Component } from 'react';
-import { bindActionCreators } from 'redux';
-import { connect } from 'react-redux';
-import { reduxForm, Field } from 'redux-form';
+import React, {PropTypes, Component} from 'react';
+import {bindActionCreators} from 'redux';
+import {connect} from 'react-redux';
+import {reduxForm, Field} from 'redux-form';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import Input from '../../common/input';
 import Password from '../../common/password';
 import styles from './Signup.scss';
 import Button from '../../common/button';
-import Banner from './../../../components/common/banner';
+import MainHeading from '../../common/mainheading';
 import NotifyBox from '../../common/notifyBox';
 import * as actionCreators from '../actions';
-import { validateEmail } from './../../../utils/validate';
+import {validateEmail} from './../../../utils/validate';
 import Dropzone from 'react-dropzone';
 import UploadPhoto from './uploadPhoto.svg';
-
+import Face from './face.svg';
 
 /**
  * Signup component
@@ -31,8 +31,12 @@ class Signup extends Component {
     constructor(props) {
         super(props);
 
-        this.handleFormSubmit = this.handleFormSubmit.bind(this);
-        this.onDrop = this.onDrop.bind(this);
+        this.handleFormSubmit = this
+            .handleFormSubmit
+            .bind(this);
+        this.onDrop = this
+            .onDrop
+            .bind(this);
     }
 
     /**
@@ -42,7 +46,7 @@ class Signup extends Component {
      * @returns {undefined}
      * @author Snær Seljan Þóroddsson
      */
-    handleFormSubmit({ email, password, name }) {
+    handleFormSubmit({email, password, name}) {
         let formData = null;
 
         if (this.props.image) {
@@ -53,7 +57,7 @@ class Signup extends Component {
         this
             .props
             .actions
-            .signupUser({ email, password, name, formData });
+            .signupUser({email, password, name, formData});
     }
 
     onDrop(acceptedFiles, rejectedFiles) {
@@ -80,65 +84,75 @@ class Signup extends Component {
         if (errorMessage) {
             return (
                 <fieldset>
-                    <NotifyBox strongText="Error: " text={errorMessage} type="error" />
+                    <NotifyBox strongText="Error: " text={errorMessage} type="error"/>
                 </fieldset>
             );
         }
     }
 
     render() {
-        const { handleSubmit, errorMessage } = this.props;
+        const {handleSubmit, errorMessage} = this.props;
 
         return (
-            <div>
-                <Banner text="SIGN UP" />
-                <div className={styles.container}>
-                    {this.renderError(errorMessage)}
-                    <form onSubmit={handleSubmit(this.handleFormSubmit)} noValidate autoComplete="off">
-                        <fieldset>
-                            <Field component={Input} name="name" id="name" type="text" label="Name" />
-                        </fieldset>
-                        <fieldset>
-                            <Field component={Input} name="email" id="email" type="email" label="Email" />
-                        </fieldset>
-                        <fieldset>
-                            <Field
-                                component={Password}
-                                name="password"
-                                id="password"
-                                type="password"
-                                label="Password" />
-                        </fieldset>
-                        <fieldset>
-                            <div className={styles.uploadPhotoContainer}>
-                                <Dropzone
-                                    onDrop={this.onDrop}
-                                    multiple={false}
-                                    accept="image/*"
-                                    className={styles.dropzoneContainer}>
-                                    <div className={styles.dropzoneContainerInner}>
-                                        <div className={styles.dropzoneBoxImage}>
-                                            <UploadPhoto width="50" height="50" className={styles.svg} />
-                                        </div>
-                                        <div className={styles.dropzoneBoxText}>Drop image here or click to select image to upload.</div>
+            <div className="card">
+                <MainHeading text="SIGN UP"/> {this.renderError(errorMessage)}
+                <form
+                    onSubmit={handleSubmit(this.handleFormSubmit)}
+                    noValidate
+                    autoComplete="off">
+                    <fieldset>
+                        <Field component={Input} name="name" id="name" type="text" label="Name"/>
+                    </fieldset>
+                    <fieldset>
+                        <Field component={Input} name="email" id="email" type="email" label="Email"/>
+                    </fieldset>
+                    <fieldset>
+                        <Field
+                            component={Password}
+                            name="password"
+                            id="password"
+                            type="password"
+                            label="Password"/>
+                    </fieldset>
+                    <fieldset>
+                        <div className={styles.uploadPhotoContainer}>
+                            <Dropzone
+                                onDrop={this.onDrop}
+                                multiple={false}
+                                accept="image/*"
+                                className={styles.dropzoneContainer}>
+                                <div className={styles.dropzoneContainerInner}>
+                                    <div className={styles.dropzoneBoxImage}>
+                                        <UploadPhoto width="50" height="50" className={styles.svg}/>
                                     </div>
-                                </Dropzone>
-                                <ReactCSSTransitionGroup
-                                    component="div"
-                                    transitionName="fadeInScale"
-                                    transitionEnterTimeout={700}
-                                    transitionLeaveTimeout={350}>
-                                    {this.props.image ? <img key="profileImage" src={this.props.image.preview} className={styles.imagePreviewContainer} /> : null}
-                                </ReactCSSTransitionGroup>
-                            </div>
-                        </fieldset>
-                        <fieldset>
-                            <div>
-                                <Button text="Sign up" ariaLabel="Sign up" className="fullWidth" />
-                            </div>
-                        </fieldset>
-                    </form>
-                </div>
+                                    <div className={styles.dropzoneBoxText}>Drop image here or click to select image to upload.</div>
+                                </div>
+                            </Dropzone>
+                            <ReactCSSTransitionGroup
+                                component="div"
+                                transitionName="fadeInScale"
+                                className={styles.imageContainer}
+                                transitionEnterTimeout={700}
+                                transitionLeaveTimeout={350}>
+                                {this.props.image
+                                    ? <img
+                                            key="profileImage"
+                                            src={this.props.image.preview}
+                                            className={styles.imagePreviewContainer}/>
+                                    : <div className={styles.fakeFrame}>
+                                        <span className="visually-hidden">Image frame</span>
+                                        <Face width="100" height="100" className={styles.svg}/>
+                                    </div>
+}
+                            </ReactCSSTransitionGroup>
+                        </div>
+                    </fieldset>
+                    <fieldset className={styles.fieldsetButton}>
+                        <div>
+                            <Button text="Sign up" ariaLabel="Sign up" className="fullWidth"/>
+                        </div>
+                    </fieldset>
+                </form>
             </div>
         );
     }
@@ -153,7 +167,7 @@ class Signup extends Component {
  * @return {Object} errors
  * @author Snær Seljan Þóroddsson
  */
-function validate({ email, password, name }) {
+function validate({email, password, name}) {
     const errors = {};
 
     // Email
@@ -184,7 +198,7 @@ function validate({ email, password, name }) {
     }
 
     if (!/^([^0-9]*)$/.test(name) || (name && name.trim().split(' ').length < 2)) {
-        errors.name = 'Name has aleast two names 2 words consisting of letters';
+        errors.name = 'Name has aleast two names consisting of letters';
     }
 
     return errors;
@@ -198,10 +212,7 @@ function validate({ email, password, name }) {
  * @author Snær Seljan Þóroddsson
  */
 function mapStateToProps(state) {
-    return {
-        errorMessage: state.auth.error,
-        image: state.auth.image
-    };
+    return {errorMessage: state.auth.error, image: state.auth.image};
 }
 
 /**

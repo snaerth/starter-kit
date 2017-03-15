@@ -32,6 +32,6 @@
   background: $button-background;
 
   &:hover {
-    background: lighten($button-background, 5%);
+    background: darken($button-background, 15%);
   }
 }
