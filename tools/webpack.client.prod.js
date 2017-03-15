@@ -6,21 +6,38 @@ const externals = require('webpack-node-externals');
 const AssetsPlugin = require('assets-webpack-plugin');
 const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
 const CONFIG = require('./webpack.base');
-const {CLIENT_ENTRY, CLIENT_OUTPUT, PUBLIC_PATH, VENDOR} = CONFIG;
+const {
+  CLIENT_ENTRY,
+  CLIENT_OUTPUT,
+  PUBLIC_PATH,
+  VENDOR,
+  RULES_PROD,
+  RULES_COMMON
+} = CONFIG;
 
 // Plugins
 const plugins = [
   new webpack
-    .optimize
-    .OccurrenceOrderPlugin(),
+  .optimize
+  .OccurrenceOrderPlugin(),
   new webpack
-    .optimize
-    .AggressiveMergingPlugin(),
-  new ExtractTextPlugin({filename: 'styles.css', allChunks: true}),
+  .optimize
+  .AggressiveMergingPlugin(),
+  new ExtractTextPlugin({
+    filename: 'styles.css',
+    allChunks: true
+  }),
   new webpack
-    .optimize
-    .CommonsChunkPlugin({name: 'vendor', filename: 'vendor_[hash].js', minChunks: 2}),
-  new AssetsPlugin({filename: 'assets.json', prettyPrint: true}),
+  .optimize
+  .CommonsChunkPlugin({
+    name: 'vendor',
+    filename: 'vendor_[hash].js',
+    minChunks: 2
+  }),
+  new AssetsPlugin({
+    filename: 'assets.json',
+    prettyPrint: true
+  }),
   new webpack.NamedModulesPlugin(),
   new CaseSensitivePathsPlugin(),
   new webpack.NoEmitOnErrorsPlugin(),
@@ -30,8 +47,8 @@ const plugins = [
     }
   }),
   new webpack
-    .optimize
-    .UglifyJsPlugin(),
+  .optimize
+  .UglifyJsPlugin(),
   new webpack.LoaderOptionsPlugin({
     minimize: true,
     options: {
@@ -40,75 +57,18 @@ const plugins = [
   })
 ];
 
-// Rules
-const json = {
-  test: /\.json?$/,
-  use: 'json-loader'
-};
 
-const file = {
-  test: /\.(woff2?|jpe?g|png|gif|ico)$/,
-  loader: 'file-loader',
-};
-
-const svg = {
-  test: /\.svg$/,
-  loaders: ['react-svgdom-loader', 'svgo-loader'],
-};
-
-const css = {
-  test: /\.css$/,
-  use: ExtractTextPlugin.extract({
-    fallback: "style-loader",
-    loader: [
-      {
-        loader: 'css-loader',
-        query: {
-          modules: true,
-          importLoaders: 2,
-          localIdentName: '[name]__[local]__[hash:base64:5]',
-          plugins: () => {
-            return [autoprefixer]
-          }
-        }
-      }, {
-        loader: 'postcss-loader'
-      }
-    ]
-  })
-};
-
-const scss = {
-  test: /\.scss$/,
-  use: ExtractTextPlugin.extract({
-    fallback: 'style-loader',
-    loader: [
-      {
-        loader: 'css-loader',
-        query: {
-          modules: true,
-          sourceMap: false,
-          localIdentName: '[name]__[local]__[hash:base64:5]',
-          plugins: () => {
-            return [autoprefixer]
-          }
-        }
-      },
-      'postcss-loader',
-      'sass-loader'
-    ]
-  })
-};
-
-const js = {
-  test: /\.(js|jsx)?$/,
-  exclude: /node_modules/,
-  loader: 'babel-loader',
-  query: {
-    "presets": ["es2015", "stage-0", "react", "react-optimize"]
-  }
-};
-
+// RULES
+const {
+  file,
+  json,
+  svg
+} = RULES_COMMON;
+const {
+  scss,
+  js,
+  css
+} = RULES_PROD;
 const rules = [js, css, scss, json, file, svg];
 
 // Main webpack config

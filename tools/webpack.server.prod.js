@@ -4,7 +4,13 @@ const CONFIG = require('./webpack.base');
 const externals = require('webpack-node-externals');
 const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
 
-const {SERVER_ENTRY, SERVER_OUTPUT} = CONFIG;
+const {
+  SERVER_ENTRY,
+  SERVER_OUTPUT,
+  RULES_COMMON,
+  RULES_DEV,
+  RULES_PROD
+} = CONFIG;
 const root = (folder = '.') => path.join(__dirname, '..', folder);
 
 const plugins = [
@@ -17,56 +23,24 @@ const plugins = [
   }),
   new webpack.NamedModulesPlugin(),
   new CaseSensitivePathsPlugin(),
-  new webpack.BannerPlugin({banner: 'require("source-map-support").install();', raw: true, entryOnly: false})
+  new webpack.BannerPlugin({
+    banner: 'require("source-map-support").install();',
+    raw: true,
+    entryOnly: false
+  })
 ];
 
 // RULES
-const json = {
-  test: /\.json?$/,
-  use: 'json-loader'
-};
-
-const css = {
-  test: /\.css$/,
-  use: [
-    {
-      loader: 'css-loader',
-      query: {
-        sourceMap: false,
-        modules: true,
-        importLoaders: 1,
-        localIdentName: '[name]_[local]_[hash:base64:5]'
-      }
-    },
-    'postcss-loader'
-  ]
-};
-
-const scss = {
-  test: /\.(scss|sass)$/,
-  use: [
-    {
-      loader: 'css-loader',
-      query: {
-        sourceMap: false,
-        modules: true,
-        importLoaders: 1,
-        localIdentName: '[name]_[local]_[hash:base64:5]'
-      }
-    },
-    'sass-loader',
-    'postcss-loader'
-  ]
-};
-
-const js = {
-  test: /\.(js|jsx)$/,
-  loader: 'babel-loader',
-  exclude: /(node_modules)/,
-  query: {
-    presets: ["es2015", "react", "stage-0", "react-optimize"]
-  }
-};
+const {
+  json
+} = RULES_COMMON;
+const {
+  scss,
+  css
+} = RULES_DEV;
+const {
+  js
+} = RULES_PROD;
 
 const rules = [js, css, scss, json];
 

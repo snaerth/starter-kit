@@ -1,4 +1,6 @@
 const path = require('path');
+const autoprefixer = require('autoprefixer');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 const vendor = [
   'react',
@@ -32,6 +34,7 @@ const svg = {
   loaders: ['react-svgdom-loader', 'svgo-loader'],
 };
 
+// Development
 const devCss = {
   test: /\.css$/,
   use: [
@@ -84,6 +87,60 @@ const devJs = {
   }]
 };
 
+// Production
+const css = {
+  test: /\.css$/,
+  use: ExtractTextPlugin.extract({
+    fallback: "style-loader",
+    loader: [
+      {
+        loader: 'css-loader',
+        query: {
+          modules: true,
+          importLoaders: 2,
+          localIdentName: '[name]__[local]__[hash:base64:5]',
+          plugins: () => {
+            return [autoprefixer]
+          }
+        }
+      }, {
+        loader: 'postcss-loader'
+      }
+    ]
+  })
+};
+
+const scss = {
+  test: /\.scss$/,
+  use: ExtractTextPlugin.extract({
+    fallback: 'style-loader',
+    loader: [
+      {
+        loader: 'css-loader',
+        query: {
+          modules: true,
+          sourceMap: false,
+          localIdentName: '[name]__[local]__[hash:base64:5]',
+          plugins: () => {
+            return [autoprefixer]
+          }
+        }
+      },
+      'postcss-loader',
+      'sass-loader'
+    ]
+  })
+};
+
+const js = {
+  test: /\.(js|jsx)?$/,
+  exclude: /node_modules/,
+  loader: 'babel-loader',
+  query: {
+    "presets": ["es2015", "stage-0", "react", "react-optimize"]
+  }
+};
+
 module.exports = {
   CLIENT_ENTRY: path.join(process.cwd(), 'src/client/index.jsx'),
   CLIENT_OUTPUT: path.join(process.cwd(), 'build/public'),
@@ -102,5 +159,10 @@ module.exports = {
     js: devJs,
     scss: devScss,
     css: devCss
+  },
+  RULES_PROD: {
+    js,
+    css,
+    scss
   }
 };
