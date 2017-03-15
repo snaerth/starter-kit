@@ -2,6 +2,7 @@ import React, { PropTypes, Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { reduxForm, Field } from 'redux-form';
+import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import Input from '../../common/input';
 import Password from '../../common/password';
 import styles from './Signup.scss';
@@ -32,7 +33,7 @@ class Signup extends Component {
 
         this.handleFormSubmit = this.handleFormSubmit.bind(this);
         this.onDrop = this.onDrop.bind(this);
-     }
+    }
 
     /**
      * Handles form submit event
@@ -122,11 +123,13 @@ class Signup extends Component {
                                         <div className={styles.dropzoneBoxText}>Drop image here or click to select image to upload.</div>
                                     </div>
                                 </Dropzone>
-                                {this.props.image
-                                    ? <div>
-                                        <img src={this.props.image.preview} className={styles.imagePreviewContainer} />
-                                    </div>
-                                    : null}
+                                <ReactCSSTransitionGroup
+                                    component="div"
+                                    transitionName="fadeInScale"
+                                    transitionEnterTimeout={700}
+                                    transitionLeaveTimeout={350}>
+                                    {this.props.image ? <img key="profileImage" src={this.props.image.preview} className={styles.imagePreviewContainer} /> : null}
+                                </ReactCSSTransitionGroup>
                             </div>
                         </fieldset>
                         <fieldset>
@@ -195,8 +198,8 @@ function validate({ email, password, name }) {
  * @author Snær Seljan Þóroddsson
  */
 function mapStateToProps(state) {
-    return { 
-        errorMessage: state.auth.error, 
+    return {
+        errorMessage: state.auth.error,
         image: state.auth.image
     };
 }
