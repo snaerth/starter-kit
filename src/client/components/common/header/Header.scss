@@ -2,11 +2,13 @@
 @import '../../../styles/mixins.scss';
 
 .container {
-    background: $navbar-background;
+    background: $primary-white;
+    border-bottom: $border-height-light solid $border-color-light;
     max-width: $max-width;
     margin: 0 auto;
-    display: flex;
-    flex-direction: row;
+    display: grid;
+    grid-template-columns: 20% 80%;
+    padding: 0.5em;
 }
 
 a.link {
@@ -18,7 +20,7 @@ a.link {
     color:$navbar-text;
 
     &:hover {
-        color: $primary-white;
+        color: $primary-pink;
         opacity: 0.9;
     }
 }
@@ -29,16 +31,12 @@ a.home_link {
 }
 
 a.active {
-    color:$primary-white;
+    color:$primary-pink;
     opacity: 0.9;
 }
 
-
-
-
 .links_right {
-    position: relative;
-    margin-left: auto;
+    text-align: right;
 }
 
 @media only screen and (min-width: $min-320) {

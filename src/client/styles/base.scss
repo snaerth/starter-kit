@@ -25,6 +25,8 @@ body {
     letter-spacing: 0.5px;
     color: $primary-black;
     overflow-x: hidden;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
 }
 
 img {
@@ -112,5 +114,37 @@ fieldset {
 }
 
 .visually-hidden {
-  @extend %visuallyhidden;
+    @extend %visuallyhidden;
+}
+
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+
+/* Track */
+
+::-webkit-scrollbar-track {
+    background: $primary-card;
+}
+
+
+/* Handle */
+
+::-webkit-scrollbar-thumb {
+    background: $primary-pink;
+    opacity: 0.7;
+}
+
+::-webkit-scrollbar-thumb:window-inactive {
+    background: $primary-pink;
+    opacity: 0.7;
+}
+
+
+@media screen and (max-width: $max-480) {
+    .card {
+        padding: 2em 0;
+    }
 }

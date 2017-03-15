@@ -37,6 +37,11 @@ class Signup extends Component {
         this.onDrop = this
             .onDrop
             .bind(this);
+
+    }
+
+    componentWillMount() {
+        this.props.actions.setPreviewUserImage(null);
     }
 
     /**
@@ -60,6 +65,14 @@ class Signup extends Component {
             .signupUser({email, password, name, formData});
     }
 
+    /**
+     * Handles on drop for dropzone component
+     *
+     * @param {Array} acceptedFiles
+     * @param {Array} rejectedFiles
+     * @returns {undefined}
+     * @author Snær Seljan Þóroddsson
+     */
     onDrop(acceptedFiles, rejectedFiles) {
         if (rejectedFiles.length > 0) {
             this.props.errorMessage = 'Only images allowed.';

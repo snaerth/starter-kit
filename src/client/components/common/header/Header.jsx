@@ -42,10 +42,12 @@ class Header extends Component {
     render() {
         return (
             <nav className={styles.container}>
-                <IndexLink
-                    to="/"
-                    activeClassName={styles.active}
-                    className={classnames(styles.home_link, styles.link)}>Home</IndexLink>
+                <div>
+                    <IndexLink
+                        to="/"
+                        activeClassName={styles.active}
+                        className={classnames(styles.home_link, styles.link)}>Home</IndexLink>
+                </div>
                 <div className={styles.links_right}>
                     {this.renderAuthLinks()}
                 </div>
