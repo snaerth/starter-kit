@@ -11,7 +11,6 @@ import MainHeading from '../../common/mainheading';
 import NotifyBox from '../../common/notifyBox';
 import {validateEmail} from './../../../utils/validate';
 import * as actionCreators from '../actions';
-import classnames from 'classnames';
 
 /**
  * Signin component
@@ -66,7 +65,7 @@ class Signin extends Component {
                     <MainHeading text="SIGN IN"/> {this.renderError()}
                     <form onSubmit={handleSubmit(this.handleFormSubmit.bind(this))} noValidate>
                         <fieldset>
-                            <Field component={Input} name="email" id="email" type="email" label="Email"/>
+                            <Field component={Input} name="email" id="email" type="email" label="Email" placeholder="someone@example.com"/>
                         </fieldset>
                         <fieldset>
                             <Field
@@ -74,16 +73,17 @@ class Signin extends Component {
                                 name="password"
                                 id="password"
                                 type="password"
-                                label="Password"/>
+                                label="Password"
+                                placeholder="Must have at least 6 characters"/>
                         </fieldset>
                         <fieldset>
                             <div>
                                 <Button text="Send" ariaLabel="Send" className="fullWidth"/>
                             </div>
-                            <div>
+                            <div className={styles.forgotPasswordContainer}>
                                 <Link
                                     to="forgotpassword"
-                                    className={classnames('link-slideright', styles.centerLink)}>Forgot password?</Link>
+                                    className="link-slideright">Forgot password?</Link>
                             </div>
                         </fieldset>
                     </form>

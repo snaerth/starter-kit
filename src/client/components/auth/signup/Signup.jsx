@@ -2,18 +2,16 @@ import React, {PropTypes, Component} from 'react';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import {reduxForm, Field} from 'redux-form';
-import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import Input from '../../common/input';
 import Password from '../../common/password';
 import styles from './Signup.scss';
 import Button from '../../common/button';
 import MainHeading from '../../common/mainheading';
 import NotifyBox from '../../common/notifyBox';
+import FileUploader from '../../common/fileUploader';
+import Spinner from '../../common/spinner';
 import * as actionCreators from '../actions';
 import {validateEmail} from './../../../utils/validate';
-import Dropzone from 'react-dropzone';
-import UploadPhoto from './uploadPhoto.svg';
-import Face from './face.svg';
 
 /**
  * Signup component
@@ -25,7 +23,8 @@ class Signup extends Component {
         signupUser: PropTypes.func,
         actions: PropTypes.object.isRequired,
         errorMessage: PropTypes.string,
-        image: PropTypes.object
+        image: PropTypes.object,
+        isFetching: PropTypes.bool
     }
 
     constructor(props) {
@@ -41,7 +40,10 @@ class Signup extends Component {
     }
 
     componentWillMount() {
-        this.props.actions.setPreviewUserImage(null);
+        this
+            .props
+            .actions
+            .setPreviewUserImage(null);
     }
 
     /**
@@ -52,6 +54,8 @@ class Signup extends Component {
      * @author Snær Seljan Þóroddsson
      */
     handleFormSubmit({email, password, name}) {
+        this.props.isFetching = true;
+
         let formData = null;
 
         if (this.props.image) {
@@ -104,68 +108,57 @@ class Signup extends Component {
     }
 
     render() {
-        const {handleSubmit, errorMessage} = this.props;
+        const {handleSubmit, errorMessage, isFetching} = this.props;
 
         return (
             <div className="card">
                 <MainHeading text="SIGN UP"/> {this.renderError(errorMessage)}
-                <form
-                    onSubmit={handleSubmit(this.handleFormSubmit)}
-                    noValidate
-                    autoComplete="off">
-                    <fieldset>
-                        <Field component={Input} name="name" id="name" type="text" label="Name"/>
-                    </fieldset>
-                    <fieldset>
-                        <Field component={Input} name="email" id="email" type="email" label="Email"/>
-                    </fieldset>
-                    <fieldset>
-                        <Field
-                            component={Password}
-                            name="password"
-                            id="password"
-                            type="password"
-                            label="Password"/>
-                    </fieldset>
-                    <fieldset>
-                        <div className={styles.uploadPhotoContainer}>
-                            <Dropzone
+                {isFetching
+                    ? <Spinner>Loading</Spinner>
+                    : <form
+                        onSubmit={handleSubmit(this.handleFormSubmit)}
+                        noValidate
+                        autoComplete="off">
+                        <fieldset>
+                            <Field
+                                component={Input}
+                                name="name"
+                                id="name"
+                                type="text"
+                                label="Name"
+                                placeholder="Full name"/>
+                        </fieldset>
+                        <fieldset>
+                            <Field
+                                component={Input}
+                                name="email"
+                                id="email"
+                                type="email"
+                                label="Email"
+                                placeholder="someone@example.com"/>
+                        </fieldset>
+                        <fieldset>
+                            <Field
+                                component={Password}
+                                name="password"
+                                id="password"
+                                type="password"
+                                label="Password"
+                                placeholder="Must have at least 6 characters"/>
+                        </fieldset>
+                        <fieldset>
+                            <FileUploader
+                                accept="image/*"
                                 onDrop={this.onDrop}
                                 multiple={false}
-                                accept="image/*"
-                                className={styles.dropzoneContainer}>
-                                <div className={styles.dropzoneContainerInner}>
-                                    <div className={styles.dropzoneBoxImage}>
-                                        <UploadPhoto width="50" height="50" className={styles.svg}/>
-                                    </div>
-                                    <div className={styles.dropzoneBoxText}>Drop image here or click to select image to upload.</div>
-                                </div>
-                            </Dropzone>
-                            <ReactCSSTransitionGroup
-                                component="div"
-                                transitionName="fadeInScale"
-                                className={styles.imageContainer}
-                                transitionEnterTimeout={700}
-                                transitionLeaveTimeout={350}>
-                                {this.props.image
-                                    ? <img
-                                            key="profileImage"
-                                            src={this.props.image.preview}
-                                            className={styles.imagePreviewContainer}/>
-                                    : <div className={styles.fakeFrame}>
-                                        <span className="visually-hidden">Image frame</span>
-                                        <Face width="100" height="100" className={styles.svg}/>
-                                    </div>
-}
-                            </ReactCSSTransitionGroup>
-                        </div>
-                    </fieldset>
-                    <fieldset className={styles.fieldsetButton}>
-                        <div>
-                            <Button text="Sign up" ariaLabel="Sign up" className="fullWidth"/>
-                        </div>
-                    </fieldset>
-                </form>
+                                image={this.props.image}/>
+                        </fieldset>
+                        <fieldset className={styles.fieldsetButton}>
+                            <div>
+                                <Button text="Sign up" ariaLabel="Sign up" className="fullWidth"/>
+                            </div>
+                        </fieldset>
+                    </form>}
             </div>
         );
     }
@@ -225,7 +218,7 @@ function validate({email, password, name}) {
  * @author Snær Seljan Þóroddsson
  */
 function mapStateToProps(state) {
-    return {errorMessage: state.auth.error, image: state.auth.image};
+    return {errorMessage: state.auth.error, image: state.auth.image, isFetching: state.auth.isFetching};
 }
 
 /**
