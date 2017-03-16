@@ -1,52 +1,50 @@
 @import '../../../styles/variables.scss';
 @import '../../../styles/mixins.scss';
-
 .container {
-    background: $primary-white;
-    border-bottom: $border-height-light solid $border-color-light;
-    max-width: $max-width;
-    margin: 0 auto;
-    display: grid;
-    grid-template-columns: 20% 80%;
-    padding: 0.5em;
+  background: $primary-pink;
+  border-bottom: $border-height-light solid $border-color-light;
+  padding: 0.5em;
+}
+
+.containerInner {
+  max-width: $max-width;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 20% 80%;
 }
 
 a.link {
-    @include responsive-font(1.5vw, 16px, 18px);
-    text-decoration: none;
-    outline: none;
-    margin: 0 0.5em;
-    pointer-events: visible;
-    color:$navbar-text;
-
-    &:hover {
-        color: $primary-pink;
-        opacity: 0.9;
-    }
+  @include responsive-font(1.5vw, 16px, 18px);
+  text-decoration: none;
+  outline: none;
+  margin: 0 0.5em;
+  pointer-events: visible;
+  color: $primary-pink-fade;
+  &:hover {
+    color: $primary-white;
+  }
 }
 
 a.home_link {
-    color:$navbar-text;
-    opacity: 0.9;
+  color: $primary-pink-fade;
 }
 
 a.active {
-    color:$primary-pink;
-    opacity: 0.9;
+  color: $primary-white;
 }
 
 .links_right {
-    text-align: right;
+  text-align: right;
 }
 
 @media only screen and (min-width: $min-320) {
-    .container {
-        padding: 0.5em;
-    }
+  .container {
+    padding: 0.5em;
+  }
 }
 
 @media only screen and (min-width: $max-768) {
-    .container {
-        padding: 0.6em;
-    }
+  .container {
+    padding: 0.6em;
+  }
 }

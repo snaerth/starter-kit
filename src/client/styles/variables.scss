@@ -2,6 +2,7 @@ $primary-yellow: #facb7a;
 $primary-red: #DC886C;
 $primary-green: #9ccc65;
 $primary-pink: #ff2178;
+$primary-pink-fade :#FFBBD0;
 $primary-black: #000;
 $primary-white: #fff;
 $primary-card: #e9ebee;
@@ -11,27 +12,21 @@ $navbar-background: #A9BAC2;
 $navbar-text: #586A6E;
 $text-dark: #666666;
 $linear-background-primary: linear-gradient(-180deg, #7C909B, #7E7767);
-
 // Link
 $link-color: #404d5b;
-
 // Button
 $button-background: #ff2178;
 $button-color: #ffffff;
 $button-color-hover: #ffffff;
-
-
 // Animations
 $hover-transition: .15s;
-
 // Borders
 $border-radius: 3px;
 $border-color:#666666;
-$border-color-light:rgba(0,0,0,.05); 
+$border-color-light:rgba(0, 0, 0, .05);
 $border: 2px;
 $border-height-light: 1px;
 $box-shadow: 0 15px 20px rgba(0, 0, 0, 0.2);
-
 // Custom break point (Min)
 $min-1800: 1800px;
 $min-1440: 1440px;
@@ -43,7 +38,6 @@ $min-768: 768px;
 $min-480: 480px;
 $min-360: 360px;
 $min-320: 320px;
-
 // Custom break points (Max)
 $max-1280: 1279px;
 $max-1200: 1199px;
@@ -53,8 +47,7 @@ $max-768: 767px;
 $max-480: 479px;
 $max-360: 359px;
 $max-320: 320px;
-
 // Containers max width
-$max-width: 1920px;
+$max-width: 1200px;
 $max-480: 480px;
 $max-440: 480px;
