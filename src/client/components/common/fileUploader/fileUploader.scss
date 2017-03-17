@@ -19,11 +19,9 @@
     border-color: $border-color;
     border-style: dashed;
     border-radius: $border-radius;
-    transition: box-shadow .25s ease-out, transform .20s ease-out, opacity .10s ease-out, border-color .2s ease-out;
+    transition: all .10s ease-out;
     &:hover {
         border-color: $border-color-dark;
-        transform: translate3d(0, -4px, 0);
-        box-shadow: $box-shadow;
         .svg {
             fill: $border-color-dark;
         }

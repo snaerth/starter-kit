@@ -37,7 +37,6 @@ class Signup extends Component {
         this.onDrop = this
             .onDrop
             .bind(this);
-
     }
 
     componentWillMount() {
