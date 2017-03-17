@@ -7,7 +7,8 @@ import {
     FORGOT_PASSWORD_ERROR,
     RESET_PASSWORD_SUCCESS,
     RESET_PASSWORD_ERROR,
-    SET_PREVIEW_USER_IMAGE
+    SET_PREVIEW_USER_IMAGE,
+    IS_FETCHING
 } from './types';
 
 const user = JSON.parse(localStorage.getItem('user'));
@@ -24,6 +25,11 @@ const initialState = {
 
 export default function (state = initialState, action) {
     switch (action.type) {
+        case IS_FETCHING:
+            return {
+                ...state,
+                isFetching: true
+            }
         case AUTH_USER:
             return {
                 ...state,

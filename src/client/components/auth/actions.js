@@ -9,8 +9,19 @@ import {
     FORGOT_PASSWORD_ERROR,
     RESET_PASSWORD_SUCCESS,
     RESET_PASSWORD_ERROR,
-    SET_PREVIEW_USER_IMAGE
+    SET_PREVIEW_USER_IMAGE,
+    IS_FETCHING
 } from './types';
+
+/**
+ * Is fetching data state
+ *
+ * @returns {Object}
+ * @author Snær Seljan Þóroddsson
+ */
+export function isFetching() {
+    return {type: IS_FETCHING};
+}
 
 /**
  * Stores user image for preview
