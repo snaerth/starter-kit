@@ -9,3 +9,4 @@ export const RESET_PASSWORD_SUCCESS = 'reset_password_success';
 export const RESET_PASSWORD_ERROR = 'reset_password_error';
 export const SET_PREVIEW_USER_IMAGE = 'set_preview_user_image';
 export const IS_FETCHING = 'is_fetching';
+export const RESET_SIGNUP_STATE = 'reset_signup_state';

@@ -39,11 +39,11 @@ class Signup extends Component {
             .bind(this);
     }
 
-    componentWillMount() {
+    componentWillUnmount() {
         this
             .props
             .actions
-            .setPreviewUserImage(null);
+            .resetSignupState(null);
     }
 
     /**

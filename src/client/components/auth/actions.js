@@ -10,7 +10,8 @@ import {
     RESET_PASSWORD_SUCCESS,
     RESET_PASSWORD_ERROR,
     SET_PREVIEW_USER_IMAGE,
-    IS_FETCHING
+    IS_FETCHING,
+    RESET_SIGNUP_STATE
 } from './types';
 
 /**
@@ -114,6 +115,16 @@ export function signupUser({email, password, name, formData}) {
             })
             .catch(error => dispatch(authError(error)));
     };
+}
+
+/**
+ * Resets image and error for signup
+ *
+ * @returns {Object}
+ * @author Snær Seljan Þóroddsson
+ */
+export function resetSignupState() {
+    return {type: RESET_SIGNUP_STATE};
 }
 
 /**
