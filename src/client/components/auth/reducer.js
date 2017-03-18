@@ -21,7 +21,8 @@ const initialState = {
         : false,
     role: user && user.role
         ? user.role
-        : 'user'
+        : 'user',
+    user: user.user
 };
 
 export default function (state = initialState, action) {
@@ -36,7 +37,8 @@ export default function (state = initialState, action) {
                 ...state,
                 authenticated: true,
                 isFetching: false,
-                role: action.payload
+                role: action.payload.role,
+                user: action.payload.user
             };
         case UNAUTH_USER:
             return {
@@ -49,7 +51,8 @@ export default function (state = initialState, action) {
                 ...state,
                 authenticated: true,
                 isFetching: false,
-                role: action.payload
+                role: action.payload.role,
+                user: action.payload.user
             };
         case AUTH_ERROR:
             return {

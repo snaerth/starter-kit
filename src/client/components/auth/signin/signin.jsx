@@ -103,7 +103,7 @@ class Signin extends Component {
                             </fieldset>
                             <fieldset>
                                 <div>
-                                    <Button text="Send" ariaLabel="Send" className="fullWidth"/>
+                                    <Button text="Sign in" ariaLabel="Sign in" className="fullWidth"/>
                                 </div>
                                 <div className={styles.forgotPasswordContainer}>
                                     <Link to="forgotpassword" className="link-slideright">Forgot password?</Link>

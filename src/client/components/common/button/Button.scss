@@ -1,45 +1,43 @@
 @import '../../../styles/variables.scss';
 @import '../../../styles/mixins.scss';
-
 .button {
-  border-radius: $border-radius;
-  overflow: hidden;
-  border: 0;
-  padding: 11px 20px;
-  cursor: pointer;
-  transition: box-shadow .25s ease-out, transform .20s ease-out, opacity .10s ease-out, background .15s ease-out, color .2s ease-out;
-  color: $button-color;
-
-  &:hover {
-    opacity: 0.9;
-    box-shadow: $box-shadow;
-    color: $button-color-hover;
-    transform: translate3d(0, -4px, 0);
-  }
-
-  &:focus {
-    outline: 0;
-    color: $button-color-hover;
-    background: darken($button-background, 5%);
-  }
+    border-radius: $border-radius;
+    overflow: hidden;
+    border: 0;
+    padding: 11px 20px;
+    cursor: pointer;
+    transition: box-shadow .25s ease-out, transform .20s ease-out, opacity .10s ease-out, background .15s ease-out, color .2s ease-out;
+    color: $button-color;
+    &:hover {
+        opacity: 0.9;
+        box-shadow: $box-shadow;
+        color: $button-color-hover;
+        transform: translate3d(0, -4px, 0);
+    }
+    &:focus {
+        outline: 0;
+        color: $button-color-hover;
+        background: darken($button-background, 5%);
+    }
 }
 
 .fullWidth {
-  width: 100%;
+    width: 100%;
 }
 
 .purple {
-  background: $primary-purple;
-
-  &:hover {
-    background: darken($primary-purple, 15%);
-  }
+    background: $primary-purple;
+    &:hover {
+        background: darken($primary-purple, 15%);
+    }
+    &:focus {
+        background: darken($primary-purple, 15%);
+    }
 }
 
 .default {
-  background: $button-background;
-
-  &:hover {
-    background: darken($button-background, 15%);
-  }
+    background: $button-background;
+    &:hover {
+        background: darken($button-background, 15%);
+    }
 }

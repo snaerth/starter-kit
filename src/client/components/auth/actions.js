@@ -50,9 +50,12 @@ export function signinUser({email, password}) {
         axios
             .post('/api/signin', {email, password})
             .then(response => {
-                const payload = (response.data.role && response.data.role === 'admin')
-                    ? response.data.role
-                    : '';
+                const payload = {
+                    role: (response.data.role && response.data.role === 'admin')
+                        ? response.data.role
+                        : '',
+                    user: response.data.user
+                };
                 // Dispatch admin action to authReducer
                 dispatch({type: AUTH_USER, payload});
                 // Save token to localStorage
@@ -81,9 +84,13 @@ export function signupUser({email, password, name, formData}) {
         axios
             .post('/api/signup', {email, password, name})
             .then(response => {
-                const payload = (response.data.role && response.data.role === 'admin')
-                    ? response.data.role
-                    : '';
+                const payload = {
+                    role: (response.data.role && response.data.role === 'admin')
+                        ? response.data.role
+                        : '',
+                    user: response.data.user
+                };
+
                 // Dispatch admin action to authReducer
                 dispatch({type: SIGNUP_USER, payload});
                 // Save token to localStorage
@@ -103,9 +110,12 @@ export function signupUser({email, password, name, formData}) {
                 }
             })
             .then(response => {
-                const payload = (response.data.role && response.data.role === 'admin')
-                    ? response.data.role
-                    : '';
+                const payload = {
+                    role: (response.data.role && response.data.role === 'admin')
+                        ? response.data.role
+                        : '',
+                    user: response.data.user
+                };
                 // Dispatch admin action to authReducer
                 dispatch({type: SIGNUP_USER, payload});
                 // Save token to localStorage
@@ -171,7 +181,7 @@ export function resetPassword({password, token}) {
             .post(`/api/reset/${token}`, {password})
             .then(response => {
                 if (!response.data.error) {
-                    dispatch({type: RESET_PASSWORD_SUCCESS, payload: response.data});
+                    dispatch({type: RESET_PASSWORD_SUCCESS, payload: response.data.message});
                 } else {
                     const error = {
                         response

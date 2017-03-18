@@ -29,7 +29,7 @@ class Error extends Component {
 
         return (
             <div className={classnames(styles.box,this.checkBoxType(type))}>
-                <strong>{strongText}</strong>
+                {strongText ? <strong>{strongText}</strong> : null}
                 {text}
             </div>
         );

@@ -245,18 +245,17 @@ function validateSignup({email, password, name}) {
  * @author Snær Seljan Þóroddsson
  */
 export function signin(req, res) {
-    const {name, roles} = req.user;
+    const {name, roles, imageUrl, email} = req.user;
+
 
     const data = {
-        token: tokenForUser(req.user)
+        token: tokenForUser(req.user),
+        user: {name, email, imageUrl, roles}
     };
 
     if (req.user) {
         if (roles.includes('admin')) {
             data.role = 'admin';
-        }
-        if (name !== '') {
-            data.name = name;
         }
     }
 
@@ -394,7 +393,7 @@ export function resetPassword(req, res) {
 
     if (token && password) {
         updateUserPassword({token, password})
-            .then(user => res.send({message: `Success! Your password has been changed for ${user.email}.`}))
+            .then(user => res.send(`Success! Your password has been changed for ${user.email}.`))
             .catch(() => res.send({error: 'Password is invalid or token has expired.'}));
     } else {
         res.send({error: 'Token and password are required'});
@@ -415,7 +414,7 @@ function updateUserPassword({token, password}) {
         User.findOne({
             resetPasswordToken: token,
             resetPasswordExpires: {
-                $lt: Date.now() - (60 * 60 * 1000)
+                $gt: Date.now() - (60 * 60 * 1000)
             }
         }, (error, user) => {
             if (error || !user) {

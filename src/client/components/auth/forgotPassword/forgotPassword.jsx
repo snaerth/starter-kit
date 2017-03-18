@@ -68,7 +68,7 @@ class Signin extends Component {
         } else if (message) {
             return (
                 <fieldset>
-                    <NotifyBox strongText="Success: " text={message} type
+                    <NotifyBox text={message} type
                     ="success"/>
                 </fieldset>
             );

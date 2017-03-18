@@ -2,6 +2,7 @@ import React, {PropTypes, Component} from 'react';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import {reduxForm, Field} from 'redux-form';
+import {Link} from 'react-router';
 import Password from '../../common/password';
 import Button from '../../common/button';
 import MainHeading from '../../common/mainheading';
@@ -68,15 +69,20 @@ class ResetPassword extends Component {
             );
         } else if (message) {
             return (
-                <fieldset>
-                    <NotifyBox strongText="Success: " text={message} type="success"/>
-                </fieldset>
+                <div>
+                    <fieldset>
+                        <NotifyBox text={message} type="success"/>
+                    </fieldset>
+                    <fieldset>
+                        <Link to="/signin"><Button text="Sign in" className="fullWidth" ariaLabel="Sign in"/></Link>
+                    </fieldset>
+                </div>
             );
         }
     }
 
     render() {
-        const {handleSubmit, isFetching} = this.props;
+        const {handleSubmit, isFetching, message} = this.props;
 
         return (
             <div className="card">
@@ -84,23 +90,25 @@ class ResetPassword extends Component {
                     ? this.renderMessages()
                     : null}
                 {isFetching
-                    ? <Spinner>Signing in</Spinner>
-                    : <form
-                        onSubmit={handleSubmit(this.handleFormSubmit.bind(this))}
-                        noValidate
-                        autoComplete="off">
-                        <fieldset>
-                            <Field
-                                component={Password}
-                                name="password"
-                                id="password"
-                                type="password"
-                                label="New password"/>
-                        </fieldset>
-                        <fieldset>
-                            <Button text="Reset password" ariaLabel="Reset password" className="fullWidth"/>
-                        </fieldset>
-                    </form>}
+                    ? <Spinner>Resetting password</Spinner>
+                    : !message
+                        ? <form
+                                onSubmit={handleSubmit(this.handleFormSubmit.bind(this))}
+                                noValidate
+                                autoComplete="off">
+                                <fieldset>
+                                    <Field
+                                        component={Password}
+                                        name="password"
+                                        id="password"
+                                        type="password"
+                                        label="New password"/>
+                                </fieldset>
+                                <fieldset>
+                                    <Button text="Reset password" ariaLabel="Reset password" className="fullWidth"/>
+                                </fieldset>
+                            </form>
+                        : null}
             </div>
         );
     }
