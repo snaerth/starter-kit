@@ -30,7 +30,7 @@ export default function (state = initialState, action) {
             return {
                 ...state,
                 isFetching: true
-            }
+            };
         case AUTH_USER:
             return {
                 ...state,

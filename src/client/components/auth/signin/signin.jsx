@@ -12,6 +12,7 @@ import NotifyBox from '../../common/notifyBox';
 import {validateEmail} from './../../../utils/validate';
 import Spinner from '../../common/spinner';
 import * as actionCreators from '../actions';
+import Email from '../svg/email.svg';
 
 /**
  * Signin component
@@ -89,7 +90,7 @@ class Signin extends Component {
                                     id="email"
                                     type="email"
                                     label="Email"
-                                    placeholder="someone@example.com"/>
+                                    placeholder="someone@example.com"><Email/></Field>
                             </fieldset>
                             <fieldset>
                                 <Field

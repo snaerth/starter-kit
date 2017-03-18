@@ -16,6 +16,7 @@ const Input = props => {
                     : null}
             </ReactCSSTransitionGroup>
             <span className={styles.input}>
+                {props.children ? <span className={styles.icon}>{props.children}</span>: null}
                 <input
                     {...props.input}
                     type={props.type}
@@ -42,7 +43,8 @@ Input.propTypes = {
     placeholder: PropTypes.string,
     touched: PropTypes.bool,
     meta: PropTypes.object,
-    autocomplete: PropTypes.string
+    autocomplete: PropTypes.string,
+    children: PropTypes.element
 };
 
 export default Input;

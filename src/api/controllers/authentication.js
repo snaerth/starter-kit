@@ -104,7 +104,7 @@ function findUserByEmail(email) {
                 return reject(error);
             }
 
-            resolve(user);
+            return resolve(user);
         });
     });
 }
@@ -132,7 +132,7 @@ function checkUserByEmail(email) {
                 return reject('Email is in use');
             }
 
-            resolve();
+            return resolve();
         });
     });
 }
@@ -154,7 +154,7 @@ function updateUser(user) {
 
             let {name, email, imageUrl, roles} = user;
 
-            resolve({token: tokenForUser(user), user: {name, email, imageUrl, roles}});
+            return resolve({token: tokenForUser(user), user: {name, email, imageUrl, roles}});
         });
     });
 }
@@ -191,7 +191,7 @@ function saveUser({name, email, password, message, fileName}) {
 
             let {name, email, imageUrl, roles} = user;
 
-            resolve({token: tokenForUser(user), user: {name, email, imageUrl, roles}});
+            return resolve({token: tokenForUser(user), user: {name, email, imageUrl, roles}});
         });
     });
 }
@@ -305,11 +305,11 @@ function createRandomToken() {
     return new Promise((resolve, reject) => {
         crypto.randomBytes(20, (error, buffer) => {
             if (error) {
-                reject(error);
+                return reject(error);
             }
 
             const token = buffer.toString('hex');
-            resolve(token);
+            return resolve(token);
         });
     });
 }
@@ -328,7 +328,7 @@ function attachTokenToUser({token, email}) {
             email
         }, (error, user) => {
             if (error) {
-                reject(error);
+                return reject(error);
             }
 
             user.resetPasswordToken = token;
@@ -337,10 +337,10 @@ function attachTokenToUser({token, email}) {
             // Save user to databases
             user.save((error) => {
                 if (error) {
-                    reject(error);
+                    return reject(error);
                 }
 
-                resolve({user, token});
+                return resolve({user, token});
             });
         });
     });
@@ -371,10 +371,10 @@ function sendResetPasswordEmail({url, email, name}) {
 
         sendMail(to, subject, text, html, (error, info) => {
             if (error) {
-                reject(error);
+                return reject(error);
             }
 
-            resolve({info, email});
+            return resolve({info, email});
         });
     });
 }
@@ -395,7 +395,7 @@ export function resetPassword(req, res) {
     if (token && password) {
         updateUserPassword({token, password})
             .then(user => res.send({message: `Success! Your password has been changed for ${user.email}.`}))
-            .catch(() => res.send({error: 'Password reset token is invalid or has expired.'}));
+            .catch(() => res.send({error: 'Password is invalid or token has expired.'}));
     } else {
         res.send({error: 'Token and password are required'});
     }
@@ -419,7 +419,7 @@ function updateUserPassword({token, password}) {
             }
         }, (error, user) => {
             if (error || !user) {
-                reject({error: 'Password reset token is invalid or has expired.'});
+                return reject({error: 'Password reset token is invalid or has expired.'});
             }
 
             user.password = password;
@@ -429,10 +429,10 @@ function updateUserPassword({token, password}) {
             // Save user to databases
             user.save((error) => {
                 if (error) {
-                    reject(error);
+                    return reject(error);
                 }
 
-                resolve(user);
+                return resolve(user);
             });
         });
     });

@@ -9,6 +9,7 @@ import NotifyBox from '../../common/notifyBox';
 import {validateEmail} from './../../../utils/validate';
 import * as actionCreators from '../actions';
 import Spinner from '../../common/spinner';
+import Email from '../svg/email.svg';
 
 /**
  * Signin component
@@ -57,7 +58,7 @@ class Signin extends Component {
      */
     renderMessages() {
         const {errorMessage, message} = this.props;
-        debugger;
+
         if (errorMessage) {
             return (
                 <fieldset>
@@ -67,7 +68,8 @@ class Signin extends Component {
         } else if (message) {
             return (
                 <fieldset>
-                    <NotifyBox strongText="Success: " text={message} type="success"/>
+                    <NotifyBox strongText="Success: " text={message} type
+                    ="success"/>
                 </fieldset>
             );
         }
@@ -82,13 +84,13 @@ class Signin extends Component {
                     ? this.renderMessages()
                     : null}
                 {isFetching
-                    ? <Spinner>Signing in</Spinner>
+                    ? <Spinner>Loading</Spinner>
                     : <form
                         onSubmit={handleSubmit(this.handleFormSubmit.bind(this))}
                         noValidate
                         autoComplete="off">
                         <fieldset>
-                            <Field component={Input} name="email" id="email" type="email" label="Email"/>
+                            <Field component={Input} name="email" id="email" type="email" label="Email"><Email/></Field>
                         </fieldset>
                         <fieldset>
                             <div>
@@ -147,4 +149,4 @@ function mapDispatchToProps(dispatch) {
     };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(reduxForm({form: 'signin', fields: ['email'], validate})(Signin));
+export default connect(mapStateToProps, mapDispatchToProps)(reduxForm({form: 'forgotPassword', fields: ['email'], validate})(Signin));

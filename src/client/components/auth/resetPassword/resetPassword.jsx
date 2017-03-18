@@ -3,11 +3,11 @@ import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import {reduxForm, Field} from 'redux-form';
 import Password from '../../common/password';
-import styles from './resetPassword.scss';
 import Button from '../../common/button';
 import MainHeading from '../../common/mainheading';
 import NotifyBox from '../../common/notifyBox';
 import * as actionCreators from '../actions';
+import Spinner from '../../common/spinner';
 
 /**
  * Signin component
@@ -21,7 +21,15 @@ class ResetPassword extends Component {
         errorMessage: PropTypes.string,
         message: PropTypes.string,
         token: PropTypes.string,
-        params: PropTypes.object
+        params: PropTypes.object,
+        isFetching: PropTypes.bool
+    }
+
+    componentWillMount() {
+        this
+            .props
+            .actions
+            .clean();
     }
 
     /**
@@ -33,7 +41,10 @@ class ResetPassword extends Component {
      */
     handleFormSubmit({password}) {
         const token = this.props.params.token;
-
+        this
+            .props
+            .actions
+            .isFetching();
         this
             .props
             .actions
@@ -65,27 +76,31 @@ class ResetPassword extends Component {
     }
 
     render() {
-        const {handleSubmit} = this.props;
+        const {handleSubmit, isFetching} = this.props;
 
         return (
             <div className="card">
-                <MainHeading text="Reset password"/> {this.renderMessages()}
-                <form
-                    onSubmit={handleSubmit(this.handleFormSubmit.bind(this))}
-                    noValidate
-                    autoComplete="off">
-                    <fieldset>
-                        <Field
-                            component={Password}
-                            name="password"
-                            id="password"
-                            type="password"
-                            label="New password"/>
-                    </fieldset>
-                    <fieldset>
-                        <Button text="Reset password" ariaLabel="Reset password" className="fullWidth"/>
-                    </fieldset>
-                </form>
+                <MainHeading text="Reset password"/> {!isFetching
+                    ? this.renderMessages()
+                    : null}
+                {isFetching
+                    ? <Spinner>Signing in</Spinner>
+                    : <form
+                        onSubmit={handleSubmit(this.handleFormSubmit.bind(this))}
+                        noValidate
+                        autoComplete="off">
+                        <fieldset>
+                            <Field
+                                component={Password}
+                                name="password"
+                                id="password"
+                                type="password"
+                                label="New password"/>
+                        </fieldset>
+                        <fieldset>
+                            <Button text="Reset password" ariaLabel="Reset password" className="fullWidth"/>
+                        </fieldset>
+                    </form>}
             </div>
         );
     }
@@ -125,7 +140,7 @@ function validate({password}) {
  * @author Snær Seljan Þóroddsson
  */
 function mapStateToProps(state) {
-    return {errorMessage: state.auth.error, message: state.auth.message};
+    return {errorMessage: state.auth.error, message: state.auth.message, isFetching: state.auth.isFetching};
 }
 
 /**
@@ -141,4 +156,4 @@ function mapDispatchToProps(dispatch) {
     };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(reduxForm({form: 'signin', fields: ['password'], validate})(ResetPassword));
+export default connect(mapStateToProps, mapDispatchToProps)(reduxForm({form: 'resetPassword', fields: ['password'], validate})(ResetPassword));

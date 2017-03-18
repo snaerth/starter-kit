@@ -113,7 +113,7 @@ export function signupUser({email, password, name, formData}) {
                 // Reroute user to home page
                 browserHistory.push('/');
             })
-            .catch(error => dispatch(authError(AUTH_ERROR,error)));
+            .catch(error => dispatch(authError(AUTH_ERROR, error)));
     };
 }
 
@@ -152,11 +152,8 @@ export function forgotPassword({email}) {
         // Post email to api server to retreive new password
         axios
             .post('/api/forgot', {email})
-            .then(response => {
-                // Dispatch admin action to authReducer
-                dispatch({type: FORGOT_PASSWORD_SUCCESS, payload: response.data});
-            })
-            .catch(error => authError(FORGOT_PASSWORD_ERROR,error));
+            .then(response => dispatch({type: FORGOT_PASSWORD_SUCCESS, payload: response.data}))
+            .catch(error => dispatch(authError(FORGOT_PASSWORD_ERROR, error)));
     };
 }
 
@@ -173,10 +170,17 @@ export function resetPassword({password, token}) {
         axios
             .post(`/api/reset/${token}`, {password})
             .then(response => {
-                // Dispatch admin action to authReducer
-                dispatch({type: RESET_PASSWORD_SUCCESS, payload: response.data});
+                if (!response.data.error) {
+                    dispatch({type: RESET_PASSWORD_SUCCESS, payload: response.data});
+                } else {
+                    const error = {
+                        response
+                    };
+                    dispatch(authError(RESET_PASSWORD_ERROR, error));
+                }
+
             })
-            .catch(error => authError(RESET_PASSWORD_ERROR,error));
+            .catch(error => dispatch(authError(RESET_PASSWORD_ERROR, error)));
     };
 }
 
@@ -187,13 +191,17 @@ export function resetPassword({password, token}) {
  * @author Snær Seljan Þóroddsson
  */
 export function authError(type, error) {
-    let payload = error.response.data.error;
+    const errorMessage = error.response.data.error
+        ? error.response.data.error
+        : error.response.data;
+
+    let payload = errorMessage;
 
     if (error.response.status === 401) {
         payload = 'Bad login credentials';
     }
 
-    if (error.response.data.error.toLowerCase() === 'proxy_error') {
+    if (errorMessage && errorMessage.toLowerCase() === 'proxy_error') {
         payload = 'Error connecting to server';
     }
 

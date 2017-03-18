@@ -111,8 +111,9 @@ fieldset {
 }
 
 .container {
-    max-width: $max-1280;
+    max-width: $max-1200;
     margin: 0 auto;
+    padding: 1em;
 }
 
 .visually-hidden {

@@ -12,6 +12,8 @@ import FileUploader from '../../common/fileUploader';
 import Spinner from '../../common/spinner';
 import * as actionCreators from '../actions';
 import {validateEmail} from './../../../utils/validate';
+import Person from '../svg/person.svg';
+import Email from '../svg/email.svg';
 
 /**
  * Signup component
@@ -149,7 +151,7 @@ class Signup extends Component {
                                 id="name"
                                 type="text"
                                 label="Name"
-                                placeholder="Full name"/>
+                                placeholder="Full name"><Person/></Field>
                         </fieldset>
                         <fieldset>
                             <Field
@@ -158,7 +160,7 @@ class Signup extends Component {
                                 id="email"
                                 type="email"
                                 label="Email"
-                                placeholder="someone@example.com"/>
+                                placeholder="someone@example.com"><Email/></Field>
                         </fieldset>
                         <fieldset>
                             <Field
@@ -174,7 +176,8 @@ class Signup extends Component {
                                 onClick={() => this.fileUploaderToggler()}
                                 text="Add profile image"
                                 color="purple"
-                                ariaLabel="Sign up"
+                                ariaLabel="Add profile image"
+                                type="button"
                                 className="fullWidth"/> {this.state.showImageLoader
                                 ? <FileUploader
                                         accept="image/*"
