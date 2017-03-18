@@ -5,9 +5,9 @@ import classnames from 'classnames';
 /**
  * Button component
  */
-const Button = ({text, ariaLabel, color, className}) => {
+const Button = ({text, ariaLabel, color, className, onClick}) => {
     return (
-        <button className={classnames(styles.button, styles[color ? color: 'default'], styles[className] )} role="button" aria-label={ariaLabel}>{text}</button>
+        <button className={classnames(styles.button, styles[color ? color: 'default'], styles[className] )} role="button" aria-label={ariaLabel} onClick={onClick}>{text}</button>
     );
 };
 
@@ -15,7 +15,8 @@ Button.propTypes = {
     text: PropTypes.string.isRequired,
     ariaLabel: PropTypes.string.isRequired,
     color: PropTypes.string,
-    className: PropTypes.string
+    className: PropTypes.string,
+    onClick: PropTypes.func
 };
 
 export default Button;

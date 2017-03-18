@@ -10,6 +10,7 @@ import Button from '../../common/button';
 import MainHeading from '../../common/mainheading';
 import NotifyBox from '../../common/notifyBox';
 import {validateEmail} from './../../../utils/validate';
+import Spinner from '../../common/spinner';
 import * as actionCreators from '../actions';
 
 /**
@@ -21,7 +22,15 @@ class Signin extends Component {
         handleSubmit: PropTypes.func.isRequired,
         signinUser: PropTypes.func,
         actions: PropTypes.object.isRequired,
-        errorMessage: PropTypes.string
+        errorMessage: PropTypes.string,
+        isFetching: PropTypes.bool
+    }
+
+    componentWillMount() {
+        this
+            .props
+            .actions
+            .clean();
     }
 
     /**
@@ -32,6 +41,10 @@ class Signin extends Component {
      * @author Snær Seljan Þóroddsson
      */
     handleFormSubmit({email, password}) {
+        this
+            .props
+            .actions
+            .isFetching();
         this
             .props
             .actions
@@ -57,36 +70,45 @@ class Signin extends Component {
     }
 
     render() {
-        const {handleSubmit} = this.props;
+        const {handleSubmit, isFetching} = this.props;
 
         return (
             <div>
                 <div className="card">
-                    <MainHeading text="SIGN IN"/> {this.renderError()}
-                    <form onSubmit={handleSubmit(this.handleFormSubmit.bind(this))} noValidate>
-                        <fieldset>
-                            <Field component={Input} name="email" id="email" type="email" label="Email" placeholder="someone@example.com"/>
-                        </fieldset>
-                        <fieldset>
-                            <Field
-                                component={Password}
-                                name="password"
-                                id="password"
-                                type="password"
-                                label="Password"
-                                placeholder="Must have at least 6 characters"/>
-                        </fieldset>
-                        <fieldset>
-                            <div>
-                                <Button text="Send" ariaLabel="Send" className="fullWidth"/>
-                            </div>
-                            <div className={styles.forgotPasswordContainer}>
-                                <Link
-                                    to="forgotpassword"
-                                    className="link-slideright">Forgot password?</Link>
-                            </div>
-                        </fieldset>
-                    </form>
+                    <MainHeading text="SIGN IN"/> 
+                    {!isFetching
+                        ? this.renderError()
+                        : null}
+                    {isFetching
+                        ? <Spinner>Signing in</Spinner>
+                        : <form onSubmit={handleSubmit(this.handleFormSubmit.bind(this))} noValidate>
+                            <fieldset>
+                                <Field
+                                    component={Input}
+                                    name="email"
+                                    id="email"
+                                    type="email"
+                                    label="Email"
+                                    placeholder="someone@example.com"/>
+                            </fieldset>
+                            <fieldset>
+                                <Field
+                                    component={Password}
+                                    name="password"
+                                    id="password"
+                                    type="password"
+                                    label="Password"
+                                    placeholder="Must have at least 6 characters"/>
+                            </fieldset>
+                            <fieldset>
+                                <div>
+                                    <Button text="Send" ariaLabel="Send" className="fullWidth"/>
+                                </div>
+                                <div className={styles.forgotPasswordContainer}>
+                                    <Link to="forgotpassword" className="link-slideright">Forgot password?</Link>
+                                </div>
+                            </fieldset>
+                        </form>}
                 </div>
             </div>
         );
@@ -137,7 +159,7 @@ function validate({email, password}) {
  * @author Snær Seljan Þóroddsson
  */
 function mapStateToProps(state) {
-    return {errorMessage: state.auth.error};
+    return {errorMessage: state.auth.error, isFetching: state.auth.isFetching};
 }
 
 /**

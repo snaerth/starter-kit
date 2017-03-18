@@ -11,7 +11,7 @@ import {
     RESET_PASSWORD_ERROR,
     SET_PREVIEW_USER_IMAGE,
     IS_FETCHING,
-    RESET_SIGNUP_STATE
+    CLEAN
 } from './types';
 
 /**
@@ -60,7 +60,7 @@ export function signinUser({email, password}) {
                 // Reroute user to home page
                 browserHistory.push('/');
             })
-            .catch(error => dispatch(authError(error)));
+            .catch(error => dispatch(authError(AUTH_ERROR, error)));
     };
 }
 
@@ -113,18 +113,18 @@ export function signupUser({email, password, name, formData}) {
                 // Reroute user to home page
                 browserHistory.push('/');
             })
-            .catch(error => dispatch(authError(error)));
+            .catch(error => dispatch(authError(AUTH_ERROR,error)));
     };
 }
 
 /**
- * Resets image and error for signup
+ * Resets image and error for auth
  *
  * @returns {Object}
  * @author Snær Seljan Þóroddsson
  */
-export function resetSignupState() {
-    return {type: RESET_SIGNUP_STATE};
+export function clean() {
+    return {type: CLEAN};
 }
 
 /**
@@ -156,7 +156,7 @@ export function forgotPassword({email}) {
                 // Dispatch admin action to authReducer
                 dispatch({type: FORGOT_PASSWORD_SUCCESS, payload: response.data});
             })
-            .catch(error => dispatch({type: FORGOT_PASSWORD_ERROR, payload: error}));
+            .catch(error => authError(FORGOT_PASSWORD_ERROR,error));
     };
 }
 
@@ -176,7 +176,7 @@ export function resetPassword({password, token}) {
                 // Dispatch admin action to authReducer
                 dispatch({type: RESET_PASSWORD_SUCCESS, payload: response.data});
             })
-            .catch(error => dispatch({type: RESET_PASSWORD_ERROR, payload: error}));
+            .catch(error => authError(RESET_PASSWORD_ERROR,error));
     };
 }
 
@@ -186,10 +186,16 @@ export function resetPassword({password, token}) {
  * @returns {Object} action
  * @author Snær Seljan Þóroddsson
  */
-export function authError(error) {
+export function authError(type, error) {
+    let payload = error.response.data.error;
+
     if (error.response.status === 401) {
-        return {type: AUTH_ERROR, payload: 'Bad login credentials'};
+        payload = 'Bad login credentials';
     }
 
-    return {type: AUTH_ERROR, payload: error.response.data.error};
+    if (error.response.data.error.toLowerCase() === 'proxy_error') {
+        payload = 'Error connecting to server';
+    }
+
+    return {type, payload};
 }

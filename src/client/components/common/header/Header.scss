@@ -1,7 +1,7 @@
 @import '../../../styles/variables.scss';
 @import '../../../styles/mixins.scss';
 .container {
-  background: $primary-pink;
+  background: $linear-background-primary;
   border-bottom: $border-height-light solid $border-color-light;
   padding: 0.5em;
 }
@@ -19,14 +19,14 @@ a.link {
   outline: none;
   margin: 0 0.5em;
   pointer-events: visible;
-  color: $primary-pink-fade;
+  color: lighten($primary-pink, 18%);
   &:hover {
     color: $primary-white;
   }
 }
 
 a.home_link {
-  color: $primary-pink-fade;
+  color: lighten($primary-pink, 18%);
 }
 
 a.active {

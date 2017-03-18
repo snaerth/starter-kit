@@ -2,12 +2,13 @@ import React, {PropTypes, Component} from 'react';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import {reduxForm, Field} from 'redux-form';
-import Password from '../../common/password';
+import Input from '../../common/input';
 import Button from '../../common/button';
 import MainHeading from '../../common/mainheading';
 import NotifyBox from '../../common/notifyBox';
 import {validateEmail} from './../../../utils/validate';
 import * as actionCreators from '../actions';
+import Spinner from '../../common/spinner';
 
 /**
  * Signin component
@@ -19,7 +20,15 @@ class Signin extends Component {
         signinUser: PropTypes.func,
         actions: PropTypes.object.isRequired,
         errorMessage: PropTypes.string,
-        message: PropTypes.string
+        message: PropTypes.string,
+        isFetching: PropTypes.bool
+    }
+
+    componentWillMount() {
+        this
+            .props
+            .actions
+            .clean();
     }
 
     /**
@@ -30,6 +39,10 @@ class Signin extends Component {
      * @author Snær Seljan Þóroddsson
      */
     handleFormSubmit({email}) {
+        this
+            .props
+            .actions
+            .isFetching();
         this
             .props
             .actions
@@ -44,7 +57,7 @@ class Signin extends Component {
      */
     renderMessages() {
         const {errorMessage, message} = this.props;
-
+        debugger;
         if (errorMessage) {
             return (
                 <fieldset>
@@ -61,24 +74,28 @@ class Signin extends Component {
     }
 
     render() {
-        const {handleSubmit} = this.props;
+        const {handleSubmit, isFetching} = this.props;
 
         return (
             <div className="card">
-                <MainHeading text="Forgot password"/> {this.renderMessages()}
-                <form
-                    onSubmit={handleSubmit(this.handleFormSubmit.bind(this))}
-                    noValidate
-                    autoComplete="off">
-                    <fieldset>
-                        <Field component={Password} name="email" id="email" type="email" label="Email"/>
-                    </fieldset>
-                    <fieldset>
-                        <div>
-                            <Button text="Reset password" ariaLabel="Reset password" className="fullWidth"/>
-                        </div>
-                    </fieldset>
-                </form>
+                <MainHeading text="Forgot password"/> {!isFetching
+                    ? this.renderMessages()
+                    : null}
+                {isFetching
+                    ? <Spinner>Signing in</Spinner>
+                    : <form
+                        onSubmit={handleSubmit(this.handleFormSubmit.bind(this))}
+                        noValidate
+                        autoComplete="off">
+                        <fieldset>
+                            <Field component={Input} name="email" id="email" type="email" label="Email"/>
+                        </fieldset>
+                        <fieldset>
+                            <div>
+                                <Button text="Reset password" ariaLabel="Reset password" className="fullWidth"/>
+                            </div>
+                        </fieldset>
+                    </form>}
             </div>
         );
     }
@@ -114,7 +131,7 @@ function validate({email}) {
  * @author Snær Seljan Þóroddsson
  */
 function mapStateToProps(state) {
-    return {errorMessage: state.auth.error, message: state.auth.message};
+    return {errorMessage: state.auth.error, message: state.auth.message, isFetching: state.auth.isFetching};
 }
 
 /**

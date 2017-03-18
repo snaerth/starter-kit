@@ -8,7 +8,7 @@ const ErrorText = ({error, id}) => {
             transitionName="fadeIn"
             transitionEnterTimeout={700} 
             transitionLeaveTimeout={700}>
-            <div className={styles.error} role="alert" aria-describedby={id}>{error}</div>
+            <div key={id} className={styles.error} role="alert" aria-describedby={id}>{error}</div>
         </ReactCSSTransitionGroup>
     );
 };

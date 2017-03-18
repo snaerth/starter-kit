@@ -9,7 +9,7 @@ import {
     RESET_PASSWORD_ERROR,
     SET_PREVIEW_USER_IMAGE,
     IS_FETCHING,
-    RESET_SIGNUP_STATE
+    CLEAN
 } from './types';
 
 const user = JSON.parse(localStorage.getItem('user'));
@@ -51,12 +51,6 @@ export default function (state = initialState, action) {
                 isFetching: false,
                 role: action.payload
             };
-        case RESET_SIGNUP_STATE:
-            return {
-                ...state,
-                error: '',
-                image: null
-            };
         case AUTH_ERROR:
             return {
                 ...state,
@@ -91,6 +85,12 @@ export default function (state = initialState, action) {
             return {
                 ...state,
                 image: action.payload
+            };
+        case CLEAN:
+            return {
+                ...state,
+                error: '',
+                image: null
             };
     }
 

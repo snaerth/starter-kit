@@ -98,13 +98,16 @@ fieldset {
     position: absolute;
     width: 100%;
     padding: 0 0 2em;
+    min-height: calc(100% - 50px);
 }
 
 .card {
     max-width: $max-480;
-    margin: 2em auto 0;
+    margin: 3em auto 0;
     background: $primary-card;
     padding: 2em;
+    min-height: $min-480;
+    position: relative;
 }
 
 .container {
