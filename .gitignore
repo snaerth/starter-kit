@@ -10,6 +10,6 @@ dist
 build
 uploads
 public
-
+assets/images
 assets.json
 *.config.js
