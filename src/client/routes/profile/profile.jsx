@@ -6,7 +6,6 @@ class Profile extends Component {
         user: PropTypes.object,
         imageUrl: PropTypes.string,
         name: PropTypes.string
-
     }
 
     render() {

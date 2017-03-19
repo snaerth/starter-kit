@@ -19,14 +19,20 @@ const vendor = [
 ];
 
 // RULES
+const urlLoader = {
+  test: /\.(png|gif|jpe?g|svg)$/,
+  include: path.join(process.cwd(), 'assets/images'),
+  use: 'url-loader?limit=20480&name=assets/[name]-[hash].[ext]',
+};
+
 const json = {
   test: /\.json?$/,
-  use: ['json-loader']
+  use: 'json-loader'
 };
 
 const file = {
   test: /\.(woff2?|jpe?g|png|gif|ico)$/,
-  use: ['file-loader']
+  use: 'file-loader'
 };
 
 const svg = {
@@ -155,7 +161,8 @@ module.exports = {
   RULES_COMMON: {
     json: json,
     svg: svg,
-    file: file
+    file: file,
+    urlLoader: urlLoader
   },
   RULES_DEV: {
     js: devJs,

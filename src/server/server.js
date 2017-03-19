@@ -36,8 +36,8 @@ Proxy({ app, target});
 app.disable('x-powered-by');
 
 // Serve static content for the app from the assets directory and build directory
-app.use(express.static('./build'));
-app.use('/assets', express.static(path.join(__dirname, 'assets')))
+app.use(express.static('build'));
+app.use(express.static('assets'));
 
 // Apply middleware to app
 app.use(middleware());

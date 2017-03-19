@@ -16,7 +16,7 @@ const {
 
 //  PLUGINS
 const plugins = [
-  new ExtractTextPlugin({filename: 'styles.css', allChunks: true}),
+  new ExtractTextPlugin({ filename: 'styles.css', allChunks: true }),
   new webpack
     .optimize
     .OccurrenceOrderPlugin(),
@@ -31,12 +31,12 @@ const plugins = [
   }),
   new webpack
     .optimize
-    .CommonsChunkPlugin({name: 'vendor', minChunks: Infinity, filename: 'vendor.js'})
+    .CommonsChunkPlugin({ name: 'vendor', minChunks: Infinity, filename: 'vendor.js' })
 ];
 
 // RULES
-const {file, json, svg} = RULES_COMMON;
-const {scss, js, css} = RULES_DEV;
+const { file, json, svg, urlLoader } = RULES_COMMON;
+const { scss, js, css } = RULES_DEV;
 const rules = [
   js,
   css,
@@ -49,24 +49,30 @@ const rules = [
 // --------------------------------------------- MAIN WEBPACK CONFIG
 module.exports = {
   devtool: 'source-map',
-  context: path.resolve(__dirname, '..'),
   target: 'web',
   cache: true,
   entry: {
     main: [
-      'webpack/hot/only-dev-server', 
-      'webpack-hot-middleware/client', 
+      'webpack/hot/only-dev-server',
+      'webpack-hot-middleware/client',
       CLIENT_ENTRY
     ],
     vendor: VENDOR
   },
   output: {
-    path: path.join(__dirname, '/dist/'),
+    path: path.resolve(__dirname, 'dist'),
     filename: '[name].js',
     sourceMapFilename: '[name].map',
-    publicPath: '/'
+    publicPath: '/',
   },
-
+  devServer: {
+    contentBase: path.join(__dirname, 'dist'),
+    compress: true,
+    historyApiFallback: true,
+    hot: true,
+    https: false,
+    noInfo: true,
+  },
   plugins,
   module: {
     rules

@@ -64,7 +64,8 @@ const plugins = [
 const {
   file,
   json,
-  svg
+  svg,
+  urlLoader
 } = RULES_COMMON;
 const {
   scss,
