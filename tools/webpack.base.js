@@ -150,7 +150,7 @@ module.exports = {
   SERVER_OUTPUT: path.join(process.cwd(), 'build'),
   API_ENTRY: path.join(process.cwd(), 'src/api/index.js'),
   API_OUTPUT: path.join(process.cwd(), 'build'),
-  PUBLIC_PATH: '/public/',
+  PUBLIC_PATH: '/assets/',
   VENDOR: vendor,
   RULES_COMMON: {
     json: json,

@@ -5,7 +5,11 @@ class HomePage extends Component {
     render() {
         return (
             <div>
-                <MainHeading text="MY NEW HOMEPAGE" />
+                <MainHeading text="MY NEW HOMEPAGE"/>
+                <img src="images/test.jpg"/>
+                <img src="/images/test.jpg"/>
+                <img src="assets/images/test.jpg"/>
+                <img src="/assets/images/test.jpg"/>
             </div>
         );
     }

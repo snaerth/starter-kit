@@ -6,19 +6,14 @@ class Profile extends Component {
         user: PropTypes.object,
         imageUrl: PropTypes.string,
         name: PropTypes.string
-        
+
     }
 
     render() {
-        const {imageUrl, name} = this.props.user;
+        const {name} = this.props.user;
         return (
             <div>
                 <h2>{name}</h2>
-                <img src={`/images/${imageUrl}`} alt={name}/>
-                <img src="assets/test.jpg" />
-                <img src="/assets/test.jpg" />
-                <img src="/assets/images/test.jpg" />
-                <img src="assets/images/test.jpg" />
             </div>
         );
     }
@@ -32,7 +27,7 @@ class Profile extends Component {
  * @author Snær Seljan Þóroddsson
  */
 function mapStateToProps(state) {
-    return { user: state.auth.user};
+    return {user: state.auth.user};
 }
 
 export default connect(mapStateToProps)(Profile);

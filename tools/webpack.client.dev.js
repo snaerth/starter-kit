@@ -16,13 +16,10 @@ const {
 
 //  PLUGINS
 const plugins = [
-  new ExtractTextPlugin({
-    filename: 'styles.css',
-    allChunks: true
-  }),
+  new ExtractTextPlugin({filename: 'styles.css', allChunks: true}),
   new webpack
-  .optimize
-  .OccurrenceOrderPlugin(),
+    .optimize
+    .OccurrenceOrderPlugin(),
   new webpack.HotModuleReplacementPlugin(),
   new webpack.DefinePlugin({
     'process.env.NODE_ENV': JSON.stringify('development')
@@ -33,42 +30,43 @@ const plugins = [
     }
   }),
   new webpack
-  .optimize
-  .CommonsChunkPlugin({
-    name: 'vendor',
-    minChunks: Infinity,
-    filename: 'vendor.js'
-  })
+    .optimize
+    .CommonsChunkPlugin({name: 'vendor', minChunks: Infinity, filename: 'vendor.js'})
 ];
 
 // RULES
-const {
-  file,
-  json,
-  svg
-} = RULES_COMMON;
-const {
-  scss,
+const {file, json, svg} = RULES_COMMON;
+const {scss, js, css} = RULES_DEV;
+const rules = [
   js,
-  css
-} = RULES_DEV;
-const rules = [js, css, scss, json, file, svg];
+  css,
+  scss,
+  json,
+  file,
+  svg
+];
 
 // --------------------------------------------- MAIN WEBPACK CONFIG
 module.exports = {
   devtool: 'source-map',
+  context: path.resolve(__dirname, '..'),
   target: 'web',
   cache: true,
   entry: {
     main: [
-      'webpack/hot/only-dev-server', 'webpack-hot-middleware/client', CLIENT_ENTRY
+      'webpack/hot/only-dev-server', 
+      'webpack-hot-middleware/client', 
+      CLIENT_ENTRY
     ],
     vendor: VENDOR
   },
   output: {
     path: path.join(__dirname, '/dist/'),
-    filename: '[name].js'
+    filename: '[name].js',
+    sourceMapFilename: '[name].map',
+    publicPath: '/'
   },
+
   plugins,
   module: {
     rules
