@@ -21,17 +21,17 @@ const vendor = [
 // RULES
 const json = {
   test: /\.json?$/,
-  loader: 'json-loader'
+  use: ['json-loader']
 };
 
 const file = {
   test: /\.(woff2?|jpe?g|png|gif|ico)$/,
-  loader: 'file-loader',
+  use: ['file-loader']
 };
 
 const svg = {
   test: /\.svg$/,
-  loaders: ['react-svgdom-loader', 'svgo-loader'],
+  use: ['react-svgdom-loader', 'svgo-loader']
 };
 
 // Development
@@ -69,22 +69,24 @@ const devScss = {
 const devJs = {
   test: /\.(js|jsx)$/,
   exclude: /node_modules/,
-  loaders: [{
-    loader: 'babel-loader',
-    query: {
-      presets: [
-        [
-          'es2015', {
-            modules: false
-          }
+  loaders: [
+    {
+      loader: 'babel-loader',
+      query: {
+        presets: [
+          [
+            'es2015', {
+              modules: false
+            }
+          ],
+          'react',
+          'stage-0',
+          'react-hmre'
         ],
-        'react',
-        'stage-0',
-        'react-hmre'
-      ],
-      plugins: ['transform-decorators-legacy']
+        plugins: ['transform-decorators-legacy']
+      }
     }
-  }]
+  ]
 };
 
 // Production

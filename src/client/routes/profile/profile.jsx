@@ -14,7 +14,11 @@ class Profile extends Component {
         return (
             <div>
                 <h2>{name}</h2>
-                <img src={`/image/${imageUrl}`} alt={name}/>
+                <img src={`/images/${imageUrl}`} alt={name}/>
+                <img src="assets/test.jpg" />
+                <img src="/assets/test.jpg" />
+                <img src="/assets/images/test.jpg" />
+                <img src="assets/images/test.jpg" />
             </div>
         );
     }

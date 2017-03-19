@@ -43,7 +43,9 @@ const plugins = [
   new webpack.NoEmitOnErrorsPlugin(),
   new webpack.DefinePlugin({
     'process.env': {
-      NODE_ENV: JSON.stringify('production')
+      'NODE_ENV': JSON.stringify(process.env.NODE_ENV),
+      'PORT': JSON.stringify(process.env.PORT),
+      'HOST': JSON.stringify(process.env.HOST)
     }
   }),
   new webpack

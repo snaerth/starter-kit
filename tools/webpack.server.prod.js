@@ -32,7 +32,8 @@ const plugins = [
 
 // RULES
 const {
-  json
+  json,
+  svg
 } = RULES_COMMON;
 const {
   scss,
@@ -42,7 +43,7 @@ const {
   js
 } = RULES_PROD;
 
-const rules = [js, css, scss, json];
+const rules = [js, css, scss, json, svg];
 
 module.exports = {
   target: 'node',

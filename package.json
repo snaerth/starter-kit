@@ -10,10 +10,10 @@
     "start-dev": "concurrent --kill-others \"npm run start-dev-api\" \"npm run start-dev-server\" \"npm run lint:watch\"",
     "start-dev-server": "better-npm-run start-dev-server",
     "start-dev-api": "better-npm-run start-dev-api",
-    "build": "rimraf build && npm run build-client && concurrent \"build-server\" \"build-api\"",
-    "build-client": "webpack -p --config ./tools/webpack.client.prod.js --progress --profile --colors --display-error-details",
-    "build-server": "webpack -p --config  ./tools/webpack.server.prod.js --progress --profile --colors --display-error-details",
-    "build-api": "webpack -p --config  ./tools/webpack.api.prod.js --progress --profile --colors --display-error-details",
+    "build": "better-npm-run build",
+    "build-client": "webpack -p --verbose --colors --display-error-details --config ./tools/webpack.client.prod.js",
+    "build-server": "webpack -p --verbose --colors --display-error-details --config ./tools/webpack.server.prod.js",
+    "build-api": "webpack -p --verbose --colors --display-error-details --config ./tools/webpack.api.prod.js",
     "lint": "node_modules/.bin/esw webpack.client.dev.* src --color",
     "lint:watch": "npm run lint -- --watch"
   },
@@ -51,11 +51,13 @@
       }
     },
     "build": {
-      "command": "babel-node src/api/index.js",
+      "command": "rimraf build && npm run build-client && npm run build-server && npm run build-api",
       "env": {
-        "NODE_ENV": "development",
+        "NODE_ENV": "production",
         "APIPORT": 3030,
-        "APIHOST": "localhost"
+        "APIHOST": "localhost",
+        "HOST": "localhost",
+        "PORT": 3000
       }
     },
     "start-server": {

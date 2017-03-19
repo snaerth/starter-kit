@@ -35,12 +35,12 @@ Proxy({ app, target});
 // Hide all software information
 app.disable('x-powered-by');
 
+// Serve static content for the app from the assets directory and build directory
+app.use(express.static('./build'));
+app.use(express.static('./assets'));
+
 // Apply middleware to app
 app.use(middleware());
-
-// Serve static content for the app from the assets directory and build directory
-pp.use('/images',express.static(path.join(__dirname, '../../', 'assets/images')));
-app.use(express.static('./build'));
 
 // Handle all requests
 app.get('*', handleRender);

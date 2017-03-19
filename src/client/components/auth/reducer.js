@@ -22,7 +22,7 @@ const initialState = {
     role: user && user.role
         ? user.role
         : 'user',
-    user: user.user
+    user: user ? user.user : null
 };
 
 export default function (state = initialState, action) {
