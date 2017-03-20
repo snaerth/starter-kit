@@ -66,7 +66,6 @@ module.exports = {
     publicPath: '/',
   },
   devServer: {
-    contentBase: path.join(__dirname, 'dist'),
     compress: true,
     historyApiFallback: true,
     hot: true,

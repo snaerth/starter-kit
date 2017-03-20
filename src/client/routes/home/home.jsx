@@ -7,15 +7,7 @@ class HomePage extends Component {
         return (
             <div>
                 <MainHeading text="MY NEW HOMEPAGE" />
-                <img src="images/test.jpg" />
-                <img src="/images/test.jpg" />
                 <img src="assets/images/test.jpg" />
-                <img src="/assets/images/test.jpg" />
-                <img src="./images/test.jpg" />
-                <img src="./assets/images/test.jpg" />
-                <img src="http://localhost:3000/images/test.jpg" />
-                <img src="http://localhost:3000/assets/images/test.jpg" />
-                --------------------
                 <img src={test} />
             </div>
         );
