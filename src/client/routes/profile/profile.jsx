@@ -9,10 +9,11 @@ class Profile extends Component {
     }
 
     render() {
-        const {name} = this.props.user;
+        const {name, imageUrl} = this.props.user;
         return (
             <div>
                 <h2>{name}</h2>
+                <img src={`images/users/${imageUrl}`} alt={name}/>
             </div>
         );
     }
