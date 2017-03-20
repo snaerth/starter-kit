@@ -6,12 +6,7 @@ class HomePage extends Component {
         return (
             <div>
                 <MainHeading text="MY NEW HOMEPAGE" />
-                <img src="assets/images/test.jpg" />
-                <img src="/assets/images/test.jpg" />
-                <img src="./assets/images/test.jpg" />
-                <img src="/images/test.jpg" />
-                <img src="images/test.jpg" />
-                <img src="./images/test.jpg" />
+                <img src="images/test.png" />
             </div>
         );
     }
