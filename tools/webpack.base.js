@@ -22,7 +22,7 @@ const vendor = [
 const urlLoader = {
   test: /\.(png|gif|jpe?g|svg)$/,
   include: path.join(process.cwd(), 'assets/images'),
-  use: 'url-loader?limit=20480&name=./assets/images[name]-[hash].[ext]',
+  use: 'url-loader?limit=20480&name=./assets/images/[name]-[hash].[ext]',
 };
 
 const json = {

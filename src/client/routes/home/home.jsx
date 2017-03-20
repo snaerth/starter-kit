@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import MainHeading from '../../components/common/mainheading';
-import test from './test.jpg';
 
 class HomePage extends Component {
     render() {
@@ -8,7 +7,11 @@ class HomePage extends Component {
             <div>
                 <MainHeading text="MY NEW HOMEPAGE" />
                 <img src="assets/images/test.jpg" />
-                <img src={test} />
+                <img src="/assets/images/test.jpg" />
+                <img src="./assets/images/test.jpg" />
+                <img src="/images/test.jpg" />
+                <img src="images/test.jpg" />
+                <img src="./images/test.jpg" />
             </div>
         );
     }

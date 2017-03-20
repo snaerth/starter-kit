@@ -11,9 +11,9 @@
     "start-dev-server": "better-npm-run start-dev-server",
     "start-dev-api": "better-npm-run start-dev-api",
     "build": "better-npm-run build",
-    "build-client": "webpack -p --verbose --colors --display-error-details --config ./tools/webpack.client.prod.js",
-    "build-server": "webpack -p --verbose --colors --display-error-details --config ./tools/webpack.server.prod.js",
-    "build-api": "webpack -p --verbose --colors --display-error-details --config ./tools/webpack.api.prod.js",
+    "build-client": "webpack -p  --colors --display-error-details --config ./tools/webpack.client.prod.js",
+    "build-server": "webpack -p --colors --display-error-details --config ./tools/webpack.server.prod.js",
+    "build-api": "webpack -p --colors --display-error-details --config ./tools/webpack.api.prod.js",
     "lint": "node_modules/.bin/esw webpack.client.dev.* src --color",
     "lint:watch": "npm run lint -- --watch"
   },
