@@ -5,16 +5,21 @@ import classnames from 'classnames';
 /**
  * Button component
  */
-const CircleImage = ({src, alt, className}) => {
+const CircleImage = ({ src, alt, className, onClick }) => {
     return (
-        <img src={src} alt={alt} className={classnames(className || '', styles.circle)}/>
+        <div style={{ backgroundImage: `url(${src})`}}
+            role="img"
+            aria-label={alt}
+            onClick={onClick}
+            className={classnames(className || '', styles.circle)} />
     );
 };
 
 CircleImage.propTypes = {
     src: PropTypes.string.isRequired,
     alt: PropTypes.string.isRequired,
-    className: PropTypes.string
+    className: PropTypes.string,
+    onClick: PropTypes.func
 };
 
 export default CircleImage;

@@ -50,7 +50,7 @@ export function signup(req, res) {
  * @author Snær Seljan Þóroddsson
  */
 export function uploadUserImage(req, res) {
-    const {name, email} = req.user;
+    const {email} = req.user;
     const form = formidable.IncomingForm({
         uploadDir: process.cwd() + '/assets/images/users'
     });
@@ -68,13 +68,13 @@ export function uploadUserImage(req, res) {
             const ext = path.extname(image.name);
             const fileName = uuid();
             const imgPath = `${form.uploadDir}/${fileName + ext}`;
-            const thumbnailPath = `${form.uploadDir}/${fileName + '-small' + ext}`;
+            const thumbnailPath = `${form.uploadDir}/${fileName + '-thumbnail' + ext}`;
             let updatedUser = {};
 
             findUserByEmail(email)
                 .then(user => {
                     updatedUser = user;
-                    updatedUser.imageUrl = fileName;
+                    updatedUser.imageUrl = fileName + ext;
                     return resizeImage(image.path, imgPath, 400);
                 })
                 .then(() => resizeImage(image.path, thumbnailPath, 27))

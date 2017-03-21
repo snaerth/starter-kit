@@ -19,7 +19,7 @@ export function resizeImage(orginalPath, newPath, width, height) {
       .read(orginalPath)
       .then(image => {
         image
-          .cover(width, height, Jimp.HORIZONTAL_ALIGN_CENTER, Jimp.VERTICAL_ALIGN_MIDDLE)    // resize
+          .resize(width, height)    // resize
           .quality(100)             // set JPEG quality
           .write(newPath, resolve(image)); // save
       })

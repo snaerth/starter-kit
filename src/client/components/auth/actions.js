@@ -1,5 +1,5 @@
 import axios from 'axios';
-import {browserHistory} from 'react-router';
+import { browserHistory } from 'react-router';
 import {
     AUTH_USER,
     UNAUTH_USER,
@@ -21,7 +21,7 @@ import {
  * @author Snær Seljan Þóroddsson
  */
 export function isFetching() {
-    return {type: IS_FETCHING};
+    return { type: IS_FETCHING };
 }
 
 /**
@@ -32,7 +32,7 @@ export function isFetching() {
  * @author Snær Seljan Þóroddsson
  */
 export function setPreviewUserImage(image) {
-    return {type: SET_PREVIEW_USER_IMAGE, payload: image};
+    return { type: SET_PREVIEW_USER_IMAGE, payload: image };
 }
 
 /**
@@ -44,11 +44,11 @@ export function setPreviewUserImage(image) {
  * @returns {undefined}
  * @author Snær Seljan Þóroddsson
  */
-export function signinUser({email, password}) {
+export function signinUser({ email, password }) {
     return function (dispatch) {
         // Post email/password to api server for sign in Get token back from server
         axios
-            .post('/api/signin', {email, password})
+            .post('/api/signin', { email, password })
             .then(response => {
                 const payload = {
                     role: (response.data.role && response.data.role === 'admin')
@@ -57,7 +57,7 @@ export function signinUser({email, password}) {
                     user: response.data.user
                 };
                 // Dispatch admin action to authReducer
-                dispatch({type: AUTH_USER, payload});
+                dispatch({ type: AUTH_USER, payload });
                 // Save token to localStorage
                 localStorage.setItem('user', JSON.stringify(response.data));
                 // Reroute user to home page
@@ -78,11 +78,11 @@ export function signinUser({email, password}) {
  * @returns {undefined}
  * @author Snær Seljan Þóroddsson
  */
-export function signupUser({email, password, name, formData}) {
+export function signupUser({ email, password, name, formData }) {
     return function (dispatch) {
         // Post email/password to api server to register user Get token back from server
         axios
-            .post('/api/signup', {email, password, name})
+            .post('/api/signup', { email, password, name })
             .then(response => {
                 const payload = {
                     role: (response.data.role && response.data.role === 'admin')
@@ -91,8 +91,6 @@ export function signupUser({email, password, name, formData}) {
                     user: response.data.user
                 };
 
-                // Dispatch admin action to authReducer
-                dispatch({type: SIGNUP_USER, payload});
                 // Save token to localStorage
                 localStorage.setItem('user', JSON.stringify(response.data));
 
@@ -105,6 +103,8 @@ export function signupUser({email, password, name, formData}) {
                     // Upload user image
                     return axios.post('/api/userimage', formData, config);
                 } else {
+                    // Dispatch admin action to authReducer
+                    dispatch({ type: SIGNUP_USER, payload });
                     // Reroute user to home page
                     browserHistory.push('/');
                 }
@@ -117,7 +117,7 @@ export function signupUser({email, password, name, formData}) {
                     user: response.data.user
                 };
                 // Dispatch admin action to authReducer
-                dispatch({type: SIGNUP_USER, payload});
+                dispatch({ type: SIGNUP_USER, payload });
                 // Save token to localStorage
                 localStorage.setItem('user', JSON.stringify(response.data));
                 // Reroute user to home page
@@ -134,7 +134,7 @@ export function signupUser({email, password, name, formData}) {
  * @author Snær Seljan Þóroddsson
  */
 export function clean() {
-    return {type: CLEAN};
+    return { type: CLEAN };
 }
 
 /**
@@ -147,7 +147,7 @@ export function clean() {
 export function signoutUser() {
     localStorage.removeItem('user');
 
-    return {type: UNAUTH_USER};
+    return { type: UNAUTH_USER };
 }
 
 /**
@@ -157,12 +157,12 @@ export function signoutUser() {
  * @returns {undefined}
  * @author Snær Seljan Þóroddsson
  */
-export function forgotPassword({email}) {
+export function forgotPassword({ email }) {
     return function (dispatch) {
         // Post email to api server to retreive new password
         axios
-            .post('/api/forgot', {email})
-            .then(response => dispatch({type: FORGOT_PASSWORD_SUCCESS, payload: response.data}))
+            .post('/api/forgot', { email })
+            .then(response => dispatch({ type: FORGOT_PASSWORD_SUCCESS, payload: response.data }))
             .catch(error => dispatch(authError(FORGOT_PASSWORD_ERROR, error)));
     };
 }
@@ -174,14 +174,14 @@ export function forgotPassword({email}) {
  * @returns {undefined}
  * @author Snær Seljan Þóroddsson
  */
-export function resetPassword({password, token}) {
+export function resetPassword({ password, token }) {
     return function (dispatch) {
         // Post email to api server to retreive new password
         axios
-            .post(`/api/reset/${token}`, {password})
+            .post(`/api/reset/${token}`, { password })
             .then(response => {
                 if (!response.data.error) {
-                    dispatch({type: RESET_PASSWORD_SUCCESS, payload: response.data.message});
+                    dispatch({ type: RESET_PASSWORD_SUCCESS, payload: response.data.message });
                 } else {
                     const error = {
                         response
@@ -211,9 +211,9 @@ export function authError(type, error) {
         payload = 'Bad login credentials';
     }
 
-    if (errorMessage && errorMessage.toLowerCase() === 'proxy_error') {
+    if (errorMessage && typeof errorMessage === 'string' && errorMessage.toLowerCase() === 'proxy_error') {
         payload = 'Error connecting to server';
     }
 
-    return {type, payload};
+    return { type, payload };
 }
