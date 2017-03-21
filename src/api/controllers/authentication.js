@@ -8,6 +8,7 @@ import crypto from 'crypto';
 import config from '../../config';
 import formidable from 'formidable';
 import path from 'path';
+import uuid from 'uuid/v1';
 
 // VARIABLES
 const {PORT, HOST} = config();
@@ -65,16 +66,18 @@ export function uploadUserImage(req, res) {
 
         if (image) {
             const ext = path.extname(image.name);
-            const fileName = `${name.replace(/\s/g, '_')}-${Date.now() + ext}`;
-            const imgPath = `${form.uploadDir}/${fileName}`;
+            const fileName = uuid();
+            const imgPath = `${form.uploadDir}/${fileName + ext}`;
+            const thumbnailPath = `${form.uploadDir}/${fileName + '-small' + ext}`;
             let updatedUser = {};
 
             findUserByEmail(email)
                 .then(user => {
                     updatedUser = user;
                     updatedUser.imageUrl = fileName;
-                    return resizeImage(image.path, imgPath, 400, 400);
+                    return resizeImage(image.path, imgPath, 400);
                 })
+                .then(() => resizeImage(image.path, thumbnailPath, 27))
                 .then(() => deleteFile(image.path))
                 .then(() => updateUser(updatedUser))
                 .then(data => res.status(200).json(data))
