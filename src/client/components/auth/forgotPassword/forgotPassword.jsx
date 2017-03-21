@@ -2,6 +2,7 @@ import React, {PropTypes, Component} from 'react';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import {reduxForm, Field} from 'redux-form';
+import styles from './forgotPassword.scss';
 import Input from '../../common/input';
 import Button from '../../common/button';
 import MainHeading from '../../common/mainheading';
@@ -9,7 +10,8 @@ import NotifyBox from '../../common/notifyBox';
 import {validateEmail} from './../../../utils/validate';
 import * as actionCreators from '../actions';
 import Spinner from '../../common/spinner';
-import Email from '../svg/email.svg';
+import Email from '../../../common/svg/email.svg';
+import ArrowForward from '../../../common/svg/arrow_forward.svg';
 
 /**
  * Signin component
@@ -94,7 +96,9 @@ class Signin extends Component {
                         </fieldset>
                         <fieldset>
                             <div>
-                                <Button text="Reset password" ariaLabel="Reset password" className="fullWidth"/>
+                                <Button text="Reset password" ariaLabel="Reset password" className="fullWidth">
+                                    <ArrowForward className={styles.iconArrowForward} />
+                                </Button>
                             </div>
                         </fieldset>
                     </form>}

@@ -1,6 +1,7 @@
 @import '../../../styles/variables.scss';
 @import '../../../styles/mixins.scss';
 .button {
+    position: relative;
     border-radius: $border-radius;
     overflow: hidden;
     border: 0;

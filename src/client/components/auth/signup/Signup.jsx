@@ -1,7 +1,7 @@
-import React, {PropTypes, Component} from 'react';
-import {bindActionCreators} from 'redux';
-import {connect} from 'react-redux';
-import {reduxForm, Field} from 'redux-form';
+import React, { PropTypes, Component } from 'react';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import { reduxForm, Field } from 'redux-form';
 import Input from '../../common/input';
 import Password from '../../common/password';
 import styles from './Signup.scss';
@@ -11,9 +11,10 @@ import NotifyBox from '../../common/notifyBox';
 import FileUploader from '../../common/fileUploader';
 import Spinner from '../../common/spinner';
 import * as actionCreators from '../actions';
-import {validateEmail} from './../../../utils/validate';
-import Person from '../svg/person.svg';
-import Email from '../svg/email.svg';
+import { validateEmail } from './../../../utils/validate';
+import Person from '../../../common/svg/person.svg';
+import Email from '../../../common/svg/email.svg';
+import ArrowForward from '../../../common/svg/arrow_forward.svg';
 
 /**
  * Signup component
@@ -76,7 +77,7 @@ class Signup extends Component {
         this
             .props
             .actions
-            .signupUser({email, password, name, formData});
+            .signupUser({ email, password, name, formData });
     }
 
     /**
@@ -111,7 +112,7 @@ class Signup extends Component {
         if (errorMessage) {
             return (
                 <fieldset>
-                    <NotifyBox strongText="Error: " text={errorMessage} type="error"/>
+                    <NotifyBox strongText="Error: " text={errorMessage} type="error" />
                 </fieldset>
             );
         }
@@ -134,7 +135,7 @@ class Signup extends Component {
 
         return (
             <div className="card">
-                <MainHeading text="SIGN UP"/> 
+                <MainHeading text="SIGN UP" />
                 {!isFetching
                     ? this.renderError(errorMessage)
                     : null}
@@ -151,7 +152,7 @@ class Signup extends Component {
                                 id="name"
                                 type="text"
                                 label="Name"
-                                placeholder="Full name"><Person/></Field>
+                                placeholder="Full name"><Person /></Field>
                         </fieldset>
                         <fieldset>
                             <Field
@@ -160,7 +161,7 @@ class Signup extends Component {
                                 id="email"
                                 type="email"
                                 label="Email"
-                                placeholder="someone@example.com"><Email/></Field>
+                                placeholder="someone@example.com"><Email /></Field>
                         </fieldset>
                         <fieldset>
                             <Field
@@ -169,7 +170,7 @@ class Signup extends Component {
                                 id="password"
                                 type="password"
                                 label="Password"
-                                placeholder="Must have at least 6 characters"/>
+                                placeholder="Must have at least 6 characters" />
                         </fieldset>
                         <fieldset>
                             <Button
@@ -178,17 +179,19 @@ class Signup extends Component {
                                 color="purple"
                                 ariaLabel="Add profile image"
                                 type="button"
-                                className="fullWidth"/> {this.state.showImageLoader
-                                ? <FileUploader
+                                className="fullWidth" /> {this.state.showImageLoader
+                                    ? <FileUploader
                                         accept="image/*"
                                         onDrop={this.onDrop}
                                         multiple={false}
-                                        image={this.props.image}/>
-                                : null}
+                                        image={this.props.image} />
+                                    : null}
                         </fieldset>
                         <fieldset className={styles.fieldsetButton}>
                             <div>
-                                <Button text="Sign up" ariaLabel="Sign up" className="fullWidth"/>
+                                <Button text="Sign up" ariaLabel="Sign up" className="fullWidth">
+                                    <ArrowForward className={styles.iconArrowForward} />
+                                </Button>
                             </div>
                         </fieldset>
                     </form>}
@@ -251,7 +254,7 @@ function validate({email, password, name}) {
  * @author Snær Seljan Þóroddsson
  */
 function mapStateToProps(state) {
-    return {errorMessage: state.auth.error, image: state.auth.image, isFetching: state.auth.isFetching};
+    return { errorMessage: state.auth.error, image: state.auth.image, isFetching: state.auth.isFetching };
 }
 
 /**

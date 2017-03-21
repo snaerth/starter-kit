@@ -11,7 +11,7 @@ class HomePage extends Component {
                 <MainHeading text="MY NEW HOMEPAGE" />
                 <div className={styles.grid}>
                     <div className={classnames(styles.card, styles.cardLeft)}>
-                        <CircleImage src="images/users/Snær_Seljan_Þóroddsson-1489854732152.jpg" className={styles.profileImage} />
+                        <CircleImage src="images/users/Snær_Seljan_Þóroddsson-1489854732152.jpg" alt="Mynd af bla" className={styles.profileImage} />
                         <p className={styles.name}>Snær Seljan Þóroddsson</p>
                         <a href="mailto:snaerth@gmail.com" title="Send email to snaerth@gmail.com" className="link-slideright">snaerth@gmail.com</a>
                     </div>

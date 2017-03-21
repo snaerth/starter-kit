@@ -3,12 +3,14 @@ import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import {reduxForm, Field} from 'redux-form';
 import {Link} from 'react-router';
+import styles from './resetPassword.scss';
 import Password from '../../common/password';
 import Button from '../../common/button';
 import MainHeading from '../../common/mainheading';
 import NotifyBox from '../../common/notifyBox';
 import * as actionCreators from '../actions';
 import Spinner from '../../common/spinner';
+import ArrowForward from '../../../common/svg/arrow_forward.svg';
 
 /**
  * Signin component
@@ -105,7 +107,9 @@ class ResetPassword extends Component {
                                         label="New password"/>
                                 </fieldset>
                                 <fieldset>
-                                    <Button text="Reset password" ariaLabel="Reset password" className="fullWidth"/>
+                                    <Button text="Reset password" ariaLabel="Reset password" className="fullWidth">
+                                        <ArrowForward className={styles.iconArrowForward} />
+                                    </Button>
                                 </fieldset>
                             </form>
                         : null}

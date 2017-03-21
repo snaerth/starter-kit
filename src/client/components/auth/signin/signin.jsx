@@ -12,7 +12,8 @@ import NotifyBox from '../../common/notifyBox';
 import {validateEmail} from './../../../utils/validate';
 import Spinner from '../../common/spinner';
 import * as actionCreators from '../actions';
-import Email from '../svg/email.svg';
+import Email from '../../../common/svg/email.svg';
+import ArrowForward from '../../../common/svg/arrow_forward.svg';
 
 /**
  * Signin component
@@ -103,7 +104,9 @@ class Signin extends Component {
                             </fieldset>
                             <fieldset>
                                 <div>
-                                    <Button text="Sign in" ariaLabel="Sign in" className="fullWidth"/>
+                                    <Button text="Sign in" ariaLabel="Sign in" className="fullWidth">
+                                        <ArrowForward className={styles.iconArrowForward} />
+                                    </Button>
                                 </div>
                                 <div className={styles.forgotPasswordContainer}>
                                     <Link to="forgotpassword" className="link-slideright">Forgot password?</Link>

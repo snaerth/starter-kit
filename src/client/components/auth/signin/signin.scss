@@ -1,14 +1,20 @@
 @import '../../../styles/variables.scss';
-
 .fullWidth {
   width: 100%;
 }
 
 .centerLink {
-    margin-top: 9px;
+  margin-top: 9px;
 }
 
 .forgotPasswordContainer {
   text-align: center;
   padding-top: 1em;
+}
+
+.iconArrowForward {
+  position: absolute;
+  right: 4%;
+  top: 8px;
+  fill: $primary-white;
 }
