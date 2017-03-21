@@ -14,7 +14,7 @@ const Button = (props) => {
         aria-label={ariaLabel} 
         onClick={onClick}>
         {text}
-        {props.children}
+        <span className={styles.icon}>{props.children}</span>
         </button>
     );
 };
