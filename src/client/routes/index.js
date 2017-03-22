@@ -25,7 +25,7 @@ export default (
     <Route path="signout" component={pageWrapper(Signout)}  />
     <Route path="forgotpassword" component={pageWrapper(ForgotPassword)}  />
     <Route path="reset/:token" component={pageWrapper(ResetPassword)}  />
-    <Route path="profile" component={requireAuth(pageWrapper(Profile))} />
+    <Route path="profile" component={pageWrapper(Profile)} />
     <Route path="admin" component={requireAuth(pageWrapper(Admin), 'admin')} />
     <Route path="*" component={pageWrapper(NotFound)} />
   </Route>

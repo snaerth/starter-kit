@@ -1,41 +1,10 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
+import ReactDOM from 'react-dom';
 import styles from './profile.scss';
 import CircleImage from '../../components/common/circleImage';
+import ModalWrapper from '../../components/common/modal';
 import classnames from 'classnames';
-import Modal from 'react-modal';
-
-const ModalStyles = {
-    overlay: {
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
-        backgroundColor: 'rgba(55, 58, 71, 0.9)',
-        webkitTransitionDuration: '0.5s',
-        transitionDuration: '0.5s',
-        webkitTransition: 'opacity 0.3s',
-        transition: 'opacity 0.3s',
-        webkitBackfaceVisibility: 'hidden'
-    },
-    content: {
-        position: 'absolute',
-        top: '40px',
-        left: '40px',
-        right: '40px',
-        bottom: '40px',
-        border: '1px solid #ccc',
-        background: '#fff',
-        overflow: 'auto',
-        WebkitOverflowScrolling: 'touch',
-        borderRadius: '4px',
-        outline: 'none',
-        padding: '20px'
-
-    }
-};
-
 
 class Profile extends Component {
     static propTypes = {
@@ -55,6 +24,19 @@ class Profile extends Component {
         this.closeModal = this.closeModal.bind(this);
     }
 
+    componentDidMount() {
+        const c = this.refs.imageCanvas;
+        const ctx = c.getContext('2d');
+        let image = new Image();
+        image.src = 'http://localhost:3000/images/users/11870894_10200772623674985_6112941039389153046_n-thumbnail.jpg';
+                
+        image.onload = () => {
+            const aspectRatio = image.width/image.height;
+            ctx.filter = 'blur(50px)';
+            ctx.drawImage(image, 0, 0, 256, 256  * aspectRatio);
+        };
+    }
+
     openModal() {
         this.setState({ modalIsOpen: true });
     }
@@ -68,7 +50,10 @@ class Profile extends Component {
     }
 
     render() {
-        const { name, imageUrl } = this.props.user;
+        const name = 'Snær Seljan Þóroddsson';
+        const imageUrl = '11870894_10200772623674985_6112941039389153046_n.jpg';
+        //const { name, imageUrl } = this.props.user;
+
         return (
             <div className="container">
                 <div className={styles.grid}>
@@ -79,17 +64,19 @@ class Profile extends Component {
                     </div>
                     <div className={styles.card}>
                         <h2 className={styles.noMarginTop}>Extra information</h2>
+                        <canvas id="canvas" ref='imageCanvas'></canvas>
                     </div>
                 </div>
 
-                <Modal
+                <button onClick={this.renderCanvas}>Canvas</button>
+
+                <ModalWrapper
                     isOpen={this.state.modalIsOpen}
                     onAfterOpen={this.afterOpenModal}
                     onRequestClose={this.closeModal}
-                    style={ModalStyles}
                     contentLabel="Image Modal">
                     <img src={`images/users/${imageUrl}`} alt={name} />
-                </Modal>
+                </ModalWrapper>
             </div>
         );
     }

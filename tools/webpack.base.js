@@ -10,6 +10,7 @@ const vendor = [
   'react-redux',
   'redux-thunk',
   'react-addons-css-transition-group',
+  'react-modal',
   'gsap',
   'axios',
   'classnames',
