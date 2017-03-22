@@ -30,9 +30,7 @@ class ImageBlurWrapper extends Component {
         let imgBig = new Image();
         imgBig.src = src;
         imgBig.onload = () => {
-            setTimeout(() => {
             this.setState({loaded: true});
-            }, 3000);
         };
     }
 
@@ -57,8 +55,7 @@ ImageBlurWrapper.propTypes = {
     alt: PropTypes.string.isRequired,
     thumbnail: PropTypes.string.isRequired,
     blur: PropTypes.string,
-    id: PropTypes.string.isRequired,
-    circle: PropTypes.bool
+    id: PropTypes.string.isRequired
 };
 
 export default ImageBlurWrapper;

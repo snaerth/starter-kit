@@ -1,4 +1,4 @@
-import React, { Component, PropTypes } from 'react';
+import React, { PropTypes } from 'react';
 import Modal from 'react-modal';
 
 const ModalStyles = {
@@ -16,18 +16,32 @@ const ModalStyles = {
         webkitBackfaceVisibility: 'hidden'
     },
     content: {
-        position: 'absolute',
-        top: '40px',
-        left: '40px',
-        right: '40px',
-        bottom: '40px',
-        border: '1px solid #ccc',
-        background: '#fff',
         overflow: 'auto',
         WebkitOverflowScrolling: 'touch',
-        borderRadius: '4px',
+        borderRadius: '2px',
+        border: 'none',
         outline: 'none',
-        padding: '20px'
+        padding: '1em',
+        position: 'fixed',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        pointerEvents: 'none',
+        width: '50%',
+        height: 'auto',
+        top: '50%',
+        left: '50%',
+        bottom: 'initial',
+        right: 'initial',
+        maxWidth: '960px',
+        minWidth: '320px',
+        webkitBackfaceVisibility: 'hidden',
+        mozBackfaceVisibility: 'hidden',
+        backfaceVisibility: 'hidden',
+        webkitTransform: 'translateX(-50%) translateY(-50%)',
+        mozTransform: 'translateX(-50%) translateY(-50%)',
+        msTransform: 'translateX(-50 %) translateY(-50 %)',
+        transform: 'translateX(-50%) translateY(-50%)'
     }
 };
 
@@ -49,6 +63,7 @@ ModalWrapper.propTypes = {
     onAfterOpen: PropTypes.func,
     onRequestClose: PropTypes.func.isRequired,
     contentLabel: PropTypes.string.isRequired,
-}
+    children: PropTypes.element
+};
 
 export default ModalWrapper;

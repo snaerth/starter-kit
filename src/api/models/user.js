@@ -35,6 +35,18 @@ const schema = {
     type: String,
     required: false
   },
+  thumbnailUrl: {
+    type: String,
+    required: false
+  },
+  dateOfBirth: {
+    type: Date,
+    required: false
+  },
+  phone: {
+    type: String,
+    required: false
+  },
   resetPasswordToken: {
     type: String,
     required: false
@@ -52,7 +64,7 @@ const schema = {
 const userSchema = new Schema(schema);
 
 // On save, encrypt password Before saving user model, run this function
-userSchema.pre('save', function(next) {
+userSchema.pre('save', function (next) {
   const user = this;
 
   // Generate a salt
@@ -73,9 +85,9 @@ userSchema.pre('save', function(next) {
 });
 
 // Compare password to encrypted password
-userSchema.methods.comparePassword = function(candidatePassword, callback) {
+userSchema.methods.comparePassword = function (candidatePassword, callback) {
   bcrypt
-    .compare(candidatePassword, this.password, function(error, isMatch) {
+    .compare(candidatePassword, this.password, function (error, isMatch) {
       if (error) {
         return callback(error);
       }
