@@ -5,6 +5,7 @@ import styles from './profile.scss';
 import CircleImage from '../../components/common/circleImage';
 import ModalWrapper from '../../components/common/modal';
 import classnames from 'classnames';
+import { processImage } from '../../utils/stackBlur';
 
 class Profile extends Component {
     static propTypes = {
@@ -25,15 +26,10 @@ class Profile extends Component {
     }
 
     componentDidMount() {
-        const c = this.refs.imageCanvas;
-        const ctx = c.getContext('2d');
-        let image = new Image();
-        image.src = 'http://localhost:3000/images/users/11870894_10200772623674985_6112941039389153046_n-thumbnail.jpg';
-                
-        image.onload = () => {
-            const aspectRatio = image.width/image.height;
-            ctx.filter = 'blur(50px)';
-            ctx.drawImage(image, 0, 0, 256, 256  * aspectRatio);
+        let img = new Image();
+        img.src = 'http://localhost:3000/images/users/bio.PNG';
+        img.onload = () => {
+            processImage(img, 'canvas-blur', 35);
         };
     }
 
@@ -64,11 +60,9 @@ class Profile extends Component {
                     </div>
                     <div className={styles.card}>
                         <h2 className={styles.noMarginTop}>Extra information</h2>
-                        <canvas id="canvas" ref='imageCanvas'></canvas>
+                        <canvas height="375" width="500" className="canvas-blur" />
                     </div>
                 </div>
-
-                <button onClick={this.renderCanvas}>Canvas</button>
 
                 <ModalWrapper
                     isOpen={this.state.modalIsOpen}
