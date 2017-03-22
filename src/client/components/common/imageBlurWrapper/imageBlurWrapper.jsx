@@ -30,7 +30,9 @@ class ImageBlurWrapper extends Component {
         let imgBig = new Image();
         imgBig.src = src;
         imgBig.onload = () => {
+            setTimeout(() => {
             this.setState({loaded: true});
+            }, 3000);
         };
     }
 
@@ -41,14 +43,10 @@ class ImageBlurWrapper extends Component {
                 <img
                     src={src}
                     alt={alt}
-                    className={classnames(styles.image, this.state.loaded
-                    ? styles.show
-                    : '')}/>
+                    className={classnames(styles.image, this.state.loaded ? styles.show: '')}/>
                 <canvas
                     id={'canvas-blur-' + id}
-                    className={classnames(styles.canvas, this.state.loaded
-                    ? styles.hide
-                    : '')}/>
+                    className={classnames(styles.canvas, this.state.loaded ? styles.hide : '')}/>
             </div>
         );
     }
@@ -59,7 +57,8 @@ ImageBlurWrapper.propTypes = {
     alt: PropTypes.string.isRequired,
     thumbnail: PropTypes.string.isRequired,
     blur: PropTypes.string,
-    id: PropTypes.string.isRequired
+    id: PropTypes.string.isRequired,
+    circle: PropTypes.bool
 };
 
 export default ImageBlurWrapper;

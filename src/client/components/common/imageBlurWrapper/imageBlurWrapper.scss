@@ -6,7 +6,7 @@
     width: 100%;
     height: 100%;
     margin: auto;
-    transition: visibility 3s linear, opacity .3s;
+    transition: visibility 2s linear, opacity .2s;
 }
 
 .hide {
@@ -19,7 +19,7 @@
     visibility: hidden;
     backface-visibility: hidden;
     opacity: 0;
-    transition: visibility 0s linear 0s, opacity .4s .2s;
+    transition: visibility 0s linear 0s, opacity .3s .15s;
 }
 
 .show {

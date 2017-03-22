@@ -66,6 +66,7 @@ class Profile extends Component {
                             id="1"
                             src={`images/users/${imageUrl}`}
                             thumbnail={`images/users/fc43dca0-0f22-11e7-bf9f-edd63dbec35d-thumbnail.jpg`}
+                            circle={true}
                             alt={name}/>
                     </div>
                 </div>
