@@ -72,21 +72,13 @@ const shg_table = [
 ];
 
 
-export function processImage(img, canvas, radius, blurAlphaChannel) {
-  if (typeof(canvas) == 'string') {
-    var canvas = document.querySelector('.' + canvas);
-  } else if (typeof HTMLCanvasElement !== 'undefined' && !canvas instanceof HTMLCanvasElement) {
-    return;
-  }
-
-  var w = img.naturalWidth;
-  var h = img.naturalHeight;
-  canvas.style.width = w + 'px';
-  canvas.style.height = h + 'px';
+export function processImage(img, canvas, radius) {
+  const w = img.naturalWidth;
+  const h = img.naturalHeight;
   canvas.width = w;
   canvas.height = h;
 
-  var context = canvas.getContext('2d');
+  const context = canvas.getContext('2d');
   context.clearRect(0, 0, w, h);
   context.drawImage(img, 0, 0);
 
@@ -96,14 +88,8 @@ export function processImage(img, canvas, radius, blurAlphaChannel) {
 }
 
 function getImageDataFromCanvas(canvas, top_x, top_y, width, height) {
-  if (typeof(canvas) == 'string') {
-    var canvas = document.getElementById(canvas);
-  } else if (typeof HTMLCanvasElement !== 'undefined' && !canvas instanceof HTMLCanvasElement) {
-    return;
-  }
-
-  var context = canvas.getContext('2d');
-  var imageData;
+  const context = canvas.getContext('2d');
+  let imageData = null;
 
   try {
     try {
@@ -122,41 +108,43 @@ function processCanvasRGB(canvas, top_x, top_y, width, height, radius) {
   if (isNaN(radius) || radius < 1) return;
   radius |= 0;
 
-  var imageData = getImageDataFromCanvas(canvas, top_x, top_y, width, height);
+  let imageData = getImageDataFromCanvas(canvas, top_x, top_y, width, height);
   imageData = processImageDataRGB(imageData, top_x, top_y, width, height, radius);
 
   canvas.getContext('2d').putImageData(imageData, top_x, top_y);
 }
 
 function processImageDataRGB(imageData, top_x, top_y, width, height, radius) {
-  var pixels = imageData.data;
+  const pixels = imageData.data;
 
-  var x, y, i, p, yp, yi, yw, r_sum, g_sum, b_sum,
+  let x, y, i, p, yp, yi, yw, r_sum, g_sum, b_sum,
     r_out_sum, g_out_sum, b_out_sum,
     r_in_sum, g_in_sum, b_in_sum,
     pr, pg, pb, rbs;
 
-  var div = radius + radius + 1;
-  var w4 = width << 2;
-  var widthMinus1 = width - 1;
-  var heightMinus1 = height - 1;
-  var radiusPlus1 = radius + 1;
-  var sumFactor = radiusPlus1 * (radiusPlus1 + 1) / 2;
+  const div = radius + radius + 1;
+  const widthMinus1 = width - 1;
+  const heightMinus1 = height - 1;
+  const radiusPlus1 = radius + 1;
+  const sumFactor = radiusPlus1 * (radiusPlus1 + 1) / 2;
 
-  var stackStart = new BlurStack();
-  var stack = stackStart;
+  const stackStart = new BlurStack();
+  let stack = stackStart;
+  let stackEnd = null;
   for (i = 1; i < div; i++) {
     stack = stack.next = new BlurStack();
-    if (i == radiusPlus1) var stackEnd = stack;
+    if (i == radiusPlus1) {
+      stackEnd = stack;
+    }
   }
   stack.next = stackStart;
-  var stackIn = null;
-  var stackOut = null;
+  let stackIn = null;
+  let stackOut = null;
 
   yw = yi = 0;
 
-  var mul_sum = mul_table[radius];
-  var shg_sum = shg_table[radius];
+  const mul_sum = mul_table[radius];
+  const shg_sum = shg_table[radius];
 
   for (y = 0; y < height; y++) {
     r_in_sum = g_in_sum = b_in_sum = r_sum = g_sum = b_sum = 0;
