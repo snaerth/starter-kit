@@ -1,5 +1,7 @@
 import React, { PropTypes } from 'react';
 import Modal from 'react-modal';
+import styles from './modalWrapper.scss';
+import ExitIcon from '../../../common/svg/exit.svg';
 
 const ModalStyles = {
     overlay: {
@@ -9,11 +11,11 @@ const ModalStyles = {
         right: 0,
         bottom: 0,
         backgroundColor: 'rgba(55, 58, 71, 0.9)',
-        webkitTransitionDuration: '0.5s',
+        WebkitTransitionDuration: '0.5s',
         transitionDuration: '0.5s',
-        webkitTransition: 'opacity 0.3s',
+        WebkitTransition: 'opacity 0.3s',
         transition: 'opacity 0.3s',
-        webkitBackfaceVisibility: 'hidden'
+        WebkitBackfaceVisibility: 'hidden'
     },
     content: {
         overflow: 'auto',
@@ -26,8 +28,6 @@ const ModalStyles = {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        pointerEvents: 'none',
-        width: '50%',
         height: 'auto',
         top: '50%',
         left: '50%',
@@ -35,13 +35,17 @@ const ModalStyles = {
         right: 'initial',
         maxWidth: '960px',
         minWidth: '320px',
-        webkitBackfaceVisibility: 'hidden',
-        mozBackfaceVisibility: 'hidden',
+        WebkitBackfaceVisibility: 'hidden',
+        MozBackfaceVisibility: 'hidden',
         backfaceVisibility: 'hidden',
-        webkitTransform: 'translateX(-50%) translateY(-50%)',
-        mozTransform: 'translateX(-50%) translateY(-50%)',
-        msTransform: 'translateX(-50 %) translateY(-50 %)',
+        WebkitTransform: 'translateX(-50%) translateY(-50%)',
+        MozTransform: 'translateX(-50%) translateY(-50%)',
+        MsTransform: 'translateX(-50 %) translateY(-50 %)',
         transform: 'translateX(-50%) translateY(-50%)'
+    },
+    contentInner: {
+        position: 'relative',
+        paddingTop: '30px'
     }
 };
 
@@ -53,7 +57,10 @@ const ModalWrapper = (props) => {
         <Modal
             {...props}
             style={ModalStyles}>
-            {props.children}
+            <div style={ModalStyles.contentInner}>
+                <ExitIcon className={styles.exit} onClick={props.onRequestClose}/>
+                {props.children}
+            </div>
         </Modal>
     );
 };

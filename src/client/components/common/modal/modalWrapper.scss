@@ -1,0 +1,13 @@
+@import '../../../styles/variables.scss';
+
+.exit {
+    position: absolute;
+    right: 0;
+    top: 0;
+    fill: $text-dark;
+    cursor: pointer;
+    transition: fill $hover-transition;
+    &:hover {
+        fill:$primary-black;
+    }
+}
