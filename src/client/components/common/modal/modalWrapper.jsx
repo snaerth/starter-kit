@@ -23,7 +23,7 @@ const ModalStyles = {
         borderRadius: '2px',
         border: 'none',
         outline: 'none',
-        padding: '1em',
+        padding: '45px 20px 20px',
         position: 'fixed',
         display: 'flex',
         alignItems: 'center',
@@ -42,10 +42,6 @@ const ModalStyles = {
         MozTransform: 'translateX(-50%) translateY(-50%)',
         MsTransform: 'translateX(-50 %) translateY(-50 %)',
         transform: 'translateX(-50%) translateY(-50%)'
-    },
-    contentInner: {
-        position: 'relative',
-        paddingTop: '30px'
     }
 };
 
@@ -57,7 +53,7 @@ const ModalWrapper = (props) => {
         <Modal
             {...props}
             style={ModalStyles}>
-            <div style={ModalStyles.contentInner}>
+            <div>
                 <ExitIcon className={styles.exit} onClick={props.onRequestClose}/>
                 {props.children}
             </div>

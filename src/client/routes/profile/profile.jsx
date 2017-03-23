@@ -22,9 +22,6 @@ class Profile extends Component {
         this.openModal = this
             .openModal
             .bind(this);
-        this.afterOpenModal = this
-            .afterOpenModal
-            .bind(this);
         this.closeModal = this
             .closeModal
             .bind(this);
@@ -34,20 +31,16 @@ class Profile extends Component {
         this.setState({ modalIsOpen: true });
     }
 
-    afterOpenModal() {
-        console.log('Modal has opened');
-    }
-
     closeModal() {
         this.setState({ modalIsOpen: false });
     }
 
     render() {
-        //const { name, imageUrl, thumbnailUrl, email } = this.props.user;
-        const name = 'Snær Seljan Þóroddsson';
-        const imageUrl = '11870894_10200772623674985_6112941039389153046_n.jpg';
-        const thumbnailUrl = '11870894_10200772623674985_6112941039389153046_n-thumbnail.jpg';
-        const email = 'snaerth@gmail.com';
+        const { name, imageUrl, thumbnailUrl, email } = this.props.user;
+        // const name = 'Snær Seljan Þóroddsson';
+        // const imageUrl = '11870894_10200772623674985_6112941039389153046_n.jpg';
+        // const thumbnailUrl = '11870894_10200772623674985_6112941039389153046_n-thumbnail.jpg';
+        // const email = 'snaerth@gmail.com';
         return (
             <div className="container">
                 <div className={styles.grid}>
@@ -70,7 +63,6 @@ class Profile extends Component {
 
                 <ModalWrapper
                     isOpen={this.state.modalIsOpen}
-                    onAfterOpen={this.afterOpenModal}
                     onRequestClose={this.closeModal}
                     contentLabel="Image Modal">
                     <ImageBlurWrapper

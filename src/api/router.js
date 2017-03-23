@@ -5,7 +5,8 @@ import {
   forgotPassword,
   resetPassword,
   isAdmin,
-  uploadUserImage
+  uploadUserImage,
+  updateUser
 } from './controllers/authentication';
 import {getNews, deleteNews, createNews, updateNews} from './controllers/news';
 import {jwtLogin, localLogin} from './services/passport';
@@ -32,6 +33,7 @@ export default function (app) {
 
   // Upload images
   app.post('/userimage', requireAuth, uploadUserImage);
+  app.put('/user', requireAuth, updateUser);
 
   // News
   app.get('/api/news', [

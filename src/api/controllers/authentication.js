@@ -42,6 +42,71 @@ export function signup(req, res) {
 }
 
 /**
+ * Updates user and save to database
+ *
+ * @param {Object} req
+ * @param {Object} res
+ * @returns {Object} res
+ * @author Snær Seljan Þóroddsson
+ */
+export function updateUser(req, res) {
+    // if (!req.body) {
+    //     return res
+    //         .status(422)
+    //         .send({ error: 'No post data found' });
+    // }
+    
+
+    // const {user, email, password, name, imageUrl, thumbnailUrl, dateOfBirth, phone } = req.body;
+    
+    // if(!user) {
+    //     return res
+    //         .status(422)
+    //         .send({ error: 'No user found' });
+    // }
+
+    
+    // // ToDO check password
+    // // TODO create new images and delete old ones
+    // // Validate dateOfBirth
+    // // Validate all
+
+    // // Validate post request inputs Check for if user exists by email, Save user in
+    // // database Send response object with user token and user information
+    // validateSignup({ email, password, name, dateOfBirth })
+    //     .then(() => findUserByEmail(email)
+    //     .then(user => {
+    //         user.email = email;
+    //         user.password = password;
+    //         user.name = name;
+    //         user.dateOfBirth = dateOfBirth;
+    //         user.phone = phone;
+    //         updatedUser.imageUrl = fileName + ext;
+    //         return resizeImage(image.path, imgPath, 400);
+    //     })
+    //     .then(() => resizeImage(image.path, thumbnailPath, 27))
+    //     .then(() => {
+    //         updatedUser.thumbnailUrl = fileName + '-thumbnail' + ext;
+    //         return deleteFile(image.path);
+    //     })
+    //     .then(() => updateUserWithImage(updatedUser))
+    //     .then(data => res.status(200).json(data))
+    //     .catch(error => res.status(422).send({ error }));
+    
+
+    // // Save new user to databases
+    // user.save((error) => {
+    //     if (error) {
+    //         return res.status(422).send({ error });
+    //     }
+
+    //     let { name, email, imageUrl, thumbnailUrl, roles } = user;
+
+    //     return res.status(200).json({ token: tokenForUser(user), user: { name, email, imageUrl, thumbnailUrl, roles } });
+    // });
+}
+
+/**
  * Upload user image to file system
  *
  * @param {Object} req
@@ -52,7 +117,7 @@ export function signup(req, res) {
 export function uploadUserImage(req, res) {
     const { email } = req.user;
     const form = formidable.IncomingForm({
-        uploadDir: process.cwd() + '/assets/images/users'
+        uploadDir: './assets/images/users'
     });
 
     form.on('error', () => {
@@ -74,6 +139,21 @@ export function uploadUserImage(req, res) {
             findUserByEmail(email)
                 .then(user => {
                     updatedUser = user;
+                    let promises = [];
+                    const rootImagePath = './assets/images/users/';
+                    const {imageUrl, thumbnailUrl} = user;
+
+                    if(imageUrl) {
+                        promises.push(deleteFile(rootImagePath + imageUrl));
+                    }
+
+                    if(thumbnailUrl) {
+                        promises.push(deleteFile(rootImagePath + thumbnailUrl));
+                    }
+                        
+                    return Promise.all([promises]);
+                })
+                .then(() => {
                     updatedUser.imageUrl = fileName + ext;
                     return resizeImage(image.path, imgPath, 400);
                 })
@@ -82,7 +162,7 @@ export function uploadUserImage(req, res) {
                     updatedUser.thumbnailUrl = fileName + '-thumbnail' + ext;
                     return deleteFile(image.path);
                 })
-                .then(() => updateUser(updatedUser))
+                .then(() => updateUserWithImage(updatedUser))
                 .then(data => res.status(200).json(data))
                 .catch(error => res.status(422).send({ error }));
         } else {
@@ -128,13 +208,13 @@ function checkUserByEmail(email) {
         // See if user with given email exists
         User.findOne({
             email
-        }, (error, existingUser) => {
+        }, (error, user) => {
             if (error) {
                 return reject(error);
             }
 
             // If a user does exist, return error
-            if (existingUser) {
+            if (user) {
                 return reject('Email is in use');
             }
 
@@ -150,7 +230,7 @@ function checkUserByEmail(email) {
  * @returns {Promise}
  * @author Snær Seljan Þóroddsson
  */
-function updateUser(user) {
+function updateUserWithImage(user) {
     return new Promise((resolve, reject) => {
         // Save new user to databases
         user.save((error) => {
@@ -213,7 +293,7 @@ function saveUser({ name, email, password, message, fileName }) {
  * @returns {Object} res
  * @author Snær Seljan Þóroddsson
  */
-function validateSignup({ email, password, name }) {
+function validateSignup({ email, password, name, dateOfBirth }) {
     return new Promise((resolve, reject) => {
         // Check if email, password or message exist in request
         if (!email || !password || !name) {
@@ -235,6 +315,10 @@ function validateSignup({ email, password, name }) {
         // Name has to have aleast two names
         if (!/^([^0-9]*)$/.test(name) || name.trim().split(' ').length < 2) {
             return reject('Name has aleast two 2 names consisting of letters');
+        }
+
+        if(dateOfBirth && !Date.parse(dateOfBirth)) {
+            return reject('Date is not in valid format. Try DD.MM.YYYY');
         }
 
         return resolve();
