@@ -21,7 +21,7 @@ class ImageBlurWrapper extends Component {
     componentDidMount() {
         const {blur, thumbnail, src, id} = this.props;
         let img = new Image();
-        img.src = thumbnail;
+        img.src = thumbnail || 'images/public/person-placeholder-thumbnail.png';
         img.onload = () => {
             let canvas = document.getElementById('canvas-blur-' + id);
             processImage(img, canvas, blur || 10);
