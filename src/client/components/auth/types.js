@@ -8,5 +8,6 @@ export const FORGOT_PASSWORD_ERROR = 'forgot_password_error';
 export const RESET_PASSWORD_SUCCESS = 'reset_password_success';
 export const RESET_PASSWORD_ERROR = 'reset_password_error';
 export const SET_PREVIEW_USER_IMAGE = 'set_preview_user_image';
+export const USER_UPDATED = 'add_user_image_success';
 export const IS_FETCHING = 'is_fetching';
 export const CLEAN = 'clean';

@@ -10,6 +10,7 @@ import {
     RESET_PASSWORD_SUCCESS,
     RESET_PASSWORD_ERROR,
     SET_PREVIEW_USER_IMAGE,
+    USER_UPDATED,
     IS_FETCHING,
     CLEAN
 } from './types';
@@ -90,25 +91,39 @@ export function signupUser({ email, password, name, formData }) {
                         : '',
                     user: response.data.user
                 };
-
                 // Save token to localStorage
                 localStorage.setItem('user', JSON.stringify(response.data));
+                // Dispatch admin action to authReducer
+                dispatch({ type: SIGNUP_USER, payload });
+                // Reroute user to home page
+                browserHistory.push('/');
 
-                if (formData) {
-                    const config = {
-                        headers: {
-                            authorization: response.data.token
-                        }
-                    };
-                    // Upload user image
-                    return axios.post('/api/userimage', formData, config);
-                } else {
-                    // Dispatch admin action to authReducer
-                    dispatch({ type: SIGNUP_USER, payload });
-                    // Reroute user to home page
-                    browserHistory.push('/');
-                }
             })
+            .catch(error => dispatch(authError(AUTH_ERROR, error)));
+    };
+}
+
+/**
+ * Add user image to user
+ * Post request to /api/userimage to save user image
+ * if success dispatch action ADD_USER_IMAGE_SUCCESS
+ * if auth error dispatch error auth
+ *
+ * @param {Object} formData
+ * @param {String} token
+ * @returns {undefined}
+ * @author Snær Seljan Þóroddsson
+ */
+export function addUserImage(formData, token) {
+    return function (dispatch) {
+        const config = {
+            headers: {
+                authorization: token
+            }
+        };
+
+        axios
+            .post('/api/userimage', formData, config)
             .then(response => {
                 const payload = {
                     role: (response.data.role && response.data.role === 'admin')
@@ -116,10 +131,10 @@ export function signupUser({ email, password, name, formData }) {
                         : '',
                     user: response.data.user
                 };
-                // Dispatch admin action to authReducer
-                dispatch({ type: SIGNUP_USER, payload });
+                // Dispatch USER_UPDATED action to authReducer
+                dispatch({ type: USER_UPDATED, payload });
                 // Save token to localStorage
-                localStorage.setItem('user', JSON.stringify(response.data));
+                localStorage.setItem('user', JSON.stringify(payload));
                 // Reroute user to home page
                 browserHistory.push('/');
             })

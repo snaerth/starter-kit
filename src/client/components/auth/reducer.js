@@ -8,6 +8,7 @@ import {
     RESET_PASSWORD_SUCCESS,
     RESET_PASSWORD_ERROR,
     SET_PREVIEW_USER_IMAGE,
+    USER_UPDATED,
     IS_FETCHING,
     CLEAN
 } from './types';
@@ -46,6 +47,7 @@ export default function (state = initialState, action) {
                 isFetching: false,
                 authenticated: false
             };
+        case USER_UPDATED:
         case SIGNUP_USER:
             return {
                 ...state,

@@ -1,7 +1,7 @@
 import { validateEmail } from '../services/utils';
 import sendMail from '../services/mailService';
 import { resizeImage } from '../services/imageService';
-import { deleteFile } from '../services/fileService';
+import { checkFileAndDelete } from '../services/fileService';
 import User from '../models/user';
 import jwt from 'jwt-simple';
 import crypto from 'crypto';
@@ -24,11 +24,7 @@ const { PORT, HOST } = config();
  * @author Snær Seljan Þóroddsson
  */
 export function signup(req, res) {
-    if (!req.body) {
-        return res
-            .status(422)
-            .send({ error: 'No post data found' });
-    }
+    if (!req.body) return res.status(422).send({ error: 'No post data found' });
 
     const { email, password, name } = req.body;
 
@@ -50,60 +46,38 @@ export function signup(req, res) {
  * @author Snær Seljan Þóroddsson
  */
 export function updateUser(req, res) {
-    // if (!req.body) {
-    //     return res
-    //         .status(422)
-    //         .send({ error: 'No post data found' });
-    // }
-    
+    if (!req.body) return res.status(422).send({ error: 'No post data found' });
+    if (!req.user) return res.status(422).send({ error: 'No user found' });
 
-    // const {user, email, password, name, imageUrl, thumbnailUrl, dateOfBirth, phone } = req.body;
-    
-    // if(!user) {
-    //     return res
-    //         .status(422)
-    //         .send({ error: 'No user found' });
-    // }
+    const { user, email, password, newPassword, name, dateOfBirth, phone } = req.body;
 
-    
-    // // ToDO check password
-    // // TODO create new images and delete old ones
-    // // Validate dateOfBirth
-    // // Validate all
+    validateSignup({ email, password, newPassword, name, dateOfBirth })
+        .then(() => findUserByEmail(email))
+        .then(user => {
+            user.email = email;
+            user.password = password;
+            user.name = name;
+            user.dateOfBirth = dateOfBirth;
+            user.phone = phone;
+            return user.comparePassword(password)
+        })
+        .then(isMatch => {
+            if (!isMatch) {
+                return res.status(422).send({ error: 'Password does not match old password' });
+            }
 
-    // // Validate post request inputs Check for if user exists by email, Save user in
-    // // database Send response object with user token and user information
-    // validateSignup({ email, password, name, dateOfBirth })
-    //     .then(() => findUserByEmail(email)
-    //     .then(user => {
-    //         user.email = email;
-    //         user.password = password;
-    //         user.name = name;
-    //         user.dateOfBirth = dateOfBirth;
-    //         user.phone = phone;
-    //         updatedUser.imageUrl = fileName + ext;
-    //         return resizeImage(image.path, imgPath, 400);
-    //     })
-    //     .then(() => resizeImage(image.path, thumbnailPath, 27))
-    //     .then(() => {
-    //         updatedUser.thumbnailUrl = fileName + '-thumbnail' + ext;
-    //         return deleteFile(image.path);
-    //     })
-    //     .then(() => updateUserWithImage(updatedUser))
-    //     .then(data => res.status(200).json(data))
-    //     .catch(error => res.status(422).send({ error }));
-    
+            user.password = newPassword;
 
-    // // Save new user to databases
-    // user.save((error) => {
-    //     if (error) {
-    //         return res.status(422).send({ error });
-    //     }
-
-    //     let { name, email, imageUrl, thumbnailUrl, roles } = user;
-
-    //     return res.status(200).json({ token: tokenForUser(user), user: { name, email, imageUrl, thumbnailUrl, roles } });
-    // });
+            // Save new user to databases
+            user.save((error) => {
+                if (error) {
+                    return res.status(422).send({ error });
+                }
+ 
+                return res.status(200).json({ user });
+            });
+        })
+        .catch(error => res.status(422).send({ error }));
 }
 
 /**
@@ -132,25 +106,24 @@ export function uploadUserImage(req, res) {
         if (image) {
             const ext = path.extname(image.name);
             const fileName = uuid();
-            const imgPath = `${form.uploadDir}/${fileName + ext}`;
-            const thumbnailPath = `${form.uploadDir}/${fileName + '-thumbnail' + ext}`;
+            const imgPath = form.uploadDir + fileName + ext;
+            const thumbnailPath = form.uploadDir + `${fileName + '-thumbnail' + ext}`;
             let updatedUser = {};
 
             findUserByEmail(email)
                 .then(user => {
                     updatedUser = user;
                     let promises = [];
-                    const rootImagePath = './assets/images/users/';
-                    const {imageUrl, thumbnailUrl} = user;
+                    const { imageUrl, thumbnailUrl } = user;
 
-                    if(imageUrl) {
-                        promises.push(deleteFile(rootImagePath + imageUrl));
+                    if (imageUrl) {
+                        promises.push(checkFileAndDelete(form.uploadDir + imageUrl));
                     }
 
-                    if(thumbnailUrl) {
-                        promises.push(deleteFile(rootImagePath + thumbnailUrl));
+                    if (thumbnailUrl) {
+                        promises.push(checkFileAndDelete(form.uploadDir + thumbnailUrl));
                     }
-                        
+
                     return Promise.all([promises]);
                 })
                 .then(() => {
@@ -160,7 +133,7 @@ export function uploadUserImage(req, res) {
                 .then(() => resizeImage(image.path, thumbnailPath, 27))
                 .then(() => {
                     updatedUser.thumbnailUrl = fileName + '-thumbnail' + ext;
-                    return deleteFile(image.path);
+                    return checkFileAndDelete(image.path);
                 })
                 .then(() => updateUserWithImage(updatedUser))
                 .then(data => res.status(200).json(data))
@@ -238,9 +211,8 @@ function updateUserWithImage(user) {
                 return reject(error);
             }
 
-            let { name, email, imageUrl, thumbnailUrl ,roles } = user;
-
-            return resolve({ token: tokenForUser(user), user: { name, email, imageUrl, thumbnailUrl, roles } });
+            delete user.password;
+            return resolve({ token: tokenForUser(user), user });
         });
     });
 }
@@ -252,19 +224,14 @@ function updateUserWithImage(user) {
  * @returns {Promise}
  * @author Snær Seljan Þóroddsson
  */
-function saveUser({ name, email, password, message, fileName }) {
+function saveUser({ name, email, password }) {
     return new Promise((resolve, reject) => {
         const newUser = {
             name,
             email,
             password,
-            message,
             roles: ['user']
         };
-
-        if (fileName) {
-            newUser.imageUrl = fileName;
-        }
 
         // If a user does not exist, create and save new user
         const user = new User(newUser);
@@ -275,9 +242,8 @@ function saveUser({ name, email, password, message, fileName }) {
                 return reject(error);
             }
 
-            let { name, email, imageUrl, roles } = user;
-
-            return resolve({ token: tokenForUser(user), user: { name, email, imageUrl, roles } });
+            delete user.password;
+            return resolve({ token: tokenForUser(user), user });
         });
     });
 }
@@ -288,12 +254,14 @@ function saveUser({ name, email, password, message, fileName }) {
  *
  * @param {String} email
  * @param {String} password
+ * @param {String} newPassword
  * @param {String} name
+ * @param {String} dateOfBirth
  * @param {Object} res
  * @returns {Object} res
  * @author Snær Seljan Þóroddsson
  */
-function validateSignup({ email, password, name, dateOfBirth }) {
+function validateSignup({ email, password, newPassword, name, dateOfBirth }) {
     return new Promise((resolve, reject) => {
         // Check if email, password or message exist in request
         if (!email || !password || !name) {
@@ -303,6 +271,7 @@ function validateSignup({ email, password, name, dateOfBirth }) {
         if (!validateEmail(email)) {
             return reject(`${email} is not a valid email`);
         }
+
         // Check if password length is longer then 6 characters
         if (password.length < 6) {
             return reject('Password must be of minimum length 6 characters');
@@ -312,12 +281,23 @@ function validateSignup({ email, password, name, dateOfBirth }) {
             return reject('Password must contain at least one number (0-9) and one uppercase letter (A-Z)');
         }
 
+        if (newPassword) {
+            // Check if password length is longer then 6 characters
+            if (newPassword.length < 6) {
+                return reject('New password must be of minimum length 6 characters');
+            }
+            // Check if password contains one number and one uppercase letter
+            if (!/[0-9]/.test(newPassword) || !/[A-Z]/.test(newPassword)) {
+                return reject('New password must contain at least one number (0-9) and one uppercase letter (A-Z)');
+            }
+        }
+
         // Name has to have aleast two names
         if (!/^([^0-9]*)$/.test(name) || name.trim().split(' ').length < 2) {
             return reject('Name has aleast two 2 names consisting of letters');
         }
 
-        if(dateOfBirth && !Date.parse(dateOfBirth)) {
+        if (dateOfBirth && !Date.parse(dateOfBirth)) {
             return reject('Date is not in valid format. Try DD.MM.YYYY');
         }
 

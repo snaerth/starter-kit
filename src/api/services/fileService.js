@@ -1,4 +1,5 @@
 import fs from 'fs';
+import path from 'path';
 
 const directorys = ['assets', 'assets/images', 'assets/images/users'];
 
@@ -26,13 +27,13 @@ export function createDefaultDirectorys() {
 /**
  * Deletes file from file system
  * 
- * @param {String} path - Path to file to delete
+ * @param {String} filePath - Path to file to delete
  * @returns {Promise}
  * @author Snær Seljan Þóroddsson
  */
-export function deleteFile(path) {
+export function deleteFile(filePath) {
     return new Promise((resolve, reject) => {
-        fs.unlink(path, error => {
+        fs.unlink(filePath, error => {
             if (error) {
                 return reject(error);
             }
@@ -40,5 +41,38 @@ export function deleteFile(path) {
             return resolve();
         });
     });
+}
 
+/**
+ * Checks if file exists
+ * 
+ * @param {String} filePath - Path to file to delete
+ * @returns {Promise}
+ * @author Snær Seljan Þóroddsson
+ */
+export function fileExists(filePath) {
+    return new Promise((resolve, reject) => {
+        path.exists(filePath, exists => {
+            if (!exists) {
+                return reject('File does not exist.');
+            }
+
+            return resolve();
+        });
+    });
+}
+
+/**
+ * Checks if file exist and if exist then deletes file
+ * 
+ * @param {String} filePath - Path to file to delete
+ * @returns {Promise}
+ * @author Snær Seljan Þóroddsson
+ */
+export function checkFileAndDelete(filePath) {
+    return new Promise((resolve, reject) => {
+        fileExists(filePath)
+            .then(() => deleteFile(filePath))
+            .catch(error => reject(error));
+    });
 }

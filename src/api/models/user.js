@@ -85,14 +85,17 @@ userSchema.pre('save', function (next) {
 });
 
 // Compare password to encrypted password
-userSchema.methods.comparePassword = function (candidatePassword, callback) {
-  bcrypt
-    .compare(candidatePassword, this.password, function (error, isMatch) {
+userSchema.methods.comparePassword = function (candidatePassword) {
+  return new Promise((resolve, reject) => {
+    bcrypt.compare(candidatePassword, this.password, function (error, isMatch) {
       if (error) {
-        return callback(error);
+        return reject(error);
       }
-      callback(null, isMatch);
+      
+      return resolve(isMatch);
     });
+  });
+
 };
 
 export default mongoose.model('user', userSchema);

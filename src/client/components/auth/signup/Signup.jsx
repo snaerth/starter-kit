@@ -62,22 +62,18 @@ class Signup extends Component {
      * @returns {undefined}
      * @author Snær Seljan Þóroddsson
      */
-    handleFormSubmit({email, password, name}) {
-        this
-            .props
-            .actions
-            .isFetching();
+    handleFormSubmit({ email, password, name }) {
+        this.props.actions.isFetching();
+        this.props.actions.signupUser({ email, password, name });
+
+        // TODO make async promise or something to wait for signup user
         let formData = null;
 
         if (this.props.image) {
             formData = new FormData();
             formData.append('image', this.props.image);
+            this.props.actions.addUserImage(formData);
         }
-
-        this
-            .props
-            .actions
-            .signupUser({ email, password, name, formData });
     }
 
     /**
@@ -131,7 +127,7 @@ class Signup extends Component {
     }
 
     render() {
-        const {handleSubmit, errorMessage, isFetching} = this.props;
+        const { handleSubmit, errorMessage, isFetching } = this.props;
 
         return (
             <div className="card">
@@ -209,7 +205,7 @@ class Signup extends Component {
  * @return {Object} errors
  * @author Snær Seljan Þóroddsson
  */
-function validate({email, password, name}) {
+function validate({ email, password, name }) {
     const errors = {};
 
     // Email
