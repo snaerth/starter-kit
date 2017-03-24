@@ -32,7 +32,16 @@ export function signup(req, res) {
     // database Send response object with user token and user information
     validateSignup({ email, password, name })
         .then(() => checkUserByEmail(email))
-        .then(() => saveUser({ email, password, name }))
+        .then(() => {
+            const user = new User({
+                name,
+                email,
+                password,
+                roles: ['user']
+            });
+
+            return saveUser(user);
+        })
         .then(data => res.status(200).json(data))
         .catch(error => res.status(422).send({ error }));
 }
@@ -69,14 +78,9 @@ export function updateUser(req, res) {
             user.password = newPassword;
 
             // Save new user to databases
-            user.save((error) => {
-                if (error) {
-                    return res.status(422).send({ error });
-                }
- 
-                return res.status(200).json({ user });
-            });
+            return saveUser(user);
         })
+        .then(data => res.status(200).json(data))
         .catch(error => res.status(422).send({ error }));
 }
 
@@ -86,8 +90,7 @@ export function updateUser(req, res) {
  * @param {Object} req
  * @param {Object} res
  * @returns {Object} res
- * @author Snær Seljan Þóroddsson
- */
+ * @author Snær Seljan Þóroddsson */
 export function uploadUserImage(req, res) {
     const { email } = req.user;
     const form = formidable.IncomingForm({
@@ -135,7 +138,7 @@ export function uploadUserImage(req, res) {
                     updatedUser.thumbnailUrl = fileName + '-thumbnail' + ext;
                     return checkFileAndDelete(image.path);
                 })
-                .then(() => updateUserWithImage(updatedUser))
+                .then(() => saveUser(updatedUser))
                 .then(data => res.status(200).json(data))
                 .catch(error => res.status(422).send({ error }));
         } else {
@@ -197,54 +200,27 @@ function checkUserByEmail(email) {
 }
 
 /**
- * Updates user and save to database
- *
- * @param {Object} props - User properties
- * @returns {Promise}
- * @author Snær Seljan Þóroddsson
- */
-function updateUserWithImage(user) {
-    return new Promise((resolve, reject) => {
-        // Save new user to databases
-        user.save((error) => {
-            if (error) {
-                return reject(error);
-            }
-
-            delete user.password;
-            return resolve({ token: tokenForUser(user), user });
-        });
-    });
-}
-
-/**
  * Create new user and save to database
  *
- * @param {Object} fields - Object with props name, email, password, message
+ * @param {Object} user - Mongoose user schema object
  * @returns {Promise}
  * @author Snær Seljan Þóroddsson
  */
-function saveUser({ name, email, password }) {
+function saveUser(user) {
     return new Promise((resolve, reject) => {
-        const newUser = {
-            name,
-            email,
-            password,
-            roles: ['user']
-        };
+        if (user.constructor.name === 'model') {
+            // Save user to databases
+            user.save((error) => {
+                if (error) {
+                    return reject(error);
+                }
 
-        // If a user does not exist, create and save new user
-        const user = new User(newUser);
-
-        // Save user to databases
-        user.save((error) => {
-            if (error) {
-                return reject(error);
-            }
-
-            delete user.password;
-            return resolve({ token: tokenForUser(user), user });
-        });
+                delete user.password;
+                return resolve({ token: tokenForUser(user), user });
+            });
+        } else {
+            return reject('Object is not a mongoose object');
+        }
     });
 }
 
@@ -404,13 +380,7 @@ function attachTokenToUser({ token, email }) {
             user.resetPasswordExpires = Date.now() + (60 * 60 * 1000); // 1 hour
 
             // Save user to databases
-            user.save((error) => {
-                if (error) {
-                    return reject(error);
-                }
-
-                return resolve({ user, token });
-            });
+            return saveUser(user);
         });
     });
 }
