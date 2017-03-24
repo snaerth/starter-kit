@@ -3,10 +3,10 @@ const path = require('path');
 const CONFIG = require('./webpack.base');
 const externals = require('webpack-node-externals');
 const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
-const {API_ENTRY, API_OUTPUT} = CONFIG;
+const { API_ENTRY, API_OUTPUT } = CONFIG;
 
 const plugins = [
-    new webpack.DefinePlugin({
+  new webpack.DefinePlugin({
     'process.env': {
       'NODE_ENV': JSON.stringify(process.env.NODE_ENV),
       'PORT': JSON.stringify(process.env.APIPORT),
@@ -14,11 +14,15 @@ const plugins = [
       'DB_URL': JSON.stringify(process.env.DB_URL),
       'DB_USERNAME': JSON.stringify(process.env.DB_USERNAME),
       'DB_PASSWORD': JSON.stringify(process.env.DB_PASSWORD)
-    }
+    },
+    __CLIENT__: false,
+    __SERVER__: true,
+    __DEVELOPMENT__: false,
+    __DEVTOOLS__: false
   }),
   new webpack.NamedModulesPlugin(),
   new CaseSensitivePathsPlugin(),
-  new webpack.BannerPlugin({banner: 'require("source-map-support").install();', raw: true, entryOnly: false})
+  new webpack.BannerPlugin({ banner: 'require("source-map-support").install();', raw: true, entryOnly: false })
 ];
 
 // RULES

@@ -18,22 +18,22 @@ const {
 // Plugins
 const plugins = [
   new webpack
-  .optimize
-  .OccurrenceOrderPlugin(),
+    .optimize
+    .OccurrenceOrderPlugin(),
   new webpack
-  .optimize
-  .AggressiveMergingPlugin(),
+    .optimize
+    .AggressiveMergingPlugin(),
   new ExtractTextPlugin({
     filename: 'styles.css',
     allChunks: true
   }),
   new webpack
-  .optimize
-  .CommonsChunkPlugin({
-    name: 'vendor',
-    filename: 'vendor_[hash].js',
-    minChunks: 2
-  }),
+    .optimize
+    .CommonsChunkPlugin({
+      name: 'vendor',
+      filename: 'vendor_[hash].js',
+      minChunks: 2
+    }),
   new AssetsPlugin({
     filename: 'assets.json',
     prettyPrint: true
@@ -46,11 +46,15 @@ const plugins = [
       'NODE_ENV': JSON.stringify(process.env.NODE_ENV),
       'PORT': JSON.stringify(process.env.PORT),
       'HOST': JSON.stringify(process.env.HOST)
-    }
+    },
+    __CLIENT__: true,
+    __SERVER__: false,
+    __DEVELOPMENT__: false,
+    __DEVTOOLS__: false
   }),
   new webpack
-  .optimize
-  .UglifyJsPlugin(),
+    .optimize
+    .UglifyJsPlugin(),
   new webpack.LoaderOptionsPlugin({
     minimize: true,
     options: {
