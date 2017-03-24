@@ -10,7 +10,8 @@ import classnames from 'classnames';
 class Header extends Component {
     static propTypes = {
         authenticated: PropTypes.bool,
-        role: PropTypes.string
+        role: PropTypes.string,
+        name: PropTypes.string
     }
 
     /**
@@ -54,13 +55,7 @@ class Header extends Component {
                             {this.renderAuthLinks()}
                         </div>
                     </nav>
-                    <h1 className={styles.banner}>Sign up</h1>
-                    <nav>
-                        <Link to="/signup" activeClassName={styles.active} className={styles.link}>Hlekkur</Link>
-                        <Link to="/signup2" activeClassName={styles.active} className={styles.link}>Hlekkur 1</Link>
-                        <Link to="/signup3" activeClassName={styles.active} className={styles.link}>Hlekkur 2</Link>
-                        <Link to="/signup4" activeClassName={styles.active} className={styles.link}>Hlekkur 3</Link>
-                    </nav>
+                    <h1 className={styles.banner}>{this.props.name}</h1>
                 </div>
             </div>
         );

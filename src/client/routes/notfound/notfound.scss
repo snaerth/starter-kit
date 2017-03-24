@@ -1,0 +1,23 @@
+@import '../../styles/mixins.scss';
+@import '../../styles/variables.scss';
+.number {
+    @include responsive-font(15vw, 40px, 100px);
+    margin: 0;
+    display: inline-block;
+}
+
+.text {
+    @include responsive-font(10vw, 16px, 30px);
+    font-weight: bold;
+    max-width: 560px;
+}
+
+.linksContainer > div {
+    margin-bottom: 4px;
+}
+
+@media screen and (max-width: $max-768) {
+    .text {
+        font-weight: normal;
+    }
+}

@@ -3,7 +3,6 @@ import {connect} from 'react-redux';
 import {Link} from 'react-router';
 import styles from './signout.scss';
 import Button from '../../../components/common/button';
-import Banner from '../../../components/common/banner';
 import * as actions from '../../../components/auth/actions';
 
 /**
@@ -23,7 +22,6 @@ class Signout extends Component {
     render() {
         return (
             <div className="container">
-                <Banner text="SIGN OUT"/>
                 <div className={styles.center}>
                     <p>You have successfully been signed out. You can sign in again at any time.</p>
                     <br/>

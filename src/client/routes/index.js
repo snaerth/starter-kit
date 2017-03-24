@@ -19,7 +19,7 @@ export {
 
 export default (
   <Route path="/" component={App}>
-    <IndexRoute component={Home}  />
+    <IndexRoute component={Home} name="My application name" />
     <Route path="signin" name="Sign in" component={pageWrapper(Signin)}  />
     <Route path="signup" name="Sign up" component={pageWrapper(Signup)} />
     <Route path="signout" name="Sign out" component={pageWrapper(Signout)}  />
@@ -27,6 +27,6 @@ export default (
     <Route path="reset/:token" name="Reset password" component={pageWrapper(ResetPassword)}  />
     <Route path="profile" name="Profile" component={pageWrapper(Profile)} />
     <Route path="admin" name="Admin" component={requireAuth(pageWrapper(Admin), 'admin')} />
-    <Route path="*" component={pageWrapper(NotFound)} />
+    <Route path="*" name="404 Page not found" component={pageWrapper(NotFound)} />
   </Route>
 );

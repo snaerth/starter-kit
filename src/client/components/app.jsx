@@ -5,7 +5,7 @@ import Header from './common/header';
 
 const App = ({children, location}) => (
   <AppLayout>
-    <Header/>
+    <Header name={children.props.route.name}/>
     <ReactCSSTransitionGroup
       component="div"
       transitionName="fadeInScale"
