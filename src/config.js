@@ -21,6 +21,9 @@ export default() => {
         SESSION_SECRET: process.env.SESSION_SECRET || 'secret',
         // Email
         EMAIL_USERNAME: process.env.EMAIL_USERNAME || '',
-        EMAIL_PASSWORD: process.env.EMAIL_PASSWORD || ''
+        EMAIL_PASSWORD: process.env.EMAIL_PASSWORD || '',
+        // Google Recaptcha
+        RECAPTCHA_SITE_KEY: process.env.RECAPTCHA_SITE_KEY || '6Ld3NBoUAAAAAIcGj92iDd8O4pOZxB3j4hufgijG',
+        RECAPTCHA_SECRET_KEY: process.env.RECAPTCHA_SECRET_KEY || '6Ld3NBoUAAAAAJ0_HGIZbYR1d80zZX3vQOpmx1Yc'
     };
 };
