@@ -1,50 +1,72 @@
 @import '../../../styles/variables.scss';
 @import '../../../styles/mixins.scss';
-.container {
-  background: $linear-background-primary;
-  border-bottom: $border-height-light solid $border-color-light;
-  padding: 0.5em;
+.background {
+    background: $linear-background-primary;
+    background-image: radial-gradient(50% top, circle, $primary-pink 0%, $primary-pink-darker 75%), radial-gradient(right top, circle, $primary-pink 0%, $primary-pink-darker 57%);
+    background-repeat: no-repeat;
+    background-size: 100% 1000px;
+    margin: 0;
+    position: relative;
+    padding: 0.5em;
 }
 
-.containerInner {
-  max-width: $max-width;
-  margin: 0 auto;
-  display: grid;
-  grid-template-columns: 20% 80%;
+.container {
+    max-width: $max-width;
+    margin: 0 auto;
+}
+
+.navUpper {
+    display: grid;
+    grid-template-columns: 20% 80%;
+    padding-bottom: .6em;
+    border-bottom: 1px solid lighten($primary-pink, 18%);
+}
+
+.navUpper>div a:first-child {
+    margin-left: 0;
+}
+
+.navUpper>div a:last-child {
+    margin-right: 0;
 }
 
 a.link {
-  @include responsive-font(1.5vw, 16px, 18px);
-  text-decoration: none;
-  outline: none;
-  margin: 0 0.5em;
-  pointer-events: visible;
-  color: lighten($primary-pink, 18%);
-  &:hover {
-    color: $primary-white;
-  }
+    @include responsive-font(1.5vw, 16px, 18px);
+    text-decoration: none;
+    outline: none;
+    margin: 0 0.5em;
+    pointer-events: visible;
+    color: lighten($primary-pink, 18%);
+    &:hover {
+        color: $primary-white;
+    }
 }
 
 a.home_link {
-  color: lighten($primary-pink, 18%);
+    color: lighten($primary-pink, 18%);
 }
 
 a.active {
-  color: $primary-white;
+    color: $primary-white;
 }
 
 .links_right {
-  text-align: right;
+    text-align: right;
+}
+
+.banner {
+    text-align: center;
+    color: lighten($primary-pink, 18%);
 }
 
 @media only screen and (min-width: $min-320) {
-  .container {
-    padding: 0.5em;
-  }
+    .container {
+        padding: 0.5em;
+    }
 }
 
 @media only screen and (min-width: $max-768) {
-  .container {
-    padding: 0.6em;
-  }
+    .container {
+        padding: 0.6em;
+    }
 }

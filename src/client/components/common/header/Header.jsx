@@ -41,18 +41,27 @@ class Header extends Component {
 
     render() {
         return (
-            <div className={styles.container}>
-                <nav className={styles.containerInner}>
-                    <div>
-                        <IndexLink
-                            to="/"
-                            activeClassName={styles.active}
-                            className={classnames(styles.home_link, styles.link)}>Home</IndexLink>
-                    </div>
-                    <div className={styles.links_right}>
-                        {this.renderAuthLinks()}
-                    </div>
-                </nav>
+            <div className={styles.background}>
+                <div className={styles.container}>
+                    <nav className={styles.navUpper}>
+                        <div>
+                            <IndexLink
+                                to="/"
+                                activeClassName={styles.active}
+                                className={classnames(styles.home_link, styles.link)}>Home</IndexLink>
+                        </div>
+                        <div className={styles.links_right}>
+                            {this.renderAuthLinks()}
+                        </div>
+                    </nav>
+                    <h1 className={styles.banner}>Sign up</h1>
+                    <nav>
+                        <Link to="/signup" activeClassName={styles.active} className={styles.link}>Hlekkur</Link>
+                        <Link to="/signup2" activeClassName={styles.active} className={styles.link}>Hlekkur 1</Link>
+                        <Link to="/signup3" activeClassName={styles.active} className={styles.link}>Hlekkur 2</Link>
+                        <Link to="/signup4" activeClassName={styles.active} className={styles.link}>Hlekkur 3</Link>
+                    </nav>
+                </div>
             </div>
         );
     }

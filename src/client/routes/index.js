@@ -20,13 +20,13 @@ export {
 export default (
   <Route path="/" component={App}>
     <IndexRoute component={Home}  />
-    <Route path="signin" component={pageWrapper(Signin)}  />
-    <Route path="signup" component={pageWrapper(Signup)} />
-    <Route path="signout" component={pageWrapper(Signout)}  />
-    <Route path="forgotpassword" component={pageWrapper(ForgotPassword)}  />
-    <Route path="reset/:token" component={pageWrapper(ResetPassword)}  />
-    <Route path="profile" component={pageWrapper(Profile)} />
-    <Route path="admin" component={requireAuth(pageWrapper(Admin), 'admin')} />
+    <Route path="signin" name="Sign in" component={pageWrapper(Signin)}  />
+    <Route path="signup" name="Sign up" component={pageWrapper(Signup)} />
+    <Route path="signout" name="Sign out" component={pageWrapper(Signout)}  />
+    <Route path="forgotpassword" name="Forgot password" component={pageWrapper(ForgotPassword)}  />
+    <Route path="reset/:token" name="Reset password" component={pageWrapper(ResetPassword)}  />
+    <Route path="profile" name="Profile" component={pageWrapper(Profile)} />
+    <Route path="admin" name="Admin" component={requireAuth(pageWrapper(Admin), 'admin')} />
     <Route path="*" component={pageWrapper(NotFound)} />
   </Route>
 );

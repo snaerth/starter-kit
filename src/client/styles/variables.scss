@@ -3,6 +3,7 @@ $primary-purple: #7A29E7;
 $primary-red: #DC886C;
 $primary-green: #9ccc65;
 $primary-pink: #F478DC;
+$primary-pink-darker: #CC62EE;
 $primary-black: #000;
 $primary-white: #ffffff;
 $primary-card: #ffffff;
@@ -12,7 +13,8 @@ $navbar-background: #A9BAC2;
 $navbar-text: #586A6E;
 $text-dark: #666666;
     
-$linear-background-primary: linear-gradient(-135deg,#F478DC, #CC62EE);
+$linear-background-primary: linear-gradient(-135deg, $primary-pink, $primary-pink-darker);
+
 // Link
 $link-color: #404d5b;
 
