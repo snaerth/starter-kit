@@ -64,7 +64,6 @@ class Signup extends Component {
      */
     handleFormSubmit({ email, password, name }) {
         this.props.actions.isFetching();
-        this.props.actions.signupUser({ email, password, name });
 
         // TODO make async promise or something to wait for signup user
         let formData = null;
@@ -72,8 +71,9 @@ class Signup extends Component {
         if (this.props.image) {
             formData = new FormData();
             formData.append('image', this.props.image);
-            this.props.actions.addUserImage(formData);
         }
+
+        this.props.actions.signupUser({ email, password, name, formData });
     }
 
     /**

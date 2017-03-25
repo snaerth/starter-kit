@@ -68,7 +68,7 @@ export function updateUser(req, res) {
             user.name = name;
             user.dateOfBirth = dateOfBirth;
             user.phone = phone;
-            return user.comparePassword(password)
+            return user.comparePassword(password);
         })
         .then(isMatch => {
             if (!isMatch) {

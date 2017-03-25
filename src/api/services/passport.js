@@ -10,7 +10,7 @@ const {JWT_SECRET} = config();
 // Setup options for local strategy
 const localOptions = {
     usernameField: 'email',
-    passwordField: 'password',
+    passwordField: 'password'
 };
 
 // Create local strategy
@@ -27,19 +27,18 @@ export const localLogin = new LocalStrategy(localOptions, (email, password, done
         if (!user) {
             return done(null, false);
         }
-        
+
         // Compare password to encrypted password
-        user.comparePassword(password, (error, isMatch) => {
-            if (error) {
-                return done(error);
-            }
+        user
+            .comparePassword(password)
+            .then(isMatch => {
+                if (!isMatch) {
+                    return done(null, false);
+                }
 
-            if (!isMatch)  {
-                return done(null, false);
-            }
-
-            return done(null, user);
-        });
+                return done(null, user);
+            })
+            .catch(error => done(error));
     });
 });
 
@@ -65,17 +64,16 @@ export const jwtLogin = new JwtStrategy(jwtOptions, (payload, done) => {
     });
 });
 
-// Only the user ID is serialized to the session, 
-// keeping the amount of data stored within the session small
+// Only the user ID is serialized to the session, keeping the amount of data
+// stored within the session small
 passport.serializeUser((user, done) => {
-  done(null, user.id);
+    done(null, user.id);
 });
 
-// When subsequent requests are received, 
-// this ID is used to find the user, 
+// When subsequent requests are received, this ID is used to find the user,
 // which will be restored to req.user
-passport.deserializeUser((id, done) =>{
-  User.findById(id, (err, user) => {
-    done(err, user);
-  });
+passport.deserializeUser((id, done) => {
+    User.findById(id, (err, user) => {
+        done(err, user);
+    });
 });

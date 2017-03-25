@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { browserHistory } from 'react-router';
+import {browserHistory} from 'react-router';
 import {
     AUTH_USER,
     UNAUTH_USER,
@@ -22,7 +22,7 @@ import {
  * @author Snær Seljan Þóroddsson
  */
 export function isFetching() {
-    return { type: IS_FETCHING };
+    return {type: IS_FETCHING};
 }
 
 /**
@@ -33,7 +33,7 @@ export function isFetching() {
  * @author Snær Seljan Þóroddsson
  */
 export function setPreviewUserImage(image) {
-    return { type: SET_PREVIEW_USER_IMAGE, payload: image };
+    return {type: SET_PREVIEW_USER_IMAGE, payload: image};
 }
 
 /**
@@ -45,11 +45,11 @@ export function setPreviewUserImage(image) {
  * @returns {undefined}
  * @author Snær Seljan Þóroddsson
  */
-export function signinUser({ email, password }) {
+export function signinUser({email, password}) {
     return function (dispatch) {
         // Post email/password to api server for sign in Get token back from server
         axios
-            .post('/api/signin', { email, password })
+            .post('/api/signin', {email, password})
             .then(response => {
                 const payload = {
                     role: (response.data.role && response.data.role === 'admin')
@@ -58,7 +58,7 @@ export function signinUser({ email, password }) {
                     user: response.data.user
                 };
                 // Dispatch admin action to authReducer
-                dispatch({ type: AUTH_USER, payload });
+                dispatch({type: AUTH_USER, payload});
                 // Save token to localStorage
                 localStorage.setItem('user', JSON.stringify(response.data));
                 // Reroute user to home page
@@ -75,15 +75,15 @@ export function signinUser({ email, password }) {
  * Stores token in localStorage if response success and dispatches action AUTH_USER
  * if auth error dispatch error auth
  *
- * @param {Object} email, password, name, image
+ * @param {Object} email, password, name, formData
  * @returns {undefined}
  * @author Snær Seljan Þóroddsson
  */
-export function signupUser({ email, password, name, formData }) {
-    return function (dispatch) {
+export function signupUser({email, password, name, formData}) {
+    return dispatch => {
         // Post email/password to api server to register user Get token back from server
         axios
-            .post('/api/signup', { email, password, name })
+            .post('/api/signup', {email, password, name})
             .then(response => {
                 const payload = {
                     role: (response.data.role && response.data.role === 'admin')
@@ -91,13 +91,32 @@ export function signupUser({ email, password, name, formData }) {
                         : '',
                     user: response.data.user
                 };
+
                 // Save token to localStorage
                 localStorage.setItem('user', JSON.stringify(response.data));
                 // Dispatch admin action to authReducer
-                dispatch({ type: SIGNUP_USER, payload });
+                dispatch({type: SIGNUP_USER, payload});
+
+                if (formData) {
+                    const config = {
+                        headers: {
+                            authorization: response.data.token
+                        }
+                    };
+
+                    return axios.post('/api/userimage', formData, config);
+                } else {
+                    // Reroute user to home page
+                    browserHistory.push('/');
+                }
+            })
+            .then(response => {
+                // Dispatch USER_UPDATED action to authReducer
+                dispatch({type: USER_UPDATED, payload: response.data});
+                // Save token to localStorage
+                localStorage.setItem('user', JSON.stringify(response.data));
                 // Reroute user to home page
                 browserHistory.push('/');
-
             })
             .catch(error => dispatch(authError(AUTH_ERROR, error)));
     };
@@ -115,7 +134,7 @@ export function signupUser({ email, password, name, formData }) {
  * @author Snær Seljan Þóroddsson
  */
 export function addUserImage(formData, token) {
-    return function (dispatch) {
+    return dispatch => {
         const config = {
             headers: {
                 authorization: token
@@ -125,16 +144,10 @@ export function addUserImage(formData, token) {
         axios
             .post('/api/userimage', formData, config)
             .then(response => {
-                const payload = {
-                    role: (response.data.role && response.data.role === 'admin')
-                        ? response.data.role
-                        : '',
-                    user: response.data.user
-                };
                 // Dispatch USER_UPDATED action to authReducer
-                dispatch({ type: USER_UPDATED, payload });
+                dispatch({type: USER_UPDATED, payload: response.data});
                 // Save token to localStorage
-                localStorage.setItem('user', JSON.stringify(payload));
+                localStorage.setItem('user', JSON.stringify(response.data));
                 // Reroute user to home page
                 browserHistory.push('/');
             })
@@ -149,7 +162,7 @@ export function addUserImage(formData, token) {
  * @author Snær Seljan Þóroddsson
  */
 export function clean() {
-    return { type: CLEAN };
+    return {type: CLEAN};
 }
 
 /**
@@ -162,7 +175,7 @@ export function clean() {
 export function signoutUser() {
     localStorage.removeItem('user');
 
-    return { type: UNAUTH_USER };
+    return {type: UNAUTH_USER};
 }
 
 /**
@@ -172,12 +185,12 @@ export function signoutUser() {
  * @returns {undefined}
  * @author Snær Seljan Þóroddsson
  */
-export function forgotPassword({ email }) {
-    return function (dispatch) {
+export function forgotPassword({email}) {
+    return dispatch => {
         // Post email to api server to retreive new password
         axios
-            .post('/api/forgot', { email })
-            .then(response => dispatch({ type: FORGOT_PASSWORD_SUCCESS, payload: response.data }))
+            .post('/api/forgot', {email})
+            .then(response => dispatch({type: FORGOT_PASSWORD_SUCCESS, payload: response.data}))
             .catch(error => dispatch(authError(FORGOT_PASSWORD_ERROR, error)));
     };
 }
@@ -189,14 +202,14 @@ export function forgotPassword({ email }) {
  * @returns {undefined}
  * @author Snær Seljan Þóroddsson
  */
-export function resetPassword({ password, token }) {
-    return function (dispatch) {
+export function resetPassword({password, token}) {
+    return dispatch => {
         // Post email to api server to retreive new password
         axios
-            .post(`/api/reset/${token}`, { password })
+            .post(`/api/reset/${token}`, {password})
             .then(response => {
                 if (!response.data.error) {
-                    dispatch({ type: RESET_PASSWORD_SUCCESS, payload: response.data.message });
+                    dispatch({type: RESET_PASSWORD_SUCCESS, payload: response.data.message});
                 } else {
                     const error = {
                         response
@@ -230,5 +243,5 @@ export function authError(type, error) {
         payload = 'Error connecting to server';
     }
 
-    return { type, payload };
+    return {type, payload};
 }

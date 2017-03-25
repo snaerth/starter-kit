@@ -48,6 +48,12 @@ export default function (state = initialState, action) {
                 authenticated: false
             };
         case USER_UPDATED:
+            return {
+                ...state,
+                authenticated: true,
+                isFetching: false,
+                user: action.payload
+            };
         case SIGNUP_USER:
             return {
                 ...state,

@@ -1,5 +1,4 @@
 import fs from 'fs';
-import path from 'path';
 
 const directorys = ['assets', 'assets/images', 'assets/images/users'];
 
@@ -52,7 +51,7 @@ export function deleteFile(filePath) {
  */
 export function fileExists(filePath) {
     return new Promise((resolve, reject) => {
-        path.exists(filePath, exists => {
+        fs.exists(filePath, exists => {
             if (!exists) {
                 return reject('File does not exist.');
             }
