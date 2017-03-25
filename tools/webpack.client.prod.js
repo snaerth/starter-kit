@@ -23,21 +23,11 @@ const plugins = [
   new webpack
     .optimize
     .AggressiveMergingPlugin(),
-  new ExtractTextPlugin({
-    filename: 'styles.css',
-    allChunks: true
-  }),
+  new ExtractTextPlugin({filename: 'styles.css', allChunks: true}),
   new webpack
     .optimize
-    .CommonsChunkPlugin({
-      name: 'vendor',
-      filename: 'vendor_[hash].js',
-      minChunks: 2
-    }),
-  new AssetsPlugin({
-    filename: 'assets.json',
-    prettyPrint: true
-  }),
+    .CommonsChunkPlugin({name: 'vendor', filename: 'vendor_[hash].js', minChunks: 2}),
+  new AssetsPlugin({filename: 'assets.json', prettyPrint: true}),
   new webpack.NamedModulesPlugin(),
   new CaseSensitivePathsPlugin(),
   new webpack.NoEmitOnErrorsPlugin(),
@@ -63,20 +53,17 @@ const plugins = [
   })
 ];
 
-
 // RULES
-const {
-  file,
-  json,
-  svg,
-  urlLoader
-} = RULES_COMMON;
-const {
-  scss,
+const {file, json, svg, urlLoader} = RULES_COMMON;
+const {scss, js, css} = RULES_PROD;
+const rules = [
   js,
-  css
-} = RULES_PROD;
-const rules = [js, css, scss, json, file, svg];
+  css,
+  scss,
+  json,
+  file,
+  svg
+];
 
 // Main webpack config
 module.exports = {

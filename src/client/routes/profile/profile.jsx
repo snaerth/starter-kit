@@ -36,11 +36,12 @@ class Profile extends Component {
     }
 
     render() {
+        if(!this.props.user) {
+            return <div>User is missing!</div>;
+        }
+
         const { name, imageUrl, thumbnailUrl, email } = this.props.user;
-        // const name = 'Snær Seljan Þóroddsson';
-        // const imageUrl = '11870894_10200772623674985_6112941039389153046_n.jpg';
-        // const thumbnailUrl = '11870894_10200772623674985_6112941039389153046_n-thumbnail.jpg';
-        // const email = 'snaerth@gmail.com';
+
         return (
             <div className="container">
                 <div className={styles.grid}>

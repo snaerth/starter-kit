@@ -2,8 +2,8 @@ import React, {Component, PropTypes} from 'react';
 import {connect} from 'react-redux';
 import {Link} from 'react-router';
 import styles from './signout.scss';
-import Button from '../../../components/common/button';
-import * as actions from '../../../components/auth/actions';
+import Button from '../../components/common/button';
+import * as actions from '../../components/auth/actions';
 
 /**
  * Signout component

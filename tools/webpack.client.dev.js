@@ -16,7 +16,7 @@ const {
 
 //  PLUGINS
 const plugins = [
-  new ExtractTextPlugin({ filename: 'styles.css', allChunks: true }),
+  new ExtractTextPlugin({filename: 'styles.css', allChunks: true}),
   new webpack
     .optimize
     .OccurrenceOrderPlugin(),
@@ -26,7 +26,7 @@ const plugins = [
     __CLIENT__: true,
     __SERVER__: false,
     __DEVELOPMENT__: true,
-    __DEVTOOLS__: true  // <-------- DISABLE redux-devtools HERE
+    __DEVTOOLS__: true // <-------- DISABLE redux-devtools HERE
   }),
   new webpack.LoaderOptionsPlugin({
     options: {
@@ -35,12 +35,12 @@ const plugins = [
   }),
   new webpack
     .optimize
-    .CommonsChunkPlugin({ name: 'vendor', minChunks: Infinity, filename: 'vendor.js' })
+    .CommonsChunkPlugin({name: 'vendor', minChunks: Infinity, filename: 'vendor.js'})
 ];
 
 // RULES
-const { file, json, svg, urlLoader } = RULES_COMMON;
-const { scss, js, css } = RULES_DEV;
+const {file, json, svg, urlLoader} = RULES_COMMON;
+const {scss, js, css} = RULES_DEV;
 const rules = [
   js,
   css,
@@ -57,9 +57,7 @@ module.exports = {
   cache: true,
   entry: {
     main: [
-      'webpack/hot/only-dev-server',
-      'webpack-hot-middleware/client',
-      CLIENT_ENTRY
+      'webpack/hot/only-dev-server', 'webpack-hot-middleware/client', CLIENT_ENTRY
     ],
     vendor: VENDOR
   },
@@ -67,14 +65,14 @@ module.exports = {
     path: path.resolve(__dirname, 'dist'),
     filename: '[name].js',
     sourceMapFilename: '[name].map',
-    publicPath: '/',
+    publicPath: '/'
   },
   devServer: {
     compress: true,
     historyApiFallback: true,
     hot: true,
     https: false,
-    noInfo: true,
+    noInfo: true
   },
   plugins,
   module: {

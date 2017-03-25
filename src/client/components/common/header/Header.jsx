@@ -2,7 +2,10 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { Link, IndexLink } from 'react-router';
 import styles from './Header.scss';
+import ModalWrapper from '../modal';
 import classnames from 'classnames';
+import Signup from '../../auth/signup';
+import Signin from '../../auth/signin';
 
 /**
  * Header Component
@@ -11,7 +14,38 @@ class Header extends Component {
     static propTypes = {
         authenticated: PropTypes.bool,
         role: PropTypes.string,
-        name: PropTypes.string
+        name: PropTypes.string,
+        activeModal: PropTypes.string
+    }
+
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            modalIsOpen: false,
+            activeModal: 'signin'
+        };
+        this.openModal = this.openModal.bind(this);
+        this.closeModal = this.closeModal.bind(this);
+        this.changeModalComponent = this.changeModalComponent.bind(this);
+    }
+
+    openModal() {
+        this.setState({modalIsOpen: true});
+    }
+
+    closeModal() {
+        this.setState({modalIsOpen: false});
+    }
+
+    /**
+     * Changes state for modal component and opens modal
+     * 
+     * @param {String} modalName 
+     */
+    changeModalComponent(modalName) {
+        this.setState({activeModal: modalName === 'signup' ? 'signup' : 'signin'});
+        this.openModal();
     }
 
     /**
@@ -34,8 +68,8 @@ class Header extends Component {
             return links;
         } else {
             return [
-                <Link to="/signin" key="signin" activeClassName={styles.active} className={styles.link}>Sign in</Link>,
-                <Link to="/signup" key="signup" activeClassName={styles.active} className={styles.link}>Sign up</Link>
+                <Link role="button" key="signin" className={styles.link} onClick={() => this.changeModalComponent('signin')}>Sign in</Link>,
+                <Link role="button" key="signup" className={styles.link} onClick={() => this.changeModalComponent('signup')}>Sign up</Link>
             ];
         }
     }
@@ -57,6 +91,13 @@ class Header extends Component {
                     </nav>
                     <h1 className={styles.banner}>{this.props.name}</h1>
                 </div>
+
+                <ModalWrapper
+                    isOpen={this.state.modalIsOpen}
+                    onRequestClose={this.closeModal}
+                    contentLabel={this.state.activeModal}>
+                    {this.state.activeModal === 'signin' ? <Signin /> : <Signup />}
+                </ModalWrapper>
             </div>
         );
     }

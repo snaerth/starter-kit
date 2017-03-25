@@ -5,7 +5,6 @@ import {reduxForm, Field} from 'redux-form';
 import styles from './forgotPassword.scss';
 import Input from '../../common/input';
 import Button from '../../common/button';
-import MainHeading from '../../common/mainheading';
 import NotifyBox from '../../common/notifyBox';
 import {validateEmail} from './../../../utils/validate';
 import * as actionCreators from '../actions';
@@ -82,7 +81,7 @@ class Signin extends Component {
 
         return (
             <div className="card">
-                <MainHeading text="Forgot password"/> {!isFetching
+                {!isFetching
                     ? this.renderMessages()
                     : null}
                 {isFetching

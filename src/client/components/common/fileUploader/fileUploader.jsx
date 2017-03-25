@@ -1,5 +1,4 @@
 import React, {PropTypes} from 'react';
-import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import styles from './fileUploader.scss';
 import Dropzone from 'react-dropzone';
 import UploadPhoto from './uploadPhoto.svg';
@@ -23,22 +22,15 @@ const FileLoader = props => {
                     <div className={styles.dropzoneBoxText}>Drop image here or click to select image to upload.</div>
                 </div>
             </Dropzone>
-            <ReactCSSTransitionGroup
-                component="div"
-                transitionName="fadeInScale"
-                className={styles.imageContainer}
-                transitionEnterTimeout={700}
-                transitionLeaveTimeout={350}>
-                {props.image
-                    ? <img
-                            key="profileImage"
-                            src={props.image.preview}
-                            className={styles.imagePreviewContainer}/>
-                    : <div className={styles.fakeFrame}>
-                        <span className="visually-hidden">Image frame</span>
-                        <Face width="100" height="100" className={styles.svg}/>
-                    </div>}
-            </ReactCSSTransitionGroup>
+            {props.image
+                ? <img
+                        key="profileImage"
+                        src={props.image.preview}
+                        className={styles.imagePreviewContainer}/>
+                : <div className={styles.fakeFrame}>
+                    <span className="visually-hidden">Image frame</span>
+                    <Face width="100" height="100" className={styles.svg}/>
+                </div>}
         </div>
     );
 };

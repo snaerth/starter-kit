@@ -7,8 +7,8 @@ import Input from '../../common/input';
 import Password from '../../common/password';
 import styles from './signin.scss';
 import Button from '../../common/button';
-import MainHeading from '../../common/mainheading';
 import NotifyBox from '../../common/notifyBox';
+import MainHeading from '../../common/mainheading';
 import {validateEmail} from './../../../utils/validate';
 import Spinner from '../../common/spinner';
 import * as actionCreators from '../actions';
@@ -77,42 +77,43 @@ class Signin extends Component {
         return (
             <div>
                 <div className="card">
-                    <MainHeading text="SIGN IN"/> 
-                    {!isFetching
-                        ? this.renderError()
-                        : null}
                     {isFetching
-                        ? <Spinner>Signing in</Spinner>
-                        : <form onSubmit={handleSubmit(this.handleFormSubmit.bind(this))} noValidate>
-                            <fieldset>
-                                <Field
-                                    component={Input}
-                                    name="email"
-                                    id="email"
-                                    type="email"
-                                    label="Email"
-                                    placeholder="someone@example.com"><Email/></Field>
-                            </fieldset>
-                            <fieldset>
-                                <Field
-                                    component={Password}
-                                    name="password"
-                                    id="password"
-                                    type="password"
-                                    label="Password"
-                                    placeholder="Must have at least 6 characters"/>
-                            </fieldset>
-                            <fieldset>
-                                <div>
-                                    <Button text="Sign in" ariaLabel="Sign in" className="fullWidth">
-                                        <ArrowForward className={styles.iconArrowForward} />
-                                    </Button>
-                                </div>
-                                <div className={styles.forgotPasswordContainer}>
-                                    <Link to="forgotpassword" className="link-slideright">Forgot password?</Link>
-                                </div>
-                            </fieldset>
-                        </form>}
+                        ? <div>{this.renderError()}
+                                <Spinner>Signing in</Spinner>
+                            </div>
+                        : <div>
+                            <MainHeading text="SIGN IN"/>
+                            <form onSubmit={handleSubmit(this.handleFormSubmit.bind(this))} noValidate>
+                                <fieldset>
+                                    <Field
+                                        component={Input}
+                                        name="email"
+                                        id="email"
+                                        type="email"
+                                        label="Email"
+                                        placeholder="someone@example.com"><Email/></Field>
+                                </fieldset>
+                                <fieldset>
+                                    <Field
+                                        component={Password}
+                                        name="password"
+                                        id="password"
+                                        type="password"
+                                        label="Password"
+                                        placeholder="Must have at least 6 characters"/>
+                                </fieldset>
+                                <fieldset>
+                                    <div>
+                                        <Button text="Sign in" ariaLabel="Sign in" className="fullWidth">
+                                            <ArrowForward className={styles.iconArrowForward}/>
+                                        </Button>
+                                    </div>
+                                    <div className={styles.forgotPasswordContainer}>
+                                        <Link to="forgotpassword" className="link-slideright">Forgot password?</Link>
+                                    </div>
+                                </fieldset>
+                            </form>
+                        </div>}
                 </div>
             </div>
         );

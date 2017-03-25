@@ -6,7 +6,6 @@ import {Link} from 'react-router';
 import styles from './resetPassword.scss';
 import Password from '../../common/password';
 import Button from '../../common/button';
-import MainHeading from '../../common/mainheading';
 import NotifyBox from '../../common/notifyBox';
 import * as actionCreators from '../actions';
 import Spinner from '../../common/spinner';
@@ -88,7 +87,7 @@ class ResetPassword extends Component {
 
         return (
             <div className="card">
-                <MainHeading text="Reset password"/> {!isFetching
+                {!isFetching
                     ? this.renderMessages()
                     : null}
                 {isFetching

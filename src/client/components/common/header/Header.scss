@@ -32,6 +32,7 @@ a.link {
     outline: none;
     margin: 0 0.5em;
     pointer-events: visible;
+    cursor: pointer;
     color: lighten($primary-pink, 18%);
     &:hover {
         color: $primary-white;
