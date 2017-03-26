@@ -5,6 +5,21 @@ import bodyParser from 'body-parser';
 import cors from 'cors';
 import passport from 'passport';
 import { parallel } from '../../server/utils/parallel';
+import config from '../../config';
+
+const {APIHOST, APIPORT, HOST, PORT} = config();
+// CORS setup 
+const corsWhitelist = [
+    `http://${APIHOST}:${APIPORT}`,
+    `http://${HOST}:${PORT}`
+];
+const corsOptions = {
+    origin: (origin, callback) => {
+        const originIsWhitelisted = corsWhitelist.indexOf(origin) !== -1;
+        callback(null, originIsWhitelisted);
+    },
+    credentials: true
+};
 
 // Default middlewares
 const defaultMiddlewares = [
@@ -27,7 +42,7 @@ const defaultMiddlewares = [
     // Content Security Policy
     helmet(),
     // Dynamically or statically enable CORS
-    cors()
+    cors(corsOptions)
 ];
 
 export default (otherMiddleware) => {

@@ -112,8 +112,7 @@ export default function (state = initialState, action) {
             return {
                 ...state,
                 error: '',
-                image: null,
-                modalOpen: false
+                image: null
             };
     }
 

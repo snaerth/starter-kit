@@ -34,9 +34,9 @@ class Header extends Component {
     }
 
     componentWillReceiveProps() {
-        // if(this.props.modalOpen) {
-        //     this.closeModal();
-        // }
+        if(this.props.modalOpen) {
+            this.closeModal();
+        }
     }
 
     openModal() {
@@ -84,7 +84,6 @@ class Header extends Component {
     }
 
     render() {
-        console.log(this.props.modalOpen);
         return (
             <div className={styles.background}>
                 <div className={styles.container}>

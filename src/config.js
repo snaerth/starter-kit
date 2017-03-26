@@ -2,7 +2,7 @@
 import dotenv from 'dotenv';
 dotenv.config();
 
-export default() => {
+export default () => {
     return {
         // Defaults
         NODE_ENV: process.env.NODE_ENV || 'development',
@@ -24,6 +24,9 @@ export default() => {
         EMAIL_PASSWORD: process.env.EMAIL_PASSWORD || '',
         // Google Recaptcha
         RECAPTCHA_SITE_KEY: process.env.RECAPTCHA_SITE_KEY || '6Ld3NBoUAAAAAIcGj92iDd8O4pOZxB3j4hufgijG',
-        RECAPTCHA_SECRET_KEY: process.env.RECAPTCHA_SECRET_KEY || '6Ld3NBoUAAAAAJ0_HGIZbYR1d80zZX3vQOpmx1Yc'
+        RECAPTCHA_SECRET_KEY: process.env.RECAPTCHA_SECRET_KEY || '6Ld3NBoUAAAAAJ0_HGIZbYR1d80zZX3vQOpmx1Yc',
+        // Facebook passport
+        FACEBOOK_CLIENT_ID: process.env.FACEBOOK_CLIENT_ID,
+        FACEBOOK_CLIENT_SECRET: process.env.FACEBOOK_CLIENT_SECRET
     };
 };

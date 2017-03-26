@@ -1,5 +1,5 @@
 import axios from 'axios';
-import {browserHistory} from 'react-router';
+import { browserHistory } from 'react-router';
 import {
     AUTH_USER,
     UNAUTH_USER,
@@ -24,7 +24,7 @@ import {
  * @author Snær Seljan Þóroddsson
  */
 export function isFetching() {
-    return {type: IS_FETCHING};
+    return { type: IS_FETCHING };
 }
 
 /**
@@ -35,7 +35,7 @@ export function isFetching() {
  * @author Snær Seljan Þóroddsson
  */
 export function setPreviewUserImage(image) {
-    return {type: SET_PREVIEW_USER_IMAGE, payload: image};
+    return { type: SET_PREVIEW_USER_IMAGE, payload: image };
 }
 
 /**
@@ -47,22 +47,39 @@ export function setPreviewUserImage(image) {
  * @returns {undefined}
  * @author Snær Seljan Þóroddsson
  */
-export function signinUser({email, password}) {
+export function signinUser({ email, password }) {
     return function (dispatch) {
         // Post email/password to api server for sign in Get token back from server
         axios
-            .post('/api/signin', {email, password})
+            .post('/api/signin', { email, password })
             .then(response => {
                 const payload = {
                     user: response.data.user
                 };
                 // Dispatch admin action to authReducer
-                dispatch({type: AUTH_USER, payload});
+                dispatch({ type: AUTH_USER, payload });
                 // Save token to localStorage
                 localStorage.setItem('user', JSON.stringify(response.data));
                 // Reroute user to home page
                 browserHistory.push('/');
             })
+            .catch(error => dispatch(authError(AUTH_ERROR, error)));
+    };
+}
+
+/**
+ * Facebook sign in
+ *
+ * @returns {undefined}
+ * @author Snær Seljan Þóroddsson
+ */
+export function signinFacebook() {
+    return function (dispatch) {
+        axios.get('/api/facebook')
+            .then(response => {
+                const payload = response.data;
+                console.log(payload);
+              })
             .catch(error => dispatch(authError(AUTH_ERROR, error)));
     };
 }
@@ -78,23 +95,23 @@ export function signinUser({email, password}) {
  * @returns {undefined}
  * @author Snær Seljan Þóroddsson
  */
-export function signupUser({email, password, name, formData}) {
+export function signupUser({ email, password, name, formData }) {
     return dispatch => {
         // Post email/password to api server to register user Get token back from server
         axios
-            .post('/api/signup', {email, password, name})
+            .post('/api/signup', { email, password, name })
             .then(response => {
                 const payload = {
-                    user: response.data.user
+                    user: response.data
                 };
 
                 // Save token to localStorage
                 localStorage.setItem('user', JSON.stringify(response.data));
                 // Dispatch admin action to authReducer
-                dispatch({type: SIGNUP_USER, payload});
+                dispatch({ type: SIGNUP_USER, payload });
                 // Reroute user to home page
                 browserHistory.push('/');
-                
+
                 if (formData) {
                     const config = {
                         headers: {
@@ -102,14 +119,15 @@ export function signupUser({email, password, name, formData}) {
                         }
                     };
 
-                    return axios.post('/api/userimage', formData, config);
+                    axios.post('/api/userimage', formData, config)
+                        .then(response => {
+                            // Dispatch USER_UPDATED action to authReducer
+                            dispatch({ type: USER_UPDATED, payload: response.data });
+                            // Save token to localStorage
+                            localStorage.setItem('user', { user: JSON.stringify(response.data) });
+                        })
+                        .catch(error => dispatch(authError(AUTH_ERROR, error)));
                 }
-            })
-            .then(response => {
-                // Dispatch USER_UPDATED action to authReducer
-                dispatch({type: USER_UPDATED, payload: response.data});
-                // Save token to localStorage
-                localStorage.setItem('user', {user: JSON.stringify(response.data)});
             })
             .catch(error => dispatch(authError(AUTH_ERROR, error)));
     };
@@ -138,11 +156,9 @@ export function addUserImage(formData, token) {
             .post('/api/userimage', formData, config)
             .then(response => {
                 // Dispatch USER_UPDATED action to authReducer
-                dispatch({type: USER_UPDATED, payload: response.data});
+                dispatch({ type: USER_UPDATED, payload: response.data });
                 // Save token to localStorage
-                localStorage.setItem('user', {user: JSON.stringify(response.data)});
-                // Reroute user to home page
-                browserHistory.push('/');
+                localStorage.setItem('user', { user: JSON.stringify(response.data) });
             })
             .catch(error => dispatch(authError(AUTH_ERROR, error)));
     };
@@ -155,7 +171,7 @@ export function addUserImage(formData, token) {
  * @author Snær Seljan Þóroddsson
  */
 export function openModal() {
-    return {type: MODAL_OPEN};
+    return { type: MODAL_OPEN };
 }
 
 /**
@@ -165,7 +181,7 @@ export function openModal() {
  * @author Snær Seljan Þóroddsson
  */
 export function closeModal() {
-    return {type: MODAL_CLOSE};
+    return { type: MODAL_CLOSE };
 }
 
 /**
@@ -175,7 +191,7 @@ export function closeModal() {
  * @author Snær Seljan Þóroddsson
  */
 export function clean() {
-    return {type: CLEAN};
+    return { type: CLEAN };
 }
 
 /**
@@ -188,7 +204,7 @@ export function clean() {
 export function signoutUser() {
     localStorage.removeItem('user');
 
-    return {type: UNAUTH_USER};
+    return { type: UNAUTH_USER };
 }
 
 /**
@@ -198,12 +214,12 @@ export function signoutUser() {
  * @returns {undefined}
  * @author Snær Seljan Þóroddsson
  */
-export function forgotPassword({email}) {
+export function forgotPassword({ email }) {
     return dispatch => {
         // Post email to api server to retreive new password
         axios
-            .post('/api/forgot', {email})
-            .then(response => dispatch({type: FORGOT_PASSWORD_SUCCESS, payload: response.data}))
+            .post('/api/forgot', { email })
+            .then(response => dispatch({ type: FORGOT_PASSWORD_SUCCESS, payload: response.data }))
             .catch(error => dispatch(authError(FORGOT_PASSWORD_ERROR, error)));
     };
 }
@@ -215,14 +231,14 @@ export function forgotPassword({email}) {
  * @returns {undefined}
  * @author Snær Seljan Þóroddsson
  */
-export function resetPassword({password, token}) {
+export function resetPassword({ password, token }) {
     return dispatch => {
         // Post email to api server to retreive new password
         axios
-            .post(`/api/reset/${token}`, {password})
+            .post(`/api/reset/${token}`, { password })
             .then(response => {
                 if (!response.data.error) {
-                    dispatch({type: RESET_PASSWORD_SUCCESS, payload: response.data.message});
+                    dispatch({ type: RESET_PASSWORD_SUCCESS, payload: response.data.message });
                 } else {
                     const error = {
                         response
@@ -256,5 +272,5 @@ export function authError(type, error) {
         payload = 'Error connecting to server';
     }
 
-    return {type, payload};
+    return { type, payload };
 }

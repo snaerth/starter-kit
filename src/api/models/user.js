@@ -1,4 +1,4 @@
-import mongoose, {Schema} from 'mongoose';
+import mongoose, { Schema } from 'mongoose';
 import bcrypt from 'bcrypt-nodejs';
 import Promise from 'bluebird';
 
@@ -52,9 +52,15 @@ const schema = {
   resetPasswordExpires: {
     type: Date
   },
-  facebook: {
-    type: Object,
+  oauthID: {
+    type: Number,
     required: false
+  },
+  facebook: {
+    id: String,
+    token: String,
+    email: String,
+    name: String
   }
 };
 
@@ -66,7 +72,7 @@ userSchema.pre('save', function (next) {
   const user = this;
 
   // Encrypt our password using the salt above
-  bcrypt.hash(user.password, 10, null, (error, hash) => {
+  bcrypt.hash(user.password, bcrypt.genSaltSync(10), null, (error, hash) => {
     if (error) {
       return next(error);
     }

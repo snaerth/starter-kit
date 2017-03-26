@@ -1,15 +1,15 @@
-import React, {PropTypes, Component} from 'react';
-import {Link} from 'react-router';
-import {bindActionCreators} from 'redux';
-import {connect} from 'react-redux';
-import {reduxForm, Field} from 'redux-form';
+import React, { PropTypes, Component } from 'react';
+import { Link } from 'react-router';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import { reduxForm, Field } from 'redux-form';
 import Input from '../../common/input';
 import Password from '../../common/password';
 import styles from './signin.scss';
 import Button from '../../common/button';
 import NotifyBox from '../../common/notifyBox';
 import MainHeading from '../../common/mainheading';
-import {validateEmail} from './../../../utils/validate';
+import { validateEmail } from './../../../utils/validate';
 import Spinner from '../../common/spinner';
 import * as actionCreators from '../actions';
 import Email from '../../../common/svg/email.svg';
@@ -28,11 +28,14 @@ class Signin extends Component {
         isFetching: PropTypes.bool
     }
 
+    constructor(props) {
+        super(props);
+        this.handleFormSubmit = this.handleFormSubmit.bind(this);
+        this.facebookSignin = this.facebookSignin.bind(this);
+    }
+
     componentWillMount() {
-        this
-            .props
-            .actions
-            .clean();
+        this.props.actions.clean();
     }
 
     /**
@@ -42,15 +45,13 @@ class Signin extends Component {
      * @returns {undefined}
      * @author Snær Seljan Þóroddsson
      */
-    handleFormSubmit({email, password}) {
-        this
-            .props
-            .actions
-            .isFetching();
-        this
-            .props
-            .actions
-            .signinUser({email, password});
+    handleFormSubmit({ email, password }) {
+        this.props.actions.isFetching();
+        this.props.actions.signinUser({ email, password });
+    }
+
+    facebookSignin() {
+        this.props.actions.signinFacebook();
     }
 
     /**
@@ -60,19 +61,19 @@ class Signin extends Component {
      * @author Snær Seljan Þóroddsson
      */
     renderError() {
-        const {errorMessage} = this.props;
+        const { errorMessage } = this.props;
 
         if (errorMessage) {
             return (
                 <fieldset>
-                    <NotifyBox strongText="Error: " text={errorMessage} type="error"/>
+                    <NotifyBox strongText="Error: " text={errorMessage} type="error" />
                 </fieldset>
             );
         }
     }
 
     render() {
-        const {handleSubmit, isFetching} = this.props;
+        const { handleSubmit, isFetching } = this.props;
 
         return (
             <div>
@@ -80,9 +81,9 @@ class Signin extends Component {
                     {isFetching
                         ? <Spinner>Signing in</Spinner>
                         : <div>
-                            <MainHeading text="SIGN IN"/>
+                            <MainHeading text="SIGN IN" />
                             {this.renderError()}
-                            <form onSubmit={handleSubmit(this.handleFormSubmit.bind(this))} noValidate>
+                            <form onSubmit={handleSubmit(this.handleFormSubmit)} noValidate>
                                 <fieldset>
                                     <Field
                                         component={Input}
@@ -90,7 +91,7 @@ class Signin extends Component {
                                         id="email"
                                         type="email"
                                         label="Email"
-                                        placeholder="someone@example.com"><Email/></Field>
+                                        placeholder="someone@example.com"><Email /></Field>
                                 </fieldset>
                                 <fieldset>
                                     <Field
@@ -99,12 +100,15 @@ class Signin extends Component {
                                         id="password"
                                         type="password"
                                         label="Password"
-                                        placeholder="Must have at least 6 characters"/>
+                                        placeholder="Must have at least 6 characters" />
                                 </fieldset>
                                 <fieldset>
                                     <div>
                                         <Button text="Sign in" ariaLabel="Sign in" className="fullWidth">
-                                            <ArrowForward className={styles.iconArrowForward}/>
+                                            <ArrowForward className={styles.iconArrowForward} />
+                                        </Button>
+                                        <Button type="button" text="Loin with facebook" ariaLabel="Login with facebook" className="fullWidth" onClick={() => this.facebookSignin()}>
+                                            <ArrowForward className={styles.iconArrowForward} />
                                         </Button>
                                     </div>
                                     <div className={styles.forgotPasswordContainer}>
@@ -127,7 +131,7 @@ class Signin extends Component {
  * @return {Object} errors
  * @author Snær Seljan Þóroddsson
  */
-function validate({email, password}) {
+function validate({ email, password }) {
     const errors = {};
 
     // Email
@@ -163,7 +167,7 @@ function validate({email, password}) {
  * @author Snær Seljan Þóroddsson
  */
 function mapStateToProps(state) {
-    return {errorMessage: state.auth.error, isFetching: state.auth.isFetching};
+    return { errorMessage: state.auth.error, isFetching: state.auth.isFetching };
 }
 
 /**
