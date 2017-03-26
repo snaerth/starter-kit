@@ -78,11 +78,10 @@ class Signin extends Component {
             <div>
                 <div className="card">
                     {isFetching
-                        ? <div>{this.renderError()}
-                                <Spinner>Signing in</Spinner>
-                            </div>
+                        ? <Spinner>Signing in</Spinner>
                         : <div>
                             <MainHeading text="SIGN IN"/>
+                            {this.renderError()}
                             <form onSubmit={handleSubmit(this.handleFormSubmit.bind(this))} noValidate>
                                 <fieldset>
                                     <Field

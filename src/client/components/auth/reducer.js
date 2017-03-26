@@ -10,6 +10,8 @@ import {
     SET_PREVIEW_USER_IMAGE,
     USER_UPDATED,
     IS_FETCHING,
+    MODAL_OPEN,
+    MODAL_CLOSE,
     CLEAN
 } from './types';
 
@@ -20,7 +22,8 @@ const initialState = {
     authenticated: user && user.token
         ? true
         : false,
-    user: user || null
+    user: user || null,
+    modalOpen: false
 };
 
 export default function (state = initialState, action) {
@@ -35,6 +38,7 @@ export default function (state = initialState, action) {
                 ...state,
                 authenticated: true,
                 isFetching: false,
+                error: '',
                 user: action.payload.user
             };
         case UNAUTH_USER:
@@ -94,11 +98,22 @@ export default function (state = initialState, action) {
                 ...state,
                 image: action.payload
             };
+        case MODAL_OPEN:
+            return {
+                ...state,
+                modalOpen: true
+            };
+        case MODAL_CLOSE:
+            return {
+                ...state,
+                modalOpen: false
+            };
         case CLEAN:
             return {
                 ...state,
                 error: '',
-                image: null
+                image: null,
+                modalOpen: false
             };
     }
 

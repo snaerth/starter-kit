@@ -12,6 +12,8 @@ import {
     SET_PREVIEW_USER_IMAGE,
     USER_UPDATED,
     IS_FETCHING,
+    MODAL_OPEN,
+    MODAL_CLOSE,
     CLEAN
 } from './types';
 
@@ -144,6 +146,26 @@ export function addUserImage(formData, token) {
             })
             .catch(error => dispatch(authError(AUTH_ERROR, error)));
     };
+}
+
+/**
+ * Open modal action createor
+ *
+ * @returns {Object}
+ * @author Snær Seljan Þóroddsson
+ */
+export function openModal() {
+    return {type: MODAL_OPEN};
+}
+
+/**
+ * Close modal action createor
+ *
+ * @returns {Object}
+ * @author Snær Seljan Þóroddsson
+ */
+export function closeModal() {
+    return {type: MODAL_CLOSE};
 }
 
 /**
