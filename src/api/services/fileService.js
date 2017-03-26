@@ -25,7 +25,7 @@ export function createDefaultDirectorys() {
 
 /**
  * Deletes file from file system
- * 
+ *
  * @param {String} filePath - Path to file to delete
  * @returns {Promise}
  * @author Snær Seljan Þóroddsson
@@ -44,7 +44,7 @@ export function deleteFile(filePath) {
 
 /**
  * Checks if file exists
- * 
+ *
  * @param {String} filePath - Path to file to delete
  * @returns {Promise}
  * @author Snær Seljan Þóroddsson
@@ -63,7 +63,7 @@ export function fileExists(filePath) {
 
 /**
  * Checks if file exist and if exist then deletes file
- * 
+ *
  * @param {String} filePath - Path to file to delete
  * @returns {Promise}
  * @author Snær Seljan Þóroddsson
@@ -71,7 +71,8 @@ export function fileExists(filePath) {
 export function checkFileAndDelete(filePath) {
     return new Promise((resolve, reject) => {
         fileExists(filePath)
-            .then(() => deleteFile(filePath))
-            .catch(error => reject(error));
+        .then(() => deleteFile(filePath))
+        .then(() => resolve(filePath))
+        .catch(error => reject(error));
     });
 }

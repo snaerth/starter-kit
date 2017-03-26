@@ -20,10 +20,7 @@ const initialState = {
     authenticated: user && user.token
         ? true
         : false,
-    role: user && user.role
-        ? user.role
-        : 'user',
-    user: user ? user.user : null
+    user: user || null
 };
 
 export default function (state = initialState, action) {
@@ -38,14 +35,15 @@ export default function (state = initialState, action) {
                 ...state,
                 authenticated: true,
                 isFetching: false,
-                role: action.payload.role,
                 user: action.payload.user
             };
         case UNAUTH_USER:
             return {
                 ...state,
+                user: null,
                 isFetching: false,
-                authenticated: false
+                authenticated: false,
+                image: null
             };
         case USER_UPDATED:
             return {
@@ -59,7 +57,6 @@ export default function (state = initialState, action) {
                 ...state,
                 authenticated: true,
                 isFetching: false,
-                role: action.payload.role,
                 user: action.payload.user
             };
         case AUTH_ERROR:

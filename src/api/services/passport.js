@@ -29,16 +29,17 @@ export const localLogin = new LocalStrategy(localOptions, (email, password, done
         }
 
         // Compare password to encrypted password
-        user
-            .comparePassword(password)
-            .then(isMatch => {
-                if (!isMatch) {
-                    return done(null, false);
-                }
+        user.comparePassword(password, (error, isMatch) => {
+            if (error) {
+                return done(error);
+            }
 
-                return done(null, user);
-            })
-            .catch(error => done(error));
+            if (!isMatch)  {
+                return done(null, false);
+            }
+
+            return done(null, user);
+        });
     });
 });
 

@@ -1,11 +1,9 @@
-import mongoose, {
-  Schema
-} from 'mongoose';
+import mongoose, {Schema} from 'mongoose';
 import bcrypt from 'bcrypt-nodejs';
 import Promise from 'bluebird';
 
-// Let mongoose use bluebird promises
-// because mongoose promise library is deprecated
+// Let mongoose use bluebird promises because mongoose promise library is
+// deprecated
 mongoose.Promise = Promise;
 
 const schema = {
@@ -67,35 +65,27 @@ const userSchema = new Schema(schema);
 userSchema.pre('save', function (next) {
   const user = this;
 
-  // Generate a salt
-  bcrypt.genSalt(10, (error, salt) => {
-    if (error)
+  // Encrypt our password using the salt above
+  bcrypt.hash(user.password, 10, null, (error, hash) => {
+    if (error) {
       return next(error);
+    }
 
-    // Encrypt our password using the salt above
-    bcrypt.hash(user.password, salt, null, (error, hash) => {
-      if (error)
-        return next(error);
-
-      // Override plain password with encrypted password
-      user.password = hash;
-      return next(user);
-    });
+    // Override plain password with encrypted password
+    user.password = hash;
+    return next(user);
   });
 });
 
 // Compare password to encrypted password
-userSchema.methods.comparePassword = function (candidatePassword) {
-  return new Promise((resolve, reject) => {
-    bcrypt.compare(candidatePassword, this.password, function (error, isMatch) {
+userSchema.methods.comparePassword = function (candidatePassword, callback) {
+  bcrypt
+    .compare(candidatePassword, this.password, function (error, isMatch) {
       if (error) {
-        return reject(error);
+        return callback(error);
       }
-      
-      return resolve(isMatch);
+      callback(null, isMatch);
     });
-  });
-
 };
 
 export default mongoose.model('user', userSchema);

@@ -5,7 +5,7 @@ export default function (ComposedComponent, userRole) {
     class Authentication extends Component {
         static propTypes = {
             authenticated: PropTypes.bool,
-            role: PropTypes.string
+            roles: PropTypes.array
         }
 
         static contextTypes = {
@@ -16,7 +16,7 @@ export default function (ComposedComponent, userRole) {
             if (!this.props.authenticated) {
                 this.context.router.push('/signin');
             } else {
-                if (userRole === 'admin' && this.props.role !== 'admin') {
+                if (userRole === 'admin' && this.props.roles && this.props.roles.indexOf('admin') > -1) {
                     this.context.router.push('/');
                 }
             }
@@ -26,7 +26,7 @@ export default function (ComposedComponent, userRole) {
             if (!nextProps.authenticated) {
                 this.context.router.push('/signin');
             } else {
-                if (userRole === 'admin' && nextProps.role !== 'admin') {
+                if (userRole === 'admin' && nextProps.roles && nextProps.roles.indexOf('admin') > -1) {
                     this.context.router.push('/');
                 }
             }
@@ -42,8 +42,8 @@ export default function (ComposedComponent, userRole) {
             authenticated: state.auth.authenticated
         };
 
-        if (state.auth.role) {
-            newStateToProps.role = state.auth.role;
+        if (state.auth.user && state.auth.user.roles) {
+            newStateToProps.roles = state.auth.user.roles;
         }
 
         return newStateToProps;

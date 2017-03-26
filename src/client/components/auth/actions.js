@@ -52,9 +52,6 @@ export function signinUser({email, password}) {
             .post('/api/signin', {email, password})
             .then(response => {
                 const payload = {
-                    role: (response.data.role && response.data.role === 'admin')
-                        ? response.data.role
-                        : '',
                     user: response.data.user
                 };
                 // Dispatch admin action to authReducer
@@ -86,9 +83,6 @@ export function signupUser({email, password, name, formData}) {
             .post('/api/signup', {email, password, name})
             .then(response => {
                 const payload = {
-                    role: (response.data.role && response.data.role === 'admin')
-                        ? response.data.role
-                        : '',
                     user: response.data.user
                 };
 
@@ -96,7 +90,9 @@ export function signupUser({email, password, name, formData}) {
                 localStorage.setItem('user', JSON.stringify(response.data));
                 // Dispatch admin action to authReducer
                 dispatch({type: SIGNUP_USER, payload});
-
+                // Reroute user to home page
+                browserHistory.push('/');
+                
                 if (formData) {
                     const config = {
                         headers: {
@@ -105,18 +101,13 @@ export function signupUser({email, password, name, formData}) {
                     };
 
                     return axios.post('/api/userimage', formData, config);
-                } else {
-                    // Reroute user to home page
-                    browserHistory.push('/');
                 }
             })
             .then(response => {
                 // Dispatch USER_UPDATED action to authReducer
                 dispatch({type: USER_UPDATED, payload: response.data});
                 // Save token to localStorage
-                localStorage.setItem('user', JSON.stringify(response.data));
-                // Reroute user to home page
-                browserHistory.push('/');
+                localStorage.setItem('user', {user: JSON.stringify(response.data)});
             })
             .catch(error => dispatch(authError(AUTH_ERROR, error)));
     };
@@ -147,7 +138,7 @@ export function addUserImage(formData, token) {
                 // Dispatch USER_UPDATED action to authReducer
                 dispatch({type: USER_UPDATED, payload: response.data});
                 // Save token to localStorage
-                localStorage.setItem('user', JSON.stringify(response.data));
+                localStorage.setItem('user', {user: JSON.stringify(response.data)});
                 // Reroute user to home page
                 browserHistory.push('/');
             })
