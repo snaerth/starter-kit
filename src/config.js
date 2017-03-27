@@ -6,11 +6,13 @@ export default () => {
     return {
         // Defaults
         NODE_ENV: process.env.NODE_ENV || 'development',
+        PROTOCOL: process.env.ADMIN_PROTOCOL || 'http',
         PORT: process.env.PORT || 3000,
         HOST: process.env.HOST || 'localhost',
-        // Api
-        APIPORT: process.env.APIPORT || 3030,
-        APIHOST: process.env.APIHOST || 'localhost',
+        // Admin
+        ADMIN_PROTOCOL: process.env.ADMIN_PROTOCOL || 'http',
+        ADMIN_PORT: process.env.ADMIN_PORT || 3030,
+        ADMIN_HOST: process.env.ADMIN_HOST || 'localhost',
         // Database
         DB_URL: process.env.DB_URL || 'mongodb://starterkit:starterkit@ds161159.mlab.com:61159/starterkit',
         DB_USERNAME: process.env.DB_USERNAME || 'username',

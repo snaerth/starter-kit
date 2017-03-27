@@ -11,31 +11,10 @@ export default ({html, preloadedState, assets}) => {
                 <meta name="description" content="just another react + webpack boilerplate">
                 <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=0, maximum-scale=1, minimum-scale=1">
                 <link href="${assets ? assets.main.css : '/styles.css'}" rel="stylesheet" type="text/css">
-                <script>document.documentElement.className = 'js';</script>
             </head>
-        <body class="loading">
+        <body>
             <div id="app">${process.env.NODE_ENV === 'production' ? html : ''}</div>
             ${preloadedState ? `<script>window.__PRELOADED_STATE__ = ${serialize(preloadedState)}</script>`: ''}
-            <script>
-            (function() {
-                document.addEventListener("DOMContentLoaded", function() {
-                var minTime = 500;
-                var now = new Date();
-                var next = new Date();
-                var timeDiff = next.getTime() - now.getTime();
-
-                if (timeDiff < minTime) {
-                    var delay = minTime - timeDiff;
-
-                    setTimeout(function() {
-                    document.body.classList.remove('loading');
-                    }, delay);
-                } else {
-                    document.body.classList.remove('loading');
-                }
-                });
-            })();
-            </script>
             <script defer src="${ assets ? assets.vendor.js : '/vendor.js' }"></script>
             <script defer src="${ assets ? assets.main.js : '/main.js' }" ></script>
         </body>

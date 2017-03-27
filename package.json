@@ -2,18 +2,18 @@
   "name": "react-redux-universal-starter",
   "version": "0.1.0",
   "scripts": {
-    "debug": "babel ./src/api --out-dir dist --watch --source-maps",
-    "start": "concurrent --kill-others \"npm run start-server\" \"npm run start-api\"",
-    "start-prod": "concurrent --kill-others \"npm run start-prod-server\" \"npm run start-prod-api\"",
+    "debug": "babel ./src/admin --out-dir dist --watch --source-maps",
+    "start": "concurrent --kill-others \"npm run start-server\" \"npm run start-admin\"",
+    "start-prod": "concurrent --kill-others \"npm run start-prod-server\" \"npm run start-prod-admin\"",
     "start-prod-server": "better-npm-run start-prod-server",
-    "start-prod-api": "better-npm-run start-prod-api",
-    "start-dev": "concurrent --kill-others \"npm run start-dev-api\" \"npm run start-dev-server\" \"npm run lint:watch\"",
+    "start-prod-admin": "better-npm-run start-prod-admin",
+    "start-dev": "concurrent --kill-others \"npm run start-dev-admin\" \"npm run start-dev-server\" \"npm run lint:watch\"",
     "start-dev-server": "better-npm-run start-dev-server",
-    "start-dev-api": "better-npm-run start-dev-api",
+    "start-dev-admin": "better-npm-run start-dev-admin",
     "build": "better-npm-run build",
     "build-client": "webpack -p  --colors --display-error-details --config ./tools/webpack.client.prod.js",
     "build-server": "webpack -p --colors --display-error-details --config ./tools/webpack.server.prod.js",
-    "build-api": "webpack -p --colors --display-error-details --config ./tools/webpack.api.prod.js",
+    "build-admin": "webpack -p --colors --display-error-details --config ./tools/webpack.admin.prod.js",
     "lint": "node_modules/.bin/esw webpack.client.dev.* src --color",
     "lint:watch": "npm run lint -- --watch"
   },
@@ -26,12 +26,12 @@
         "PORT": 8080
       }
     },
-    "start-prod-api": {
-      "command": "node build/api.js",
+    "start-prod-admin": {
+      "command": "node build/admin.js",
       "env": {
         "NODE_ENV": "production",
-        "APIPORT": 3030,
-        "APIHOST": "localhost"
+        "ADMIN_PORT": 3030,
+        "ADMIN_HOST": "localhost"
       }
     },
     "start-dev-server": {
@@ -42,20 +42,20 @@
         "PORT": 3000
       }
     },
-    "start-dev-api": {
-      "command": "babel-node src/api/index.js",
+    "start-dev-admin": {
+      "command": "babel-node src/admin/index.js",
       "env": {
         "NODE_ENV": "development",
-        "APIPORT": 3030,
-        "APIHOST": "localhost"
+        "ADMIN_PORT": 3030,
+        "ADMIN_HOST": "localhost"
       }
     },
     "build": {
-      "command": "rimraf build && npm run build-client && npm run build-server && npm run build-api",
+      "command": "rimraf build && npm run build-client && npm run build-server && npm run build-admin",
       "env": {
         "NODE_ENV": "production",
-        "APIPORT": 3030,
-        "APIHOST": "localhost",
+        "ADMIN_PORT": 3030,
+        "ADMIN_HOST": "localhost",
         "HOST": "localhost",
         "PORT": 3000
       }
@@ -68,12 +68,12 @@
         "PORT": 8080
       }
     },
-    "start-api": {
-      "command": "pm2 start build/api.js",
+    "start-admin": {
+      "command": "pm2 start build/admin.js",
       "env": {
         "NODE_ENV": "production",
-        "APIPORT": 3030,
-        "APIHOST": "localhost"
+        "ADMIN_PORT": 3030,
+        "ADMIN_HOST": "localhost"
       }
     }
   },

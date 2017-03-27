@@ -15,7 +15,7 @@ const schema = {
   },
   password: {
     type: String,
-    required: true
+    required: false
   },
   name: {
     type: String,
@@ -27,7 +27,8 @@ const schema = {
   },
   roles: {
     type: Array,
-    required: true
+    required: true,
+    default: ['user']
   },
   imageUrl: {
     type: String,

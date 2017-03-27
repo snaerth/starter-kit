@@ -3,14 +3,14 @@ const path = require('path');
 const CONFIG = require('./webpack.base');
 const externals = require('webpack-node-externals');
 const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
-const { API_ENTRY, API_OUTPUT } = CONFIG;
+const { ADMIN_ENTRY, ADMIN_OUTPUT } = CONFIG;
 
 const plugins = [
   new webpack.DefinePlugin({
     'process.env': {
       'NODE_ENV': JSON.stringify(process.env.NODE_ENV),
-      'PORT': JSON.stringify(process.env.APIPORT),
-      'HOST': JSON.stringify(process.env.APIHOST),
+      'PORT': JSON.stringify(process.env.ADMIN_PORT),
+      'HOST': JSON.stringify(process.env.ADMIN_HOST),
       'DB_URL': JSON.stringify(process.env.DB_URL),
       'DB_USERNAME': JSON.stringify(process.env.DB_USERNAME),
       'DB_PASSWORD': JSON.stringify(process.env.DB_PASSWORD)
@@ -45,11 +45,11 @@ const rules = [js, json];
 module.exports = {
   target: 'node',
   devtool: 'source-map',
-  entry: API_ENTRY,
+  entry: ADMIN_ENTRY,
   output: {
-    path: API_OUTPUT,
-    filename: 'api.js',
-    sourceMapFilename: 'api.map',
+    path: ADMIN_OUTPUT,
+    filename: 'admin.js',
+    sourceMapFilename: 'admin.map',
     libraryTarget: 'commonjs2'
   },
   node: {

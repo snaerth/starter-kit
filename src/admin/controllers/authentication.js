@@ -34,7 +34,7 @@ export function signup(req, res) {
     validateSignup({ email, password, name })
         .then(() => checkUserByEmail(email))
         .then(() => {
-            const user = new User({ name, email, password, roles: ['user'] });
+            const user = new User({ name, email, password });
             return saveUser(user);
         })
         .then(data => res.status(200).json(data))

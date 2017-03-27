@@ -21,12 +21,12 @@ const requireAuth = passport.authenticate('jwt');
 const requireSignin = passport.authenticate('local');
 const facebookAuth = passport.authenticate('facebook', { scope: 'email' });
 const facebookAuthCallback = passport.authenticate('facebook', {
-  successRedirect: '/profile',
+  successRedirect: '/auth/facebook/callback',
   failureRedirect: '/'
 });
 
 /**
- * Default API routes
+ * Default Admin routes
  * @param {Object} app - Express app referece
  * @returns {undefined}
  */
@@ -37,29 +37,41 @@ export default function (app) {
   app.post('/forgot', forgotPassword);
   app.post('/reset/:token', resetPassword);
   // Facebook authentication
-  app.get('/facebook', facebookAuth);
+  app.get('/auth/facebook', facebookAuth);
   // handle the callback after facebook has authenticated the user
-  app.get('/facebook/callback', facebookAuthCallback, (req, res) => {
-    // Successful authentication, redirect home.
-    console.log('Facebook authenticated');
-    res.redirect('/');
-  });
+  app.get('/auth/facebook/callback', facebookAuthCallback,     
+    // On success
+    (req,res) => {
+        // return the token or you would wish otherwise give eg. a succes message
+        res.render('json', {data: JSON.stringify(req.user.access_token)});
+    },
+
+    // on error; likely to be something FacebookTokenError token invalid or already used token,
+    // these errors occur when the user logs in twice with the same token
+    (err,req,res,next) => {
+        // You could put your own behavior in here, fx: you could force auth again...
+        // res.redirect('/auth/facebook/');
+        if(err) {
+            res.status(400);
+            res.render('error', {message: err.message});
+        }
+    });
 
   // Upload images
   app.post('/userimage', requireAuth, uploadUserImage);
   app.put('/user', requireAuth, updateUser);
 
   // News
-  app.get('/api/news', [
+  app.get('/news', [
     requireAuth, isAdmin
   ], getNews);
-  app.put('/api/news', [
+  app.put('/news', [
     requireAuth, isAdmin
   ], updateNews);
-  app.delete('/api/news', [
+  app.delete('/news', [
     requireAuth, isAdmin
   ], deleteNews);
-  app.post('/api/news', [
+  app.post('/news', [
     requireAuth, isAdmin
   ], createNews);
 }

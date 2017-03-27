@@ -11,8 +11,8 @@ const ButtonLink = (props) => {
         <a className={classnames(styles.button, styles[color ? color: 'default'], styles[className] )} 
             href={href}
             title={title}>
-            {text}
             <span className={styles.icon}>{props.children}</span>
+            {text}
         </a>
     );
 };

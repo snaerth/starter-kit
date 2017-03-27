@@ -3,11 +3,11 @@ import User from '../models/user';
 import { Strategy as JwtStrategy, ExtractJwt } from 'passport-jwt';
 import { Strategy as FacebookStrategy } from 'passport-facebook';
 import LocalStrategy from 'passport-local';
-import {removeUserProps, tokenForUser} from '../controllers/authentication';
+import { removeUserProps, tokenForUser } from '../controllers/authentication';
 import config from '../../config';
 
 // VARIABLES
-const { JWT_SECRET, FACEBOOK_CLIENT_ID, FACEBOOK_CLIENT_SECRET, FACEBOOK_CALLBACK_URL, APIHOST, APIPORT } = config();
+const { JWT_SECRET, FACEBOOK_CLIENT_ID, FACEBOOK_CLIENT_SECRET, ADMIN_PROTOCOL, ADMIN_HOST, ADMIN_PORT } = config();
 
 // Setup options for local strategy
 const localOptions = {
@@ -77,8 +77,9 @@ export const jwtLogin = new JwtStrategy(jwtOptions, (payload, done) => {
 const facebookOptions = {
     clientID: FACEBOOK_CLIENT_ID,
     clientSecret: FACEBOOK_CLIENT_SECRET,
-    callbackURL: `http://${APIHOST}:${APIPORT}/facebook/callback`
-    //profileFields: ['id', 'displayName', 'photos', 'email', 'birthday', 'cover']
+    callbackURL: `${ADMIN_PROTOCOL}://${ADMIN_HOST}:${ADMIN_PORT}/auth/facebook/callback`,
+    profileFields: ['id', 'displayName', 'photos', 'email', 'birthday', 'cover'],
+    enableProof: true
 };
 
 export const facebookLogin = new FacebookStrategy(facebookOptions, (accessToken, refreshToken, profile, done) => {
@@ -95,38 +96,33 @@ export const facebookLogin = new FacebookStrategy(facebookOptions, (accessToken,
                 // if there is no user found with that facebook id, create them
                 const newUser = new User();
 
-                // set all of the facebook information in our user model
-                newUser.facebook.id = profile.id;
-                newUser.facebook.token = accessToken;
-                newUser.facebook.name = profile.name.givenName + ' ' + profile.name.familyName;
-                newUser.facebook.email = profile.emails[0].value;
+                const {emails, photos, id, displayName} = profile;
+                newUser.email = emails[0].value;
+                newUser.name = displayName;
+                newUser.imageUrl = photos[0].value;
+                // TODO búa til tumbnail imageUrl
 
+                // set all of the facebook information in our user model
+                newUser.facebook.id = id;
+                newUser.facebook.token = accessToken;
+                newUser.facebook.name = displayName;
+                newUser.facebook.email = emails[0].value;
                 // save our user to the database
-                newUser.save(function (err) {
-                    if (err)
-                        throw err;
+                newUser.save(error => {
+                    if (error) {
+                        return done(error);
+                    }
                     // if successful, return the new user
                     return done(null, newUser);
                 });
-                // Save user to databases
-                // newUser.save((error) => {
-                //     if (error) {
-                //         return done(err);
-                //     }
-
-                //     let newUser = removeUserProps(user);
-
                 //     return ({
                 //         token: tokenForUser(newUser),
                 //         ...newUser
                 //     });
-                // });
             }
 
         });
     });
-
-    return done(null, profile);
 });
 
 // Only the user ID is serialized to the session, keeping the amount of data

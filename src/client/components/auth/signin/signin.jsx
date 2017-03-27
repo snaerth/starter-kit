@@ -106,14 +106,14 @@ class Signin extends Component {
                                         <Button text="Sign in" ariaLabel="Sign in" className="fullWidth">
                                             <ArrowForward className={styles.iconArrowForward} />
                                         </Button>
-                                        <ButtonLink href="/api/facebook" text="Sign in with facebook" title="Facebook login" color="facebook" className="fullWidth">
-                                            <FacebookIcon className={styles.iconFacebook} position="center" />
+                                        <ButtonLink href="/admin/auth/facebook" text="Sign in with facebook" title="Facebook login" color="facebook" className="fullWidth">
+                                            <FacebookIcon className={styles.iconFacebook} />
                                         </ButtonLink>
-                                        <ButtonLink href="/api/twitter" text="Sign in with Twitter" title="Twitter login" color="twitter" className="fullWidth">
-                                            <TwitterIcon className={styles.iconFacebook} position="center" />
+                                        <ButtonLink href="/admin/auth/twitter" text="Sign in with Twitter" title="Twitter login" color="twitter" className="fullWidth">
+                                            <TwitterIcon className={styles.iconFacebook} />
                                         </ButtonLink>
-                                        <ButtonLink href="/api/google" text="Sign in with Google" title="Google login" color="google" className="fullWidth">
-                                            <GoogleIcon className={styles.iconFacebook} position="center" />
+                                        <ButtonLink href="/admin/auth/google" text="Sign in with Google" title="Google login" color="google" className="fullWidth">
+                                            <GoogleIcon className={styles.iconFacebook} />
                                         </ButtonLink>
                                     </div>
                                     <div className={styles.forgotPasswordContainer}>

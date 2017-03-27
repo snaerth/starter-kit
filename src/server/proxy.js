@@ -4,8 +4,8 @@ import httpProxy from 'http-proxy';
 export function Proxy({app, target}) {
     const proxy = httpProxy.createProxyServer({target});
 
-    // Proxy to API server
-    app.use('/api', (req, res) => {
+    // Proxy to Admin server
+    app.use('/admin', (req, res) => {
         proxy.web(req, res, {target});
     });
 

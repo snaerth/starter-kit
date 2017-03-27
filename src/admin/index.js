@@ -12,8 +12,8 @@ import {createDefaultDirectorys} from './services/fileService';
 
 // VARIABLES
 const {
-  APIPORT,
-  APIHOST,
+  ADMIN_HOST,
+  ADMIN_PORT,
   DB_URL,
   SESSION_SECRET
 } = config();
@@ -29,7 +29,7 @@ const server = new http.createServer(app);
 
 // Basic IP rate-limiting middleware for Express. Use to limit repeated requests
 // to public APIs and/or endpoints such as password reset.
-const apiLimiter = new RateLimit({
+const limiter = new RateLimit({
   windowMs: 10 * 1000, // 10 seconds
   max: 30, // limit each IP to 10 requests per windowMs
   delayMs: 0 // disabled
@@ -58,19 +58,19 @@ db(DB_URL, () => {
   app.disable('x-powered-by');
 
   // Apply middleware to app
-  app.use(middleware([apiLimiter, session(sessionOptions)]));
+  app.use(middleware([limiter, session(sessionOptions)]));
 
-  // Api routes
+  // Admin routes
   routes(app);
 
   // Error Handler middlewares.
   app.use(...errorHandlers);
 });
 
-// Start API
-server.listen(APIPORT, error => {
+// Start Admin
+server.listen(ADMIN_PORT, error => {
   if (error) {
     console.error(error);
   }
-  console.info('==> ✅  API server is running on %s:%s.', APIHOST, APIPORT);
+  console.info('==> ✅  Admin server is running on %s:%s.', ADMIN_HOST, ADMIN_PORT);
 });
