@@ -112,7 +112,7 @@ class Signin extends Component {
                                         <ButtonLink href="/api/twitter" text="Sign in with Twitter" title="Twitter login" color="twitter" className="fullWidth">
                                             <TwitterIcon className={styles.iconFacebook} position="center" />
                                         </ButtonLink>
-                                        <ButtonLink href="/api/google" text="Sign in with Twitter" title="Twitter login" color="google" className="fullWidth">
+                                        <ButtonLink href="/api/google" text="Sign in with Google" title="Google login" color="google" className="fullWidth">
                                             <GoogleIcon className={styles.iconFacebook} position="center" />
                                         </ButtonLink>
                                     </div>
