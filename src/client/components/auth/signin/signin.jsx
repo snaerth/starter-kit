@@ -7,6 +7,7 @@ import Input from '../../common/input';
 import Password from '../../common/password';
 import styles from './signin.scss';
 import Button from '../../common/button';
+import ButtonLink from '../../common/buttonLink';
 import NotifyBox from '../../common/notifyBox';
 import MainHeading from '../../common/mainheading';
 import { validateEmail } from './../../../utils/validate';
@@ -14,6 +15,9 @@ import Spinner from '../../common/spinner';
 import * as actionCreators from '../actions';
 import Email from '../../../common/svg/email.svg';
 import ArrowForward from '../../../common/svg/arrow_forward.svg';
+import FacebookIcon from '../../../common/svg/facebook.svg';
+import TwitterIcon from '../../../common/svg/twitter.svg';
+import GoogleIcon from '../../../common/svg/google.svg';
 
 /**
  * Signin component
@@ -31,7 +35,6 @@ class Signin extends Component {
     constructor(props) {
         super(props);
         this.handleFormSubmit = this.handleFormSubmit.bind(this);
-        this.facebookSignin = this.facebookSignin.bind(this);
     }
 
     componentWillMount() {
@@ -48,10 +51,6 @@ class Signin extends Component {
     handleFormSubmit({ email, password }) {
         this.props.actions.isFetching();
         this.props.actions.signinUser({ email, password });
-    }
-
-    facebookSignin() {
-        this.props.actions.signinFacebook();
     }
 
     /**
@@ -107,9 +106,15 @@ class Signin extends Component {
                                         <Button text="Sign in" ariaLabel="Sign in" className="fullWidth">
                                             <ArrowForward className={styles.iconArrowForward} />
                                         </Button>
-                                        <Button type="button" text="Loin with facebook" ariaLabel="Login with facebook" className="fullWidth" onClick={() => this.facebookSignin()}>
-                                            <ArrowForward className={styles.iconArrowForward} />
-                                        </Button>
+                                        <ButtonLink href="/api/facebook" text="Sign in with facebook" title="Facebook login" color="facebook" className="fullWidth">
+                                            <FacebookIcon className={styles.iconFacebook} position="center" />
+                                        </ButtonLink>
+                                        <ButtonLink href="/api/twitter" text="Sign in with Twitter" title="Twitter login" color="twitter" className="fullWidth">
+                                            <TwitterIcon className={styles.iconFacebook} position="center" />
+                                        </ButtonLink>
+                                        <ButtonLink href="/api/google" text="Sign in with Twitter" title="Twitter login" color="google" className="fullWidth">
+                                            <GoogleIcon className={styles.iconFacebook} position="center" />
+                                        </ButtonLink>
                                     </div>
                                     <div className={styles.forgotPasswordContainer}>
                                         <Link to="forgotpassword" className="link-slideright">Forgot password?</Link>

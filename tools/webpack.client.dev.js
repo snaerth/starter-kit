@@ -35,7 +35,7 @@ const plugins = [
   }),
   new webpack
     .optimize
-    .CommonsChunkPlugin({name: 'vendor', minChunks: Infinity, filename: 'vendor.js'})
+    .CommonsChunkPlugin({name: 'vendor', minChunks: 6, filename: 'vendor.js'})
 ];
 
 // RULES

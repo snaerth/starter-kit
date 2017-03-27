@@ -12,6 +12,12 @@
   padding-top: 1em;
 }
 
-.iconArrowForward {
+.iconArrowForward, .iconFacebook {
   fill: $primary-white;
 }
+
+.iconFacebook {
+  height: 24px;
+  width: 24px;
+}
+
