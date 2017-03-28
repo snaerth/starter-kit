@@ -1,10 +1,10 @@
 import React, { PropTypes, Component } from 'react';
-import ReactDOM from 'react-dom';
 import { Link } from 'react-router';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { reduxForm, Field } from 'redux-form';
-import {TimelineLite} from 'gsap';
+import { TimelineLite } from 'gsap';
+import classnames from 'classnames';
 import Input from '../../common/input';
 import Password from '../../common/password';
 import styles from './signin.scss';
@@ -37,14 +37,36 @@ class Signin extends Component {
     constructor(props) {
         super(props);
         this.handleFormSubmit = this.handleFormSubmit.bind(this);
-        this.toggleSigninView = this.toggleSigninView.bind(this);
+        this.toggleView = this.toggleView.bind(this);
         this.state = {
-            showEmailSignin: false
+            showEmailSignin: false,
+            animateButtons: false
         };
     }
 
     componentWillMount() {
         this.props.actions.clean();
+        this.animateStart();
+    }
+
+    componentDidMount() {
+        setTimeout(() => {
+            this.animateStart();
+            this.setState({ animateButtons: true });
+        }, 100);
+    }
+
+    /**
+     * Sign in start animation for buttons
+     * 
+     * @returns {undefined}
+     * @author Snær Seljan Þóroddsson
+     */
+    animateStart() {
+        if (this.refs.buttons) {
+            const timeline = new TimelineLite();
+            timeline.staggerFrom(this.refs.buttons.children, 1, { scale: 0.7, opacity: 0, delay: 0.1, ease: Elastic.easeOut }, 0.1); // eslint-disable-line
+        }
     }
 
     /**
@@ -77,78 +99,26 @@ class Signin extends Component {
         }
     }
 
-    toggleSigninView() {
-        const node = ReactDOM.findDOMNode(this);
+    /**
+     * Toggles signin views BUTTONS or SIGN IN with email
+     * 
+     * @returns {undefined}
+     * @author Snær Seljan Þóroddsson
+     */
+    toggleView() {
+        this.setState({ showEmailSignin: !this.state.showEmailSignin });
+        const timeline = new TimelineLite();
 
-        if(this.refs.buttons && this.refs.buttons.children) {
-            // const elements = this.refs.buttons.children;
-            // const tl = new TimelineLite({paused: true});
-            // for(let i = 0;i < elements.length; i++) {
-            //     tl.to(elements[i], 0.3, {y: -100, ease:Power2.easeInOut}, '-=0.2');
-            // }
-            console.log(this.refs);
-            const tl = new TimelineLite({paused: true});
-            tl.to(this.refs.buttons, 0.3, {x: '-150%', ease:Power2.easeOutIn});
-            this.setState({ showEmailSignin: !this.state.showEmailSignin });
-            console.log(this.refs);
-            tl.play();
-
+        if (!this.state.showEmailSignin) {
+            timeline
+                .to(this.refs.buttons, 0.3, { x: '-110%', opacity: 1, ease: Power1.easeIn }) // eslint-disable-line
+                .from(this.refs.form, 0.3, { x: '100%', opacity: 0, ease: Power1.easeIn }) // eslint-disable-line
+            timeline.pause();
+            timeline.play();
+        } else {
+            timeline.reverse();
         }
-        //this.setState({ showEmailSignin: !this.state.showEmailSignin });
-    }
-
-    renderSigninForm(handleSubmit) {
-        return (
-            <form onSubmit={handleSubmit(this.handleFormSubmit)} noValidate ref="form">
-                <fieldset>
-                    <Field
-                        component={Input}
-                        name="email"
-                        id="email"
-                        type="email"
-                        label="Email"
-                        placeholder="someone@example.com"><Email /></Field>
-                </fieldset>
-                <fieldset>
-                    <Field
-                        component={Password}
-                        name="password"
-                        id="password"
-                        type="password"
-                        label="Password"
-                        placeholder="Must have at least 6 characters" />
-                </fieldset>
-                <fieldset>
-                    <div>
-                        <Button text="Sign in" ariaLabel="Sign in" className="fullWidth">
-                            <ArrowForward className={styles.iconArrowForward} />
-                        </Button>
-                    </div>
-                </fieldset>
-            </form>
-        );
-    }
-
-    renderButtons() {
-        return (
-            <div className={styles.buttonContainer} ref="buttons">
-                <ButtonLink href="/admin/auth/facebook" text="Continue with facebook" title="Facebook login" color="facebook" className="fullWidth">
-                    <FacebookIcon className={styles.iconFacebook} />
-                </ButtonLink>
-                <ButtonLink href="/admin/auth/twitter" text="Continue with Twitter" title="Twitter login" color="twitter" className="fullWidth">
-                    <TwitterIcon className={styles.iconFacebook} />
-                </ButtonLink>
-                <ButtonLink href="/admin/auth/google" text="Continue with Google" title="Google login" color="google" className="fullWidth">
-                    <GoogleIcon className={styles.iconFacebook} />
-                </ButtonLink>
-                <Button onClick={() => this.toggleSigninView()} text="Sign in with email" ariaLabel="Sign in with email" className="fullWidth">
-                    <ArrowForward className={styles.iconArrowForward} />
-                </Button>
-                <div className={styles.forgotPasswordContainer}>
-                    <Link to="forgotpassword" className="link-slideright">Forgot password?</Link>
-                </div>
-            </div>
-        );
+        
     }
 
     render() {
@@ -156,13 +126,67 @@ class Signin extends Component {
 
         return (
             <div>
-                <div className="card">
+                <div className={classnames('card', styles.cardExtend)}>
                     {isFetching
                         ? <Spinner>Signing in</Spinner>
                         : <div>
                             <MainHeading text="SIGN IN" />
                             {this.renderError()}
-                            {this.state.showEmailSignin ? this.renderSigninForm(handleSubmit) : this.renderButtons()}
+                            <div className={styles.relative}>
+                                <form onSubmit={handleSubmit(this.handleFormSubmit)}
+                                    noValidate
+                                    ref="form"
+                                    className={classnames(styles.formContainer, this.state.showEmailSignin ? '' : styles.hidden)}>
+                                    <fieldset>
+                                        <Field
+                                            component={Input}
+                                            name="email"
+                                            id="email"
+                                            type="email"
+                                            label="Email"
+                                            placeholder="someone@example.com"><Email /></Field>
+                                    </fieldset>
+                                    <fieldset>
+                                        <Field
+                                            component={Password}
+                                            name="password"
+                                            id="password"
+                                            type="password"
+                                            label="Password"
+                                            placeholder="Must have at least 6 characters" />
+                                    </fieldset>
+                                    <fieldset>
+                                        <div>
+                                            <Button text="Sign in" ariaLabel="Sign in" className="fullWidth">
+                                                <ArrowForward className={styles.iconArrowForward} />
+                                            </Button>
+                                        </div>
+                                    </fieldset>
+                                    <div className={styles.back}>
+                                        <Link role="button"
+                                            className="link-slideright"
+                                            onClick={() => this.toggleView()}>Back to socials sign in</Link>
+                                    </div>
+                                </form>
+                                <div className={classnames(styles.buttonContainer, !this.state.animateButtons ? styles.hidden : '')}
+                                    ref="buttons">
+                                    <ButtonLink href="/admin/auth/facebook" text="Continue with facebook" title="Facebook login" color="facebook" className="fullWidth">
+                                        <FacebookIcon className={styles.iconFacebook} />
+                                    </ButtonLink>
+                                    <ButtonLink href="/admin/auth/twitter" text="Continue with Twitter" title="Twitter login" color="twitter" className="fullWidth">
+                                        <TwitterIcon className={styles.iconFacebook} />
+                                    </ButtonLink>
+                                    <ButtonLink href="/admin/auth/google" text="Continue with Google" title="Google login" color="google" className="fullWidth">
+                                        <GoogleIcon className={styles.iconFacebook} />
+                                    </ButtonLink>
+                                    <Button onClick={() => this.toggleView()} text="Sign in with email" ariaLabel="Sign in with email" className="fullWidth">
+                                        <ArrowForward className={styles.iconArrowForward} />
+                                    </Button>
+                                    <div className={styles.forgotPasswordContainer}>
+                                        <Link to="forgotpassword" className="link-slideright">Forgot password?</Link>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     }
                 </div>

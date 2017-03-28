@@ -1,4 +1,5 @@
 @import '../../../styles/variables.scss';
+
 .fullWidth {
   width: 100%;
 }
@@ -7,9 +8,17 @@
   margin-top: 9px;
 }
 
+.relative {
+  position: relative;
+}
+
 .forgotPasswordContainer {
   text-align: center;
   padding-top: 1em;
+}
+
+.back {
+  text-align: center;
 }
 
 .iconArrowForward,
@@ -24,5 +33,22 @@
 
 .buttonContainer {
   margin: 0 2px;
-  padding: 0.35em 0.625em 0.75em;
+  padding: .35em .625em .75em;
+}
+
+.buttonContainer,
+.formContainer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+}
+
+.cardExtend {
+  min-height: 400px;
+}
+
+.hidden {
+  display: none;
+  visibility: hidden;
 }

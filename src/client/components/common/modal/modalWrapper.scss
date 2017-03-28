@@ -23,6 +23,7 @@
     min-width: $min-320;
     max-height: $max-768;
     overflow-y: auto;
+    overflow-x: hidden;
 }
 
 @media screen and (max-width: $max-768) {
