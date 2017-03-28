@@ -1,8 +1,10 @@
 import React, { PropTypes, Component } from 'react';
+import ReactDOM from 'react-dom';
 import { Link } from 'react-router';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { reduxForm, Field } from 'redux-form';
+import {TimelineLite} from 'gsap';
 import Input from '../../common/input';
 import Password from '../../common/password';
 import styles from './signin.scss';
@@ -35,6 +37,10 @@ class Signin extends Component {
     constructor(props) {
         super(props);
         this.handleFormSubmit = this.handleFormSubmit.bind(this);
+        this.toggleSigninView = this.toggleSigninView.bind(this);
+        this.state = {
+            showEmailSignin: false
+        };
     }
 
     componentWillMount() {
@@ -71,6 +77,80 @@ class Signin extends Component {
         }
     }
 
+    toggleSigninView() {
+        const node = ReactDOM.findDOMNode(this);
+
+        if(this.refs.buttons && this.refs.buttons.children) {
+            // const elements = this.refs.buttons.children;
+            // const tl = new TimelineLite({paused: true});
+            // for(let i = 0;i < elements.length; i++) {
+            //     tl.to(elements[i], 0.3, {y: -100, ease:Power2.easeInOut}, '-=0.2');
+            // }
+            console.log(this.refs);
+            const tl = new TimelineLite({paused: true});
+            tl.to(this.refs.buttons, 0.3, {x: '-150%', ease:Power2.easeOutIn});
+            this.setState({ showEmailSignin: !this.state.showEmailSignin });
+            console.log(this.refs);
+            tl.play();
+
+        }
+        //this.setState({ showEmailSignin: !this.state.showEmailSignin });
+    }
+
+    renderSigninForm(handleSubmit) {
+        return (
+            <form onSubmit={handleSubmit(this.handleFormSubmit)} noValidate ref="form">
+                <fieldset>
+                    <Field
+                        component={Input}
+                        name="email"
+                        id="email"
+                        type="email"
+                        label="Email"
+                        placeholder="someone@example.com"><Email /></Field>
+                </fieldset>
+                <fieldset>
+                    <Field
+                        component={Password}
+                        name="password"
+                        id="password"
+                        type="password"
+                        label="Password"
+                        placeholder="Must have at least 6 characters" />
+                </fieldset>
+                <fieldset>
+                    <div>
+                        <Button text="Sign in" ariaLabel="Sign in" className="fullWidth">
+                            <ArrowForward className={styles.iconArrowForward} />
+                        </Button>
+                    </div>
+                </fieldset>
+            </form>
+        );
+    }
+
+    renderButtons() {
+        return (
+            <div className={styles.buttonContainer} ref="buttons">
+                <ButtonLink href="/admin/auth/facebook" text="Continue with facebook" title="Facebook login" color="facebook" className="fullWidth">
+                    <FacebookIcon className={styles.iconFacebook} />
+                </ButtonLink>
+                <ButtonLink href="/admin/auth/twitter" text="Continue with Twitter" title="Twitter login" color="twitter" className="fullWidth">
+                    <TwitterIcon className={styles.iconFacebook} />
+                </ButtonLink>
+                <ButtonLink href="/admin/auth/google" text="Continue with Google" title="Google login" color="google" className="fullWidth">
+                    <GoogleIcon className={styles.iconFacebook} />
+                </ButtonLink>
+                <Button onClick={() => this.toggleSigninView()} text="Sign in with email" ariaLabel="Sign in with email" className="fullWidth">
+                    <ArrowForward className={styles.iconArrowForward} />
+                </Button>
+                <div className={styles.forgotPasswordContainer}>
+                    <Link to="forgotpassword" className="link-slideright">Forgot password?</Link>
+                </div>
+            </div>
+        );
+    }
+
     render() {
         const { handleSubmit, isFetching } = this.props;
 
@@ -82,46 +162,9 @@ class Signin extends Component {
                         : <div>
                             <MainHeading text="SIGN IN" />
                             {this.renderError()}
-                            <form onSubmit={handleSubmit(this.handleFormSubmit)} noValidate>
-                                <fieldset>
-                                    <Field
-                                        component={Input}
-                                        name="email"
-                                        id="email"
-                                        type="email"
-                                        label="Email"
-                                        placeholder="someone@example.com"><Email /></Field>
-                                </fieldset>
-                                <fieldset>
-                                    <Field
-                                        component={Password}
-                                        name="password"
-                                        id="password"
-                                        type="password"
-                                        label="Password"
-                                        placeholder="Must have at least 6 characters" />
-                                </fieldset>
-                                <fieldset>
-                                    <div>
-                                        <Button text="Sign in" ariaLabel="Sign in" className="fullWidth">
-                                            <ArrowForward className={styles.iconArrowForward} />
-                                        </Button>
-                                        <ButtonLink href="/admin/auth/facebook" text="Sign in with facebook" title="Facebook login" color="facebook" className="fullWidth">
-                                            <FacebookIcon className={styles.iconFacebook} />
-                                        </ButtonLink>
-                                        <ButtonLink href="/admin/auth/twitter" text="Sign in with Twitter" title="Twitter login" color="twitter" className="fullWidth">
-                                            <TwitterIcon className={styles.iconFacebook} />
-                                        </ButtonLink>
-                                        <ButtonLink href="/admin/auth/google" text="Sign in with Google" title="Google login" color="google" className="fullWidth">
-                                            <GoogleIcon className={styles.iconFacebook} />
-                                        </ButtonLink>
-                                    </div>
-                                    <div className={styles.forgotPasswordContainer}>
-                                        <Link to="forgotpassword" className="link-slideright">Forgot password?</Link>
-                                    </div>
-                                </fieldset>
-                            </form>
-                        </div>}
+                            {this.state.showEmailSignin ? this.renderSigninForm(handleSubmit) : this.renderButtons()}
+                        </div>
+                    }
                 </div>
             </div>
         );

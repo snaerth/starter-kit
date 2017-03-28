@@ -1,5 +1,6 @@
 {
   "name": "react-redux-universal-starter",
+  "engine": "node >= 7.6.0",
   "version": "0.1.0",
   "scripts": {
     "debug": "babel ./src/admin --out-dir dist --watch --source-maps",

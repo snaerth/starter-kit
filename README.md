@@ -1,14 +1,17 @@
 # React-Redux-Universal with Mongodb and express
+## Requirements
+Node version >= 7.6.0
 
 ## Install, Development, Production and Running
 git clone https://github.com/snaerth/starter-kit my-project
 
 1. cd my-project
-2. npm install
+2. yarn install
 
 ### Development
 1. npm run start-dev
 2. Navigate to http://localhost:3000 in your browser of choice.
+3. Admin system running http://localhost:3030
 
 ### Production
 1. npm run build
