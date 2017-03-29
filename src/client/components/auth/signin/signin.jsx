@@ -149,7 +149,7 @@ class Signin extends Component {
                         label="Password"
                         placeholder="Must have at least 6 characters" />
                 </fieldset>
-                <fieldset className={styles.noPaddingBottom}>
+                <fieldset>
                     <div>
                         <Button text="Sign in" ariaLabel="Sign in" className="fullWidth">
                             <ArrowForward className={styles.iconArrowForward} />
