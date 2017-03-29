@@ -38,6 +38,7 @@ class Signin extends Component {
         super(props);
         this.handleFormSubmit = this.handleFormSubmit.bind(this);
         this.toggleView = this.toggleView.bind(this);
+        this.timeline = new TimelineLite();
         this.state = {
             showEmailSignin: false,
             animateButtons: false
@@ -64,8 +65,8 @@ class Signin extends Component {
      */
     animateStart() {
         if (this.refs.buttons) {
-            const timeline = new TimelineLite();
-            timeline.staggerFrom(this.refs.buttons.children, 1, { scale: 0.7, opacity: 0, delay: 0.1, ease: Elastic.easeOut }, 0.1); // eslint-disable-line
+            const tl = new TimelineLite();
+            tl.staggerFrom(this.refs.buttons.children, 1, { scale: 0.9, opacity: 0, delay: 0.1, ease: Elastic.easeOut }, 0.1); // eslint-disable-line
         }
     }
 
@@ -107,18 +108,16 @@ class Signin extends Component {
      */
     toggleView() {
         this.setState({ showEmailSignin: !this.state.showEmailSignin });
-        const timeline = new TimelineLite();
 
         if (!this.state.showEmailSignin) {
-            timeline
-                .to(this.refs.buttons, 0.3, { x: '-110%', opacity: 1, ease: Power1.easeIn }) // eslint-disable-line
-                .from(this.refs.form, 0.3, { x: '100%', opacity: 0, ease: Power1.easeIn }) // eslint-disable-line
-            timeline.pause();
-            timeline.play();
+            this.timeline
+                .to(this.refs.buttons, 0.3, { left: '-110%', opacity: 1, ease: Power1.easeIn }) // eslint-disable-line
+                .to(this.refs.form, 0.3, { left: 0, opacity: 1, ease: Power1.easeIn }) // eslint-disable-line
+            this.timeline.pause();
+            this.timeline.play();
         } else {
-            timeline.reverse();
+            this.timeline.reverse();
         }
-        
     }
 
     render() {
@@ -136,7 +135,7 @@ class Signin extends Component {
                                 <form onSubmit={handleSubmit(this.handleFormSubmit)}
                                     noValidate
                                     ref="form"
-                                    className={classnames(styles.formContainer, this.state.showEmailSignin ? '' : styles.hidden)}>
+                                    className={classnames(styles.formContainer)}>
                                     <fieldset>
                                         <Field
                                             component={Input}
