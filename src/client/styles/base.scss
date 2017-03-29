@@ -17,7 +17,7 @@ html {
 }
 
 body {
-    @include responsive-font(1.5vw, 16px, 18px);
+    @include responsive-font(1.5vw, 16px, 16px);
     background: $primary-background;
     position: relative;
     margin: 0;
@@ -119,7 +119,7 @@ fieldset {
 
 .card {
     max-width: $max-480;
-    margin: 1em auto 0;
+    margin: 0 auto;
     background: $primary-card;
     padding: 1em 1em 0;
     position: relative;
