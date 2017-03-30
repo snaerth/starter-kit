@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import {bindActionCreators} from 'redux';
+import { bindActionCreators } from 'redux';
 import { Link, IndexLink } from 'react-router';
 import styles from './Header.scss';
 import ModalWrapper from '../modal';
@@ -34,7 +34,7 @@ class Header extends Component {
     }
 
     componentWillReceiveProps() {
-        if(this.props.modalOpen) {
+        if (this.props.modalOpen) {
             this.closeModal();
         }
     }
@@ -53,7 +53,7 @@ class Header extends Component {
      * @param {String} modalName 
      */
     changeModalComponent(modalName) {
-        this.setState({activeModal: modalName === 'signup' ? 'signup' : 'signin'});
+        this.setState({ activeModal: modalName === 'signup' ? 'signup' : 'signin' });
         this.openModal();
     }
 
@@ -70,7 +70,7 @@ class Header extends Component {
                 <Link to="/signout" key="signout" activeClassName={styles.active} className={styles.link}>Sign out</Link>
             ];
 
-            if(this.props.roles && this.props.roles.indexOf('admin') > -1) {
+            if (this.props.roles && this.props.roles.indexOf('admin') > -1) {
                 links.unshift(<Link to="/admin" key="admin" activeClassName={styles.active} className={styles.link}>Admin</Link>);
             }
 
@@ -133,7 +133,9 @@ function mapDispatchToProps(dispatch) {
  * @author Snær Seljan Þóroddsson
  */
 function mapStateToProps(state) {
-    const {authenticated, modalOpen} = state.auth;
+    const {authenticated} = state.auth;
+    const {modalOpen} = state.common;
+
     let newStateToProps = {
         authenticated,
         modalOpen
