@@ -168,7 +168,7 @@ class Signup extends Component {
                                 label="Password"
                                 placeholder="Must have at least 6 characters" />
                         </fieldset>
-                        <fieldset>
+                        <fieldset className={styles.noPaddingBottom}>
                             <Button
                                 onClick={() => this.fileUploaderToggler()}
                                 text="Add profile image"
