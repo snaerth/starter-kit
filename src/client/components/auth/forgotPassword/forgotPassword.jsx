@@ -1,12 +1,13 @@
-import React, {PropTypes, Component} from 'react';
-import {bindActionCreators} from 'redux';
-import {connect} from 'react-redux';
-import {reduxForm, Field} from 'redux-form';
+import React, { PropTypes, Component } from 'react';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import { reduxForm, Field } from 'redux-form';
 import styles from './forgotPassword.scss';
+import MainHeading from '../../common/mainheading';
 import Input from '../../common/input';
 import Button from '../../common/button';
 import NotifyBox from '../../common/notifyBox';
-import {validateEmail} from './../../../utils/validate';
+import { validateEmail } from './../../../utils/validate';
 import * as actionCreators from '../actions';
 import Spinner from '../../common/spinner';
 import Email from '../../../common/svg/email.svg';
@@ -48,7 +49,7 @@ class Signin extends Component {
         this
             .props
             .actions
-            .forgotPassword({email});
+            .forgotPassword({ email });
     }
 
     /**
@@ -63,14 +64,14 @@ class Signin extends Component {
         if (errorMessage) {
             return (
                 <fieldset>
-                    <NotifyBox strongText="Error: " text={errorMessage} type="error"/>
+                    <NotifyBox strongText="Error: " text={errorMessage} type="error" />
                 </fieldset>
             );
         } else if (message) {
             return (
                 <fieldset>
                     <NotifyBox text={message} type
-                    ="success"/>
+                        ="success" />
                 </fieldset>
             );
         }
@@ -86,21 +87,25 @@ class Signin extends Component {
                     : null}
                 {isFetching
                     ? <Spinner>Loading</Spinner>
-                    : <form
-                        onSubmit={handleSubmit(this.handleFormSubmit.bind(this))}
-                        noValidate
-                        autoComplete="off">
-                        <fieldset>
-                            <Field component={Input} name="email" id="email" type="email" label="Email"><Email/></Field>
-                        </fieldset>
-                        <fieldset>
-                            <div>
-                                <Button text="Reset password" ariaLabel="Reset password" className="fullWidth">
-                                    <ArrowForward className={styles.iconArrowForward} />
-                                </Button>
-                            </div>
-                        </fieldset>
-                    </form>}
+                    : <div>
+                        <MainHeading text="Lost password" className="medium" />
+                        <form
+                            onSubmit={handleSubmit(this.handleFormSubmit.bind(this))}
+                            noValidate
+                            autoComplete="off">
+                            <fieldset>
+                                <Field component={Input} name="email" id="email" type="email" label="Email"><Email /></Field>
+                            </fieldset>
+                            <fieldset>
+                                <div>
+                                    <Button text="Reset password" ariaLabel="Reset password" className="fullWidth">
+                                        <ArrowForward className={styles.iconArrowForward} />
+                                    </Button>
+                                </div>
+                            </fieldset>
+                        </form>
+                    </div>
+                }
             </div>
         );
     }
@@ -136,7 +141,7 @@ function validate({email}) {
  * @author Snær Seljan Þóroddsson
  */
 function mapStateToProps(state) {
-    return {errorMessage: state.auth.error, message: state.auth.message, isFetching: state.auth.isFetching};
+    return { errorMessage: state.auth.error, message: state.auth.message, isFetching: state.auth.isFetching };
 }
 
 /**
@@ -152,4 +157,4 @@ function mapDispatchToProps(dispatch) {
     };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(reduxForm({form: 'forgotPassword', fields: ['email'], validate})(Signin));
+export default connect(mapStateToProps, mapDispatchToProps)(reduxForm({ form: 'forgotPassword', fields: ['email'], validate })(Signin));

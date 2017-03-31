@@ -9,6 +9,11 @@ const initialState = {
 
 export default function(state = initialState, action) {
   switch (action.type) {
+    case 'LOCATION_CHANGE': // Default location change in react-router-redux library
+      return {
+        ...state,
+        modalOpen: false
+      };
     case MODAL_OPEN:
       return {
         ...state,
