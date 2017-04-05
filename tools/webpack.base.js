@@ -2,6 +2,15 @@ const path = require('path');
 const autoprefixer = require('autoprefixer');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
+const autoprefixerConfig = autoprefixer({
+  browsers: [
+    '>1%',
+    'last 4 versions',
+    'Firefox ESR',
+    'not ie < 9', // React doesn't support IE8 anyway
+  ]
+});
+
 const vendor = [
   'react',
   'react-dom',
@@ -76,24 +85,23 @@ const devScss = {
 const devJs = {
   test: /\.(js|jsx)$/,
   exclude: /node_modules/,
-  loaders: [
-    {
-      loader: 'babel-loader',
-      query: {
-        presets: [
-          [
-            'es2015', {
-              modules: false
-            }
-          ],
-          'react',
-          'stage-0',
-          'react-hmre'
+  loaders: [{
+    loader: 'babel-loader',
+    query: {
+      cacheDirectory: true,
+      presets: [
+        [
+          'es2015', {
+            modules: false
+          }
         ],
-        plugins: ['transform-decorators-legacy']
-      }
+        'react',
+        'stage-0',
+        'react-hmre'
+      ],
+      plugins: ['transform-decorators-legacy']
     }
-  ]
+  }]
 };
 
 // Production
@@ -101,21 +109,19 @@ const css = {
   test: /\.css$/,
   use: ExtractTextPlugin.extract({
     fallback: "style-loader",
-    loader: [
-      {
-        loader: 'css-loader',
-        query: {
-          modules: true,
-          importLoaders: 2,
-          localIdentName: '[name]__[local]__[hash:base64:5]',
-          plugins: () => {
-            return [autoprefixer]
-          }
+    loader: [{
+      loader: 'css-loader',
+      query: {
+        modules: true,
+        importLoaders: 2,
+        localIdentName: '[name]__[local]__[hash:base64:5]',
+        plugins: () => {
+          return [autoprefixerConfig]
         }
-      }, {
-        loader: 'postcss-loader'
       }
-    ]
+    }, {
+      loader: 'postcss-loader'
+    }]
   })
 };
 
@@ -123,15 +129,14 @@ const scss = {
   test: /\.scss$/,
   use: ExtractTextPlugin.extract({
     fallback: 'style-loader',
-    loader: [
-      {
+    loader: [{
         loader: 'css-loader',
         query: {
           modules: true,
           sourceMap: false,
           localIdentName: '[name]__[local]__[hash:base64:5]',
           plugins: () => {
-            return [autoprefixer]
+            return [autoprefixerConfig]
           }
         }
       },
