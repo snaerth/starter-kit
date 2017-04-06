@@ -23,7 +23,7 @@ const { PORT, HOST } = config();
  * @returns {undefined}
  * @author Snær Seljan Þóroddsson
  */
-export function signup(req, res) {
+export async function signup(req, res) {
     if (!req.body)
         return res.status(422).send({ error: 'No post data found' });
 
@@ -31,14 +31,15 @@ export function signup(req, res) {
 
     // Validate post request inputs Check for if user exists by email, Save user in
     // database Send response object with user token and user information
-    validateSignup({ email, password, name })
-        .then(() => checkUserByEmail(email))
-        .then(() => {
-            const user = new User({ name, email, password });
-            return saveUser(user);
-        })
-        .then(data => res.status(200).json(data))
-        .catch(error => res.status(422).send({ error }));
+    try {
+        const validateSignup = await validateSignup({ email, password, name });
+        const checkUserByEmail = await checkUserByEmail(email);
+        const user = new User({ name, email, password });
+        const data = await saveUser(user);
+        return res.status(200).json(data);
+    } catch (error) {
+        return res.status(422).send({ error });
+    }
 }
 
 /**
