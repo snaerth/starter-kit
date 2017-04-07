@@ -50,14 +50,13 @@ export async function signup(req, res) {
  * @returns {Object} res
  * @author Snær Seljan Þóroddsson
  */
-export function updateUser(req, res) {
+export async function updateUser(req, res) {
     if (!req.body)
         return res.status(422).send({ error: 'No post data found' });
     if (!req.user)
         return res.status(422).send({ error: 'No user found' });
 
     const {
-        user,
         email,
         password,
         newPassword,
@@ -66,13 +65,15 @@ export function updateUser(req, res) {
         phone
     } = req.body;
 
-    validateSignup({ email, password, newPassword, name, dateOfBirth }).then(() => findUserByEmail(email)).then(user => {
+    try {
+        const validateSignup = await validateSignup({ email, password, newPassword, name, dateOfBirth });
+        const user = await findUserByEmail(email);
         user.email = email;
         user.password = password;
         user.name = name;
         user.dateOfBirth = dateOfBirth;
         user.phone = phone;
-        user.comparePassword(password, (error, isMatch) => {
+        user.comparePassword(password, async (error, isMatch) => {
             if (error) {
                 return Promise.reject({ error });
             }
@@ -81,15 +82,14 @@ export function updateUser(req, res) {
                 return Promise.reject({ error: 'Password does not match old password' });
             }
 
-            return Promise.resolve();
+            user.password = newPassword;
+            // Save new user to databases
+            const updatedUser = await saveUser(user);
+            return res.status(200).json(updatedUser);
         });
-    }).then(() => {
-        user.password = newPassword;
-        // Save new user to databases
-        return saveUser(user);
-    })
-        .then(data => res.status(200).json(data))
-        .catch(error => res.status(422).send({ error }));
+    } catch (error) {
+        return res.status(422).send({ error });
+    }
 }
 
 /**
@@ -109,7 +109,7 @@ export function uploadUserImage(req, res) {
             .send({ error: 'An error has occured with image upload' });
     });
 
-    form.parse(req, (err, fields, files) => {
+    form.parse(req, async (err, fields, files) => {
         const image = files.image;
 
         if (image) {
@@ -117,31 +117,32 @@ export function uploadUserImage(req, res) {
             const fileName = uuid();
             const imgPath = form.uploadDir + fileName + ext;
             const thumbnailPath = form.uploadDir + `${fileName + '-thumbnail' + ext}`;
-            let updatedUser = {};
 
-            findUserByEmail(email).then(user => {
-                updatedUser = user;
-                let promises = [];
+            try {
+                const user = await findUserByEmail(email);
                 const { imageUrl, thumbnailUrl } = user;
 
                 if (imageUrl) {
-                    promises.push(checkFileAndDelete(form.uploadDir + imageUrl));
+                    await checkFileAndDelete(form.uploadDir + imageUrl);
                 }
 
                 if (thumbnailUrl) {
-                    promises.push(checkFileAndDelete(form.uploadDir + thumbnailUrl));
+                    await checkFileAndDelete(form.uploadDir + thumbnailUrl);
                 }
 
-                return Promise.all([promises]);
-            }).then(() => {
-                updatedUser.imageUrl = fileName + ext;
-                return resizeImage(image.path, imgPath, 400);
-            }).then(() => resizeImage(image.path, thumbnailPath, 27)).then(() => {
-                updatedUser.thumbnailUrl = fileName + '-thumbnail' + ext;
-                return checkFileAndDelete(image.path);
-            }).then(() => saveUser(updatedUser, ['password']))
-                .then(data => res.status(200).send(data))
-                .catch(error => res.status(422).send({ error }));
+                user.imageUrl = fileName + ext;
+                await resizeImage(image.path, imgPath, 400);
+                await resizeImage(image.path, thumbnailPath, 27);
+
+                user.thumbnailUrl = fileName + '-thumbnail' + ext;
+                await checkFileAndDelete(image.path);
+                const updatedUser = await saveUser(updatedUser, ['password']);
+
+                return res.status(200).send(updatedUser);
+
+            } catch (error) {
+                return res.status(422).send({ error });
+            }
         } else {
             return res
                 .status(422)
@@ -326,27 +327,23 @@ export function signin(req, res) {
  * @returns {undefined}
  * @author Snær Seljan Þóroddsson
  */
-export function forgotPassword(req, res) {
+export async function forgotPassword(req, res) {
     const { email } = req.body;
 
     // Create token Save resetPasswordToken and resetPasswordExpires to user Send
     // email to user
-    createRandomToken()
-        .then(token => attachTokenToUser({ token, email }))
-        .then(({ user, token }) => {
-            const url = `${HOST}:${PORT}/reset/${token}`;
-            const { email, name } = user;
-
-            return sendResetPasswordEmail({ url, email, name });
-        })
-        .then(({ email }) => {
-            res.send(`An e-mail has been sent to ${email} with further instructions.`);
-        })
-        .catch((error) => {
-            return res
-                .status(550)
-                .send({ error: `Coundn't reset password at this time.`, err: error });
-        });
+    try {
+        const token = await createRandomToken();
+        const { user } = await attachTokenToUser({ token, email });
+        const url = `${HOST}:${PORT}/reset/${token}`;
+        const { name } = user;
+        const data = await sendResetPasswordEmail({ url, email, name });
+        return res.send(`An e-mail has been sent to ${data.email} with further instructions.`);
+    } catch (error) {
+        return res
+            .status(550)
+            .send({ error: `Coundn't reset password at this time.`, err: error });
+    }
 }
 
 /**
@@ -436,14 +433,17 @@ function sendResetPasswordEmail({ url, email, name }) {
  * @returns {undefined}
  * @author Snær Seljan Þóroddsson
  */
-export function resetPassword(req, res) {
+export async function resetPassword(req, res) {
     const token = req.params.token;
     const password = req.body.password;
 
     if (token && password) {
-        updateUserPassword({ token, password })
-            .then(user => res.send(`Success! Your password has been changed for ${user.email}.`))
-            .catch(() => res.send({ error: 'Password is invalid or token has expired.' }));
+        try {
+            const user = await updateUserPassword({ token, password });
+            return res.send(`Success! Your password has been changed for ${user.email}.`);
+        } catch (error) {
+            return res.send({ error: 'Password is invalid or token has expired.' })
+        }
     } else {
         res.send({ error: 'Token and password are required' });
     }
