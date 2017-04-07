@@ -1,5 +1,5 @@
 import mongoose, {Schema} from 'mongoose';
-import comment from './comment';
+import Comment from './comment';
 
 const schema = {
     id: {
@@ -32,7 +32,7 @@ const schema = {
         default: Date.now
     },
     comments: {
-        type: comment,
+        type: Comment,
         required: false
     }
 };
