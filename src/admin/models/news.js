@@ -2,11 +2,6 @@ import mongoose, {Schema} from 'mongoose';
 import Comment from './comment';
 
 const schema = {
-    id: {
-        type: mongoose.Types.ObjectId,
-        required: true,
-        default: Schema.ObjectId
-    },
     title: {
         type: String,
         required: true
@@ -32,7 +27,8 @@ const schema = {
         default: Date.now
     },
     comments: {
-        type: Comment,
+        type: Array,
+        schema: [Comment],
         required: false
     }
 };

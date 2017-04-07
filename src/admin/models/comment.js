@@ -1,13 +1,7 @@
 import mongoose, { Schema } from 'mongoose';
 
 const schema = {
-    id: {
-        type: mongoose.Types.ObjectId,
-        required: true,
-        unique: true,
-        default: Schema.ObjectId
-    },
-    comment: {
+    text: {
         type: String,
         required: true
     },

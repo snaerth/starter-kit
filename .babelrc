@@ -8,7 +8,18 @@
   "retainLines": true,
   "env": {
     "production": {
-      "presets": ["react-optimize"]
+      "presets": [
+        "react-optimize"
+      ]
     }
-  }
+  },
+  "plugins": [
+    [
+      "transform-runtime",
+      {
+        "polyfill": false,
+        "regenerator": true
+      }
+    ]
+  ]
 }
