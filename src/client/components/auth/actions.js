@@ -78,7 +78,6 @@ export function signinFacebook() {
         axios.get('/admin/facebook')
             .then(response => {
                 const payload = response.data;
-                console.log(payload);
               })
             .catch(error => dispatch(authError(AUTH_ERROR, error)));
     };

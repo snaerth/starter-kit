@@ -24,8 +24,9 @@ const { PORT, HOST } = config();
  * @author Snær Seljan Þóroddsson
  */
 export async function signup(req, res) {
-    if (!req.body)
+    if (!req.body) {
         return res.status(422).send({ error: 'No post data found' });
+    }
 
     const { email, password, name } = req.body;
 
@@ -181,7 +182,7 @@ function findUserByEmail(email) {
  * @returns {Promise}
  * @author Snær Seljan Þóroddsson
  */
-function checkUserByEmail(email) {
+function checkUserByEmail(email) { // eslint-disable-line
     return new Promise((resolve, reject) => {
         // See if user with given email exists
         User.findOne({
@@ -244,7 +245,7 @@ function saveUser(user, propsToDelArr) {
  * @returns {Object} res
  * @author Snær Seljan Þóroddsson
  */
-function validateSignup({ email, password, newPassword, name, dateOfBirth }) {
+function validateSignup({ email, password, newPassword, name, dateOfBirth }) { // eslint-disable-line
     return new Promise((resolve, reject) => {
         // Check if email, password or message exist in request
         if (!email || !password || !name) {
@@ -442,7 +443,7 @@ export async function resetPassword(req, res) {
             const user = await updateUserPassword({ token, password });
             return res.send(`Success! Your password has been changed for ${user.email}.`);
         } catch (error) {
-            return res.send({ error: 'Password is invalid or token has expired.' })
+            return res.send({ error: 'Password is invalid or token has expired.' });
         }
     } else {
         res.send({ error: 'Token and password are required' });

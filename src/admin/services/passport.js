@@ -3,7 +3,6 @@ import User from '../models/user';
 import { Strategy as JwtStrategy, ExtractJwt } from 'passport-jwt';
 import { Strategy as FacebookStrategy } from 'passport-facebook';
 import LocalStrategy from 'passport-local';
-import { removeUserProps, tokenForUser } from '../controllers/authentication';
 import config from '../../config';
 
 // VARIABLES
@@ -115,10 +114,6 @@ export const facebookLogin = new FacebookStrategy(facebookOptions, (accessToken,
                     // if successful, return the new user
                     return done(null, newUser);
                 });
-                //     return ({
-                //         token: tokenForUser(newUser),
-                //         ...newUser
-                //     });
             }
 
         });

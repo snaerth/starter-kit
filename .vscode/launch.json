@@ -11,7 +11,9 @@
       "args": [],
       "cwd": "${workspaceRoot}",
       "runtimeArgs": [
-        "--nolazy"
+        "--nolazy",
+        "--harmony",
+        "--no-deprecation"
       ],
       "sourceMaps": true,
       "outFiles": [

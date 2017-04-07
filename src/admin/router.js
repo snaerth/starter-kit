@@ -48,7 +48,7 @@ export default function (app) {
 
     // on error; likely to be something FacebookTokenError token invalid or already used token,
     // these errors occur when the user logs in twice with the same token
-    (err,req,res,next) => {
+    (err,req,res) => {
         // You could put your own behavior in here, fx: you could force auth again...
         // res.redirect('/auth/facebook/');
         if(err) {
