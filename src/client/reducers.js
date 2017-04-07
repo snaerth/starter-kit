@@ -8,7 +8,7 @@ import authReducer from './components/auth/reducer';
 import commonReducer from './common/reducer';
 import {
   routerReducer
-} from 'react-router-redux'
+} from 'react-router-redux';
 
 const rootReducer = combineReducers({
   common: commonReducer,
