@@ -1,10 +1,14 @@
 import mongoose, {Schema} from 'mongoose';
+import comment from './comment';
 
 const schema = {
+    id: {
+        type: mongoose.Types.ObjectId,
+        required: true,
+        default: Schema.ObjectId
+    },
     title: {
         type: String,
-        unique: true,
-        lowercase: true,
         required: true
     },
     shortDescription: {
@@ -26,6 +30,10 @@ const schema = {
     createdAt: {
         type: Date,
         default: Date.now
+    },
+    comments: {
+        type: comment,
+        required: false
     }
 };
 
