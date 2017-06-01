@@ -16,9 +16,9 @@ const root = (folder = '.') => path.join(__dirname, '..', folder);
 const plugins = [
   new webpack.DefinePlugin({
     'process.env': {
-      'NODE_ENV': JSON.stringify(process.env.NODE_ENV),
-      'PORT': JSON.stringify(process.env.PORT),
-      'HOST': JSON.stringify(process.env.HOST)
+      NODE_ENV: JSON.stringify(process.env.NODE_ENV),
+      PORT: JSON.stringify(process.env.PORT),
+      HOST: JSON.stringify(process.env.HOST)
     },
     __CLIENT__: false,
     __SERVER__: true,
@@ -35,17 +35,9 @@ const plugins = [
 ];
 
 // RULES
-const {
-  json,
-  svg
-} = RULES_COMMON;
-const {
-  scss,
-  css
-} = RULES_DEV;
-const {
-  js
-} = RULES_PROD;
+const { json, svg } = RULES_COMMON;
+const { scss, css } = RULES_DEV;
+const { js } = RULES_PROD;
 
 const rules = [js, css, scss, json, svg];
 
@@ -60,7 +52,12 @@ module.exports = {
     libraryTarget: 'commonjs2'
   },
   externals: externals({
-    whitelist: [/\.(eot|woff|woff2|ttf|otf)$/, /\.(svg|png|jpg|jpeg|gif|ico|webm)$/, /\.(mp4|mp3|ogg|swf|webp)$/, /\.(css|scss|sass|less|styl)$/]
+    whitelist: [
+      /\.(eot|woff|woff2|ttf|otf)$/,
+      /\.(svg|png|jpg|jpeg|gif|ico|webm)$/,
+      /\.(mp4|mp3|ogg|swf|webp)$/,
+      /\.(css|scss|sass|less|styl)$/
+    ]
   }),
   node: {
     __filename: true,
@@ -70,4 +67,4 @@ module.exports = {
   module: {
     rules
   }
-}
+};

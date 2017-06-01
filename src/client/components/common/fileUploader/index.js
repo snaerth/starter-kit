@@ -1,2 +1,2 @@
-import fileUploader from './fileUploader.jsx';
+import fileUploader from './fileUploader';
 export default fileUploader;

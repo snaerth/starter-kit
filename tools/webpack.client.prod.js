@@ -17,34 +17,30 @@ const {
 
 // Plugins
 const plugins = [
-  new webpack
-    .optimize
-    .OccurrenceOrderPlugin(),
-  new webpack
-    .optimize
-    .AggressiveMergingPlugin(),
-  new ExtractTextPlugin({filename: 'styles.css', allChunks: true}),
-  new webpack
-    .optimize
-    .CommonsChunkPlugin({name: 'vendor', filename: 'vendor_[hash].js', minChunks: 2}),
-  new AssetsPlugin({filename: 'assets.json', prettyPrint: true}),
+  new webpack.optimize.OccurrenceOrderPlugin(),
+  new webpack.optimize.AggressiveMergingPlugin(),
+  new ExtractTextPlugin({ filename: 'styles.css', allChunks: true }),
+  new webpack.optimize.CommonsChunkPlugin({
+    name: 'vendor',
+    filename: 'vendor_[hash].js',
+    minChunks: 2
+  }),
+  new AssetsPlugin({ filename: 'assets.json', prettyPrint: true }),
   new webpack.NamedModulesPlugin(),
   new CaseSensitivePathsPlugin(),
   new webpack.NoEmitOnErrorsPlugin(),
   new webpack.DefinePlugin({
     'process.env': {
-      'NODE_ENV': JSON.stringify(process.env.NODE_ENV),
-      'PORT': JSON.stringify(process.env.PORT),
-      'HOST': JSON.stringify(process.env.HOST)
+      NODE_ENV: JSON.stringify(process.env.NODE_ENV),
+      PORT: JSON.stringify(process.env.PORT),
+      HOST: JSON.stringify(process.env.HOST)
     },
     __CLIENT__: true,
     __SERVER__: false,
     __DEVELOPMENT__: false,
     __DEVTOOLS__: false
   }),
-  new webpack
-    .optimize
-    .UglifyJsPlugin(),
+  new webpack.optimize.UglifyJsPlugin(),
   new webpack.LoaderOptionsPlugin({
     minimize: true,
     options: {
@@ -54,16 +50,9 @@ const plugins = [
 ];
 
 // RULES
-const {file, json, svg, urlLoader} = RULES_COMMON;
-const {scss, js, css} = RULES_PROD;
-const rules = [
-  js,
-  css,
-  scss,
-  json,
-  file,
-  svg
-];
+const { file, json, svg, urlLoader } = RULES_COMMON;
+const { scss, js, css } = RULES_PROD;
+const rules = [js, css, scss, json, file, svg];
 
 // Main webpack config
 module.exports = {

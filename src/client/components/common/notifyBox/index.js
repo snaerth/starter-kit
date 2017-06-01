@@ -1,2 +1,2 @@
-import notifyBox from './notifyBox.jsx';
+import notifyBox from './notifyBox';
 export default notifyBox;

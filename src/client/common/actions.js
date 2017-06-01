@@ -1,7 +1,4 @@
-import {
-    MODAL_OPEN,
-    MODAL_CLOSE
-} from './types';
+import { MODAL_OPEN, MODAL_CLOSE } from './types';
 
 /**
  * Open modal action createor
@@ -10,7 +7,7 @@ import {
  * @author Snær Seljan Þóroddsson
  */
 export function openModal() {
-    return { type: MODAL_OPEN };
+  return { type: MODAL_OPEN };
 }
 
 /**
@@ -20,5 +17,5 @@ export function openModal() {
  * @author Snær Seljan Þóroddsson
  */
 export function closeModal() {
-    return { type: MODAL_CLOSE };
+  return { type: MODAL_CLOSE };
 }

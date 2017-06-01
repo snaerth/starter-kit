@@ -16,10 +16,8 @@ const {
 
 //  PLUGINS
 const plugins = [
-  new ExtractTextPlugin({filename: 'styles.css', allChunks: true}),
-  new webpack
-    .optimize
-    .OccurrenceOrderPlugin(),
+  new ExtractTextPlugin({ filename: 'styles.css', allChunks: true }),
+  new webpack.optimize.OccurrenceOrderPlugin(),
   new webpack.HotModuleReplacementPlugin(),
   new webpack.DefinePlugin({
     'process.env.NODE_ENV': JSON.stringify('development'),
@@ -33,22 +31,17 @@ const plugins = [
       postcss: [autoprefixer]
     }
   }),
-  new webpack
-    .optimize
-    .CommonsChunkPlugin({name: 'vendor', minChunks: 6, filename: 'vendor.js'})
+  new webpack.optimize.CommonsChunkPlugin({
+    name: 'vendor',
+    minChunks: 6,
+    filename: 'vendor.js'
+  })
 ];
 
 // RULES
-const {file, json, svg, urlLoader} = RULES_COMMON;
-const {scss, js, css} = RULES_DEV;
-const rules = [
-  js,
-  css,
-  scss,
-  json,
-  file,
-  svg
-];
+const { file, json, svg, urlLoader } = RULES_COMMON;
+const { scss, js, css } = RULES_DEV;
+const rules = [js, css, scss, json, file, svg];
 
 // --------------------------------------------- MAIN WEBPACK CONFIG
 module.exports = {
@@ -57,7 +50,9 @@ module.exports = {
   cache: true,
   entry: {
     main: [
-      'webpack/hot/only-dev-server', 'webpack-hot-middleware/client', CLIENT_ENTRY
+      'webpack/hot/only-dev-server',
+      'webpack-hot-middleware/client',
+      CLIENT_ENTRY
     ],
     vendor: VENDOR
   },

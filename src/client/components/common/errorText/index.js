@@ -1,2 +1,2 @@
-import ErrorText from './errorText.jsx';
+import ErrorText from './errorText';
 export default ErrorText;

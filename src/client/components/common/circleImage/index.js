@@ -1,2 +1,2 @@
-import CircleImage from './circleImage.jsx';
+import CircleImage from './circleImage';
 export default CircleImage;

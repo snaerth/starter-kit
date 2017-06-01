@@ -1,2 +1,2 @@
-import password from './password.jsx';
+import password from './password';
 export default password;

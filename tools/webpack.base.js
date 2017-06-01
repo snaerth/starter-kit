@@ -7,7 +7,7 @@ const autoprefixerConfig = autoprefixer({
     '>1%',
     'last 4 versions',
     'Firefox ESR',
-    'not ie < 9', // React doesn't support IE8 anyway
+    'not ie < 9' // React doesn't support IE8 anyway
   ]
 });
 
@@ -32,7 +32,7 @@ const vendor = [
 const urlLoader = {
   test: /\.(png|gif|jpe?g|svg)$/,
   include: path.join(process.cwd(), 'assets/images'),
-  use: 'url-loader?limit=20480&name=./assets/images/[name]-[hash].[ext]',
+  use: 'url-loader?limit=20480&name=./assets/images/[name]-[hash].[ext]'
 };
 
 const json = {
@@ -54,7 +54,8 @@ const svg = {
 const devCss = {
   test: /\.css$/,
   use: [
-    'style-loader', {
+    'style-loader',
+    {
       loader: 'css-loader',
       query: {
         modules: true,
@@ -69,7 +70,8 @@ const devCss = {
 const devScss = {
   test: /\.scss$/,
   use: [
-    'style-loader', {
+    'style-loader',
+    {
       loader: 'css-loader',
       query: {
         modules: true,
@@ -85,43 +87,49 @@ const devScss = {
 const devJs = {
   test: /\.(js|jsx)$/,
   exclude: /node_modules/,
-  loaders: [{
-    loader: 'babel-loader',
-    query: {
-      cacheDirectory: true,
-      presets: [
-        [
-          'es2015', {
-            modules: false
-          }
+  loaders: [
+    {
+      loader: 'babel-loader',
+      query: {
+        cacheDirectory: true,
+        presets: [
+          [
+            'es2015',
+            {
+              modules: false
+            }
+          ],
+          'react',
+          'stage-0',
+          'react-hmre'
         ],
-        'react',
-        'stage-0',
-        'react-hmre'
-      ],
-      plugins: ['transform-decorators-legacy']
+        plugins: ['transform-decorators-legacy']
+      }
     }
-  }]
+  ]
 };
 
 // Production
 const css = {
   test: /\.css$/,
   use: ExtractTextPlugin.extract({
-    fallback: "style-loader",
-    loader: [{
-      loader: 'css-loader',
-      query: {
-        modules: true,
-        importLoaders: 2,
-        localIdentName: '[name]__[local]__[hash:base64:5]',
-        plugins: () => {
-          return [autoprefixerConfig]
+    fallback: 'style-loader',
+    loader: [
+      {
+        loader: 'css-loader',
+        query: {
+          modules: true,
+          importLoaders: 2,
+          localIdentName: '[name]__[local]__[hash:base64:5]',
+          plugins: () => {
+            return [autoprefixerConfig];
+          }
         }
+      },
+      {
+        loader: 'postcss-loader'
       }
-    }, {
-      loader: 'postcss-loader'
-    }]
+    ]
   })
 };
 
@@ -129,14 +137,15 @@ const scss = {
   test: /\.scss$/,
   use: ExtractTextPlugin.extract({
     fallback: 'style-loader',
-    loader: [{
+    loader: [
+      {
         loader: 'css-loader',
         query: {
           modules: true,
           sourceMap: false,
           localIdentName: '[name]__[local]__[hash:base64:5]',
           plugins: () => {
-            return [autoprefixerConfig]
+            return [autoprefixerConfig];
           }
         }
       },
@@ -151,7 +160,7 @@ const js = {
   exclude: /node_modules/,
   loader: 'babel-loader',
   query: {
-    "presets": ["es2015", "stage-0", "react", "react-optimize"]
+    presets: ['es2015', 'stage-0', 'react', 'react-optimize']
   }
 };
 

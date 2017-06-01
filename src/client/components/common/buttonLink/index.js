@@ -1,2 +1,2 @@
-import buttonLink from './buttonLink.jsx';
+import buttonLink from './buttonLink';
 export default buttonLink;

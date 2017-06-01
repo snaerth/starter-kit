@@ -1,2 +1,2 @@
-import modalWrapper from './modalWrapper.jsx';
+import modalWrapper from './modalWrapper';
 export default modalWrapper;

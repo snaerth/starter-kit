@@ -1,2 +1,2 @@
-import signout from './signout.jsx';
+import signout from './signout';
 export default signout;

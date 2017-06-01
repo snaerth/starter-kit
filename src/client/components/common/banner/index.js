@@ -1,2 +1,2 @@
-import Banner from './banner.jsx';
+import Banner from './banner';
 export default Banner;

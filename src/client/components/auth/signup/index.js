@@ -1,2 +1,2 @@
-import Signup from './Signup.jsx';
+import Signup from './Signup';
 export default Signup;
