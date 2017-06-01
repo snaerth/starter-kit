@@ -18,7 +18,15 @@ import renderHtml from './utils/renderHtml';
 import errorHandlers from './middleware/errorHandlers';
 import handleRender from './middleware/handleRender';
 
-const {ADMIN_HOST, ADMIN_PORT, ADMIN_PROTOCOL, PROTOCOL, HOST, PORT, NODE_ENV} = config();
+const {
+  ADMIN_HOST,
+  ADMIN_PORT,
+  ADMIN_PROTOCOL,
+  PROTOCOL,
+  HOST,
+  PORT,
+  NODE_ENV
+} = config();
 const isDeveloping = NODE_ENV !== 'production';
 const port = PORT || 3000;
 const target = `${ADMIN_PROTOCOL}://${ADMIN_HOST}:${ADMIN_PORT}`;
@@ -29,8 +37,8 @@ const app = express();
 // Create HTTP Server
 const server = new http.createServer(app);
 
-// Initialize proxy server 
-Proxy({ app, target});
+// Initialize proxy server
+Proxy({ app, target });
 
 // Hide all software information
 app.disable('x-powered-by');
@@ -50,9 +58,17 @@ app.use(...errorHandlers);
 
 // Start server
 server.listen(port, error => {
-    if (error) {
-        console.error(error);
-    }
-    console.info('==> ✅  %s is running, talking to ADMIN server on %s.', ADMIN_HOST, ADMIN_PORT);
-    console.info(`==> 💻  Open ${PROTOCOL}://%s:%s in a browser to view the app.`, HOST, PORT);
+  if (error) {
+    console.error(error);
+  }
+  console.info(
+    '==> ✅  %s is running, talking to ADMIN server on %s.',
+    ADMIN_HOST,
+    ADMIN_PORT
+  );
+  console.info(
+    `==> 💻  Open ${PROTOCOL}://%s:%s in a browser to view the app.`,
+    HOST,
+    PORT
+  );
 });

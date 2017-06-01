@@ -1,16 +1,16 @@
-import React, {PropTypes} from 'react';
+import React, { PropTypes } from 'react';
 import MainHeading from '../mainheading';
 
-const Banner = ({text}) => {
-    return (
-        <div className="container">
-            <MainHeading text={text}/>
-        </div>
-    );
+const Banner = ({ text }) => {
+  return (
+    <div className="container">
+      <MainHeading text={text} />
+    </div>
+  );
 };
 
 Banner.propTypes = {
-    text: PropTypes.string
+  text: PropTypes.string
 };
 
 export default Banner;

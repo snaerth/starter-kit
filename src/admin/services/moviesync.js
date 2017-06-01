@@ -1,81 +1,102 @@
 import fetch from 'node-fetch';
 import _ from 'lodash';
-import {deepTrim} from './utils';
+import { deepTrim } from './utils';
 import genres from '../data/genres';
 import config from '../../config';
 
 // VARIABLES
-const {API_KEY_KVIKMYNDIR, API_KEY_TMDB} = config();
+const { API_KEY_KVIKMYNDIR, API_KEY_TMDB } = config();
 
-export default(callback) => {
-    // Contains all movies for 5 days in one big array [movie1, movie2, movie2, ...]
-    let allMovies = [];
-    // Contains all movies for 5 days [[day0]], [day1]], [day2]], ...]
-    let moviesByDay = [];
-    // allMovies array merged into uniqe movie array
-    let mergedList = [];
-    // Contains upcoming movies { ... ,data: [movie1, movie2, movie2, ...] }
-    let upcomingMovies = {
-        date: null,
-        type: 'upcoming',
-        data: []
-    };
-    // Array of movie plots object [{imdb:'tt0317248',text: 'This is movie plot
-    // text'}, ...]
-    let plotsArr = [];
-    // Array of trailer information for movie [{imdb:'tt0317248',data: [{...},
-    // {...}, ...]]
-    let trailersArr = [];
-    // Array of omdb information for movie [{imdb:'tt0317248',data: {...}, ...]
-    let omdbArr = [];
-    // Array of images objects [{imdb:'tt0317248',data: {...}, ...]
-    let imagesArr = [];
+export default callback => {
+  // Contains all movies for 5 days in one big array [movie1, movie2, movie2, ...]
+  let allMovies = [];
+  // Contains all movies for 5 days [[day0]], [day1]], [day2]], ...]
+  let moviesByDay = [];
+  // allMovies array merged into uniqe movie array
+  let mergedList = [];
+  // Contains upcoming movies { ... ,data: [movie1, movie2, movie2, ...] }
+  let upcomingMovies = {
+    date: null,
+    type: 'upcoming',
+    data: []
+  };
+  // Array of movie plots object [{imdb:'tt0317248',text: 'This is movie plot
+  // text'}, ...]
+  let plotsArr = [];
+  // Array of trailer information for movie [{imdb:'tt0317248',data: [{...},
+  // {...}, ...]]
+  let trailersArr = [];
+  // Array of omdb information for movie [{imdb:'tt0317248',data: {...}, ...]
+  let omdbArr = [];
+  // Array of images objects [{imdb:'tt0317248',data: {...}, ...]
+  let imagesArr = [];
 
-    getKvikmyndir().then(data => {
-        moviesByDay = data;
-        allMovies = mergeMovieArrays(data);
-        mergedList = _.uniqBy(allMovies, 'id'); // Find uniqe movies by id in array,
+  getKvikmyndir()
+    .then(data => {
+      moviesByDay = data;
+      allMovies = mergeMovieArrays(data);
+      mergedList = _.uniqBy(allMovies, 'id'); // Find uniqe movies by id in array,
 
-        return getUpcoming();
-    }).then(data => {
-        upcomingMovies.date = Date.now();
-        upcomingMovies.data = data;
-        mergedList = _.unionBy(mergedList, data, 'id');
+      return getUpcoming();
+    })
+    .then(data => {
+      upcomingMovies.date = Date.now();
+      upcomingMovies.data = data;
+      mergedList = _.unionBy(mergedList, data, 'id');
 
-        return getPlotForMovies(mergedList); // Get plot for each movie in array
-    }).then(plots => {
-        plotsArr = plots;
+      return getPlotForMovies(mergedList); // Get plot for each movie in array
+    })
+    .then(plots => {
+      plotsArr = plots;
 
-        return getTmdbData(mergedList, getTrailersRequest, 'videos'); // Get trailers for each movie in array
-    }).then(trailersData => {
-        trailersArr = trailersData;
+      return getTmdbData(mergedList, getTrailersRequest, 'videos'); // Get trailers for each movie in array
+    })
+    .then(trailersData => {
+      trailersArr = trailersData;
 
-        return getTmdbData(mergedList, getImagesRequest, 'images'); // Get trailers for each movie in array
-    }).then(imagesData => {
-        imagesArr = imagesData;
+      return getTmdbData(mergedList, getImagesRequest, 'images'); // Get trailers for each movie in array
+    })
+    .then(imagesData => {
+      imagesArr = imagesData;
 
-        return getOmdbData(mergedList); // Get omdb information for each movie in array
-    }).then(omdbData => {
-        omdbArr = omdbData;
+      return getOmdbData(mergedList); // Get omdb information for each movie in array
+    })
+    .then(omdbData => {
+      omdbArr = omdbData;
 
-        const propsToDelete = [
-            'directors_abridged',
-            'actors_abridged',
-            'alternativeTitles',
-            'alternative_titles',
-            'ids',
-            'id',
-            'certificateImg',
-            'certificateIS',
-            'ratings'
-        ];
+      const propsToDelete = [
+        'directors_abridged',
+        'actors_abridged',
+        'alternativeTitles',
+        'alternative_titles',
+        'ids',
+        'id',
+        'certificateImg',
+        'certificateIS',
+        'ratings'
+      ];
 
-        moviesByDay.forEach(day => {
-            day.data = extendMoviesObjects(day.data, plotsArr, trailersArr, imagesArr, omdbArr, propsToDelete);
-        });
+      moviesByDay.forEach(day => {
+        day.data = extendMoviesObjects(
+          day.data,
+          plotsArr,
+          trailersArr,
+          imagesArr,
+          omdbArr,
+          propsToDelete
+        );
+      });
 
-        upcomingMovies.data = extendMoviesObjects(upcomingMovies.data, plotsArr, trailersArr, imagesArr, omdbArr, propsToDelete);
-    }).catch(error => callback(error));
+      upcomingMovies.data = extendMoviesObjects(
+        upcomingMovies.data,
+        plotsArr,
+        trailersArr,
+        imagesArr,
+        omdbArr,
+        propsToDelete
+      );
+    })
+    .catch(error => callback(error));
 };
 
 /**
@@ -88,172 +109,167 @@ export default(callback) => {
  * @param {Array} omdb - Array of omdb objects
  * @returns {Array} movies - Array of extended movie objects
  */
-function extendMoviesObjects(movies, plots, trailers, images, omdb, propsToDelete) {
-    movies.forEach(movie => {
-        const imdbId = formatImdbId(movie.ids.imdb);
+function extendMoviesObjects(
+  movies,
+  plots,
+  trailers,
+  images,
+  omdb,
+  propsToDelete
+) {
+  movies.forEach(movie => {
+    const imdbId = formatImdbId(movie.ids.imdb);
 
-        // Create kvikmyndir object
-        movie.kvikmyndir = {
-            id: movie.id
-                ? movie.id
-                : '',
-            url: movie.id
-                ? `http://kvikmyndir.is/mynd/?id=${movie.id}`
-                : ''
-        };
+    // Create kvikmyndir object
+    movie.kvikmyndir = {
+      id: movie.id ? movie.id : '',
+      url: movie.id ? `http://kvikmyndir.is/mynd/?id=${movie.id}` : ''
+    };
 
-        // Create rated object
-        movie.rated = {
-            is: movie.certificateIS
-                ? movie.certificateIS
-                : '',
-            en: ''
-        };
+    // Create rated object
+    movie.rated = {
+      is: movie.certificateIS ? movie.certificateIS : '',
+      en: ''
+    };
 
-        // IMDB
-        movie.imdb = {
-            id: imdbId,
-            rating: (movie && movie.ratings && movie.ratings.imdb),
-            url: `http://www.imdb.com/title/${imdbId}/`,
-            votes: ''
-        };
+    // IMDB
+    movie.imdb = {
+      id: imdbId,
+      rating: movie && movie.ratings && movie.ratings.imdb,
+      url: `http://www.imdb.com/title/${imdbId}/`,
+      votes: ''
+    };
 
-        // OMDB
-        if (omdb && omdb.length > 0) {
-            const omdbObj = _.find(omdb, o => o.imdb === imdbId);
-            const omdbProps = ['Country', 'Awards', 'Website'];
+    // OMDB
+    if (omdb && omdb.length > 0) {
+      const omdbObj = _.find(omdb, o => o.imdb === imdbId);
+      const omdbProps = ['Country', 'Awards', 'Website'];
 
-            if (omdbObj && omdbObj.data) {
-                // Create Rotten Tomatos object
-                movie.rottenTomatoes = {};
+      if (omdbObj && omdbObj.data) {
+        // Create Rotten Tomatos object
+        movie.rottenTomatoes = {};
 
-                for (let key in omdbObj.data) {
-                    // Check if property is not inherited from prototype
-                    if (omdbObj.data.hasOwnProperty(key)) {
-                        // Add all tomato keys to rottenTomatoes object
-                        if (key.includes('tomato')) {
-                            movie.rottenTomatoes[key] = omdbObj.data[key] !== 'N/A'
-                                ? omdbObj.data[key]
-                                : '';
-                        }
-
-                        // Add keys in omdbProps array to movie object
-                        for (let i = 0; i < omdbProps.length; i++) {
-                            if (omdbProps[i] === key) {
-                                movie[omdbProps[i].toLowerCase()] = omdbObj.data[key] !== 'N/A'
-                                    ? omdbObj.data[key]
-                                    : '';
-                            }
-                        }
-
-                        // Rated
-                        const rated = omdbObj.data.Rated;
-                        if (rated && rated !== 'N/A') {
-                            movie.rated.en = rated;
-                        }
-
-                        // IMDB rating
-                        const rating = omdbObj.data.imdbRating;
-                        if (rating && rating !== 'N/A') {
-                            movie.imdb.rating = rating;
-                        }
-
-                        // IMDB votes
-                        const votes = omdbObj.data.imdbVotes;
-                        if (votes && votes !== 'N/A') {
-                            movie.imdb.votes = votes;
-                        }
-                    }
-                }
-
-                // If not tomatoRating
-                if (movie.rottenTomatoes.tomatoRating === '' && movie.ids && movie.ids.rotten !== '') {
-                    movie.rottenTomatoes.tomatoRating = movie.ids.rotten;
-                }
+        for (let key in omdbObj.data) {
+          // Check if property is not inherited from prototype
+          if (omdbObj.data.hasOwnProperty(key)) {
+            // Add all tomato keys to rottenTomatoes object
+            if (key.includes('tomato')) {
+              movie.rottenTomatoes[key] = omdbObj.data[key] !== 'N/A'
+                ? omdbObj.data[key]
+                : '';
             }
-        }
 
-        // GENRES
-        if (movie.genres) {
-            let tempGenres = {
-                is: [],
-                en: []
-            };
-
-            _.forEach(movie.genres, genreId => {
-                const genreObj = _.find(genres, o => o.ID === genreId);
-                tempGenres
-                    .is
-                    .push(genreObj.Name);
-                tempGenres
-                    .en
-                    .push(genreObj.NameEN);
-            });
-
-            movie.genres = tempGenres;
-        }
-
-        // PLOTS
-        if (plots && plots.length > 0) {
-            const matchedPlot = _.find(plots, p => p.imdb === imdbId);
-            movie.plot = {
-                is: (matchedPlot && matchedPlot.text)
-                    ? matchedPlot.text
-                    : '',
-                en: (omdb && omdb.data && omdb.data.Plot)
-                    ? omdb.data.Plot
-                    : ''
-            };
-        }
-
-        // TRAILERS
-        if (trailers && trailers.length > 0) {
-            const matchedTrailer = _.find(trailers, trailer => trailer.imdb === imdbId);
-            if (matchedTrailer && matchedTrailer.data) 
-                movie.trailers = matchedTrailer.data;
+            // Add keys in omdbProps array to movie object
+            for (let i = 0; i < omdbProps.length; i++) {
+              if (omdbProps[i] === key) {
+                movie[omdbProps[i].toLowerCase()] = omdbObj.data[key] !== 'N/A'
+                  ? omdbObj.data[key]
+                  : '';
+              }
             }
-        
-        // IMAGES
-        if (images && images.length > 0) {
-            const matchedImages = _.find(images, image => image.imdb === imdbId);
 
-            if (matchedImages && matchedImages.backdrops && matchedImages.posters) {
-                movie.images = {
-                    backdrops: matchedImages.backdrops,
-                    posters: matchedImages.posters
-                };
+            // Rated
+            const rated = omdbObj.data.Rated;
+            if (rated && rated !== 'N/A') {
+              movie.rated.en = rated;
             }
+
+            // IMDB rating
+            const rating = omdbObj.data.imdbRating;
+            if (rating && rating !== 'N/A') {
+              movie.imdb.rating = rating;
+            }
+
+            // IMDB votes
+            const votes = omdbObj.data.imdbVotes;
+            if (votes && votes !== 'N/A') {
+              movie.imdb.votes = votes;
+            }
+          }
         }
 
-        // ACTORS
-        if (movie.actors_abridged && movie.actors_abridged.length > 0) {
-            const getActorName = d => d.name;
-            movie.actors = movie
-                .actors_abridged
-                .map(getActorName);
+        // If not tomatoRating
+        if (
+          movie.rottenTomatoes.tomatoRating === '' &&
+          movie.ids &&
+          movie.ids.rotten !== ''
+        ) {
+          movie.rottenTomatoes.tomatoRating = movie.ids.rotten;
         }
+      }
+    }
 
-        // DIRECTORS
-        if (movie.directors_abridged && movie.directors_abridged.length > 0) {
-            const getDirectorName = d => d.name;
-            movie.directors = movie
-                .directors_abridged
-                .map(getDirectorName);
-        }
+    // GENRES
+    if (movie.genres) {
+      let tempGenres = {
+        is: [],
+        en: []
+      };
 
-        // DELETE props from object
-        const deleteItem = item => {
-            if (movie[item]) 
-                delete movie[item];
-            };
-        
-        propsToDelete.map(deleteItem);
+      _.forEach(movie.genres, genreId => {
+        const genreObj = _.find(genres, o => o.ID === genreId);
+        tempGenres.is.push(genreObj.Name);
+        tempGenres.en.push(genreObj.NameEN);
+      });
 
-        // Deep trims every property and its children
-        movie = deepTrim(movie);
-    });
+      movie.genres = tempGenres;
+    }
 
-    return movies;
+    // PLOTS
+    if (plots && plots.length > 0) {
+      const matchedPlot = _.find(plots, p => p.imdb === imdbId);
+      movie.plot = {
+        is: matchedPlot && matchedPlot.text ? matchedPlot.text : '',
+        en: omdb && omdb.data && omdb.data.Plot ? omdb.data.Plot : ''
+      };
+    }
+
+    // TRAILERS
+    if (trailers && trailers.length > 0) {
+      const matchedTrailer = _.find(
+        trailers,
+        trailer => trailer.imdb === imdbId
+      );
+      if (matchedTrailer && matchedTrailer.data)
+        movie.trailers = matchedTrailer.data;
+    }
+
+    // IMAGES
+    if (images && images.length > 0) {
+      const matchedImages = _.find(images, image => image.imdb === imdbId);
+
+      if (matchedImages && matchedImages.backdrops && matchedImages.posters) {
+        movie.images = {
+          backdrops: matchedImages.backdrops,
+          posters: matchedImages.posters
+        };
+      }
+    }
+
+    // ACTORS
+    if (movie.actors_abridged && movie.actors_abridged.length > 0) {
+      const getActorName = d => d.name;
+      movie.actors = movie.actors_abridged.map(getActorName);
+    }
+
+    // DIRECTORS
+    if (movie.directors_abridged && movie.directors_abridged.length > 0) {
+      const getDirectorName = d => d.name;
+      movie.directors = movie.directors_abridged.map(getDirectorName);
+    }
+
+    // DELETE props from object
+    const deleteItem = item => {
+      if (movie[item]) delete movie[item];
+    };
+
+    propsToDelete.map(deleteItem);
+
+    // Deep trims every property and its children
+    movie = deepTrim(movie);
+  });
+
+  return movies;
 }
 
 /**
@@ -261,33 +277,32 @@ function extendMoviesObjects(movies, plots, trailers, images, omdb, propsToDelet
  * @returns {Promise} Promise - the promise object
  */
 function getKvikmyndir() {
-    return new Promise((resolve, reject) => {
-        let movieArr = []; // Contains all movies for 5 days [[day0]], [day1]], [day2]], ...]
-        let promises = [];
+  return new Promise((resolve, reject) => {
+    let movieArr = []; // Contains all movies for 5 days [[day0]], [day1]], [day2]], ...]
+    let promises = [];
 
-        for (let i = 0; i < 5; i++) {
-            const url = `http://kvikmyndir.is/api/showtimes_by_date/?key=${API_KEY_KVIKMYNDIR}&dagur=${i}`;
+    for (let i = 0; i < 5; i++) {
+      const url = `http://kvikmyndir.is/api/showtimes_by_date/?key=${API_KEY_KVIKMYNDIR}&dagur=${i}`;
 
-            const request = fetch(url)
-                .then(res => res.json())
-                .then(data => {
-                    movieArr.push({
-                        day: i,
-                        date: Date.now(),
-                        type: 'showtimes',
-                        data: data
-                    });
-                })
-                .catch(error => reject(error));
+      const request = fetch(url)
+        .then(res => res.json())
+        .then(data => {
+          movieArr.push({
+            day: i,
+            date: Date.now(),
+            type: 'showtimes',
+            data: data
+          });
+        })
+        .catch(error => reject(error));
 
-            promises.push(request);
-        }
+      promises.push(request);
+    }
 
-        Promise
-            .all(promises)
-            .then(() => resolve(movieArr))
-            .catch(error => reject(error));
-    });
+    Promise.all(promises)
+      .then(() => resolve(movieArr))
+      .catch(error => reject(error));
+  });
 }
 
 /**
@@ -295,14 +310,14 @@ function getKvikmyndir() {
  * @returns {Promise} Promise - the promise object
  */
 function getUpcoming() {
-    return new Promise((resolve, reject) => {
-        const url = `http://kvikmyndir.is/api/movie_list_upcoming/?key=${API_KEY_KVIKMYNDIR}&count=100`;
+  return new Promise((resolve, reject) => {
+    const url = `http://kvikmyndir.is/api/movie_list_upcoming/?key=${API_KEY_KVIKMYNDIR}&count=100`;
 
-        fetch(url)
-            .then(res => res.json())
-            .then(data => resolve(data))
-            .catch(error => reject(error));
-    });
+    fetch(url)
+      .then(res => res.json())
+      .then(data => resolve(data))
+      .catch(error => reject(error));
+  });
 }
 
 /**
@@ -312,34 +327,33 @@ function getUpcoming() {
  * @returns {Promise} Promise - the promise object
  */
 function getPlotForMovies(movies) {
-    return new Promise((resolve, reject) => {
-        let moviesWithPlot = [];
-        let promises = [];
+  return new Promise((resolve, reject) => {
+    let moviesWithPlot = [];
+    let promises = [];
 
-        movies.forEach(movie => {
-            if (movie.ids && movie.ids.imdb) {
-                const url = `http://kvikmyndir.is/api/movie/?imdb=${movie.ids.imdb}&key=${API_KEY_KVIKMYNDIR}`;
-                const request = fetch(url)
-                    .then(res => res.json())
-                    .then(data => {
-                        if (data.plot && data.imdb) {
-                            moviesWithPlot.push({
-                                imdb: formatImdbId(data.imdb),
-                                text: data.plot
-                            });
-                        }
-                    })
-                    .catch(error => reject(error));
-
-                promises.push(request);
+    movies.forEach(movie => {
+      if (movie.ids && movie.ids.imdb) {
+        const url = `http://kvikmyndir.is/api/movie/?imdb=${movie.ids.imdb}&key=${API_KEY_KVIKMYNDIR}`;
+        const request = fetch(url)
+          .then(res => res.json())
+          .then(data => {
+            if (data.plot && data.imdb) {
+              moviesWithPlot.push({
+                imdb: formatImdbId(data.imdb),
+                text: data.plot
+              });
             }
-        });
+          })
+          .catch(error => reject(error));
 
-        Promise
-            .all(promises)
-            .then(() => resolve(moviesWithPlot))
-            .catch(error => reject(error));
+        promises.push(request);
+      }
     });
+
+    Promise.all(promises)
+      .then(() => resolve(moviesWithPlot))
+      .catch(error => reject(error));
+  });
 }
 
 /**
@@ -350,32 +364,33 @@ function getPlotForMovies(movies) {
  * @returns {Promise} promise - When all promises have resolved then trailersArr is returned
  */
 function getTmdbData(movies, fn, type) {
-    return new Promise((resolve, reject) => {
-        let dataArr = [];
-        let promises = [];
+  return new Promise((resolve, reject) => {
+    let dataArr = [];
+    let promises = [];
 
-        for (let i = 0, len = movies.length; i < len; i++) {
-            const movie = movies[i];
+    for (let i = 0, len = movies.length; i < len; i++) {
+      const movie = movies[i];
 
-            if (movie.ids && movie.ids.imdb) {
-                const imdbId = formatImdbId(movie.ids.imdb);
-                const url = `https://api.themoviedb.org/3/movie/${imdbId}/${type}?api_key=${API_KEY_TMDB}`;
-                const delay = 400 * i; // TMDB has 30 request per 10 seconds
+      if (movie.ids && movie.ids.imdb) {
+        const imdbId = formatImdbId(movie.ids.imdb);
+        const url = `https://api.themoviedb.org/3/movie/${imdbId}/${type}?api_key=${API_KEY_TMDB}`;
+        const delay = 400 * i; // TMDB has 30 request per 10 seconds
 
-                const request = fn(url, imdbId, delay).then(data => {
-                    if (data) {
-                        dataArr.push(data);
-                    }
-                }).catch(error => reject(error));
-                promises.push(request);
+        const request = fn(url, imdbId, delay)
+          .then(data => {
+            if (data) {
+              dataArr.push(data);
             }
-        }
+          })
+          .catch(error => reject(error));
+        promises.push(request);
+      }
+    }
 
-        Promise
-            .all(promises)
-            .then(() => resolve(dataArr))
-            .catch(error => reject(error));
-    });
+    Promise.all(promises)
+      .then(() => resolve(dataArr))
+      .catch(error => reject(error));
+  });
 }
 
 /**
@@ -386,21 +401,22 @@ function getTmdbData(movies, fn, type) {
  * @returns {Promise} promise - Promise witch returns trailer object
  */
 function getTrailersRequest(url, imdbId, delay) {
-    return new Promise((resolve, reject) => {
-        setTimeout(() => {
-            fetch(url)
-                .then(res => res.json())
-                .then(data => {
-                    if (data.status_code && data.status_code === 34 && !data.results) { // Status code for resource not be found.
-                        return resolve();
-                    }
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      fetch(url)
+        .then(res => res.json())
+        .then(data => {
+          if (data.status_code && data.status_code === 34 && !data.results) {
+            // Status code for resource not be found.
+            return resolve();
+          }
 
-                    const trailersObj = createTrailerObject(imdbId, data.results);
-                    return resolve(trailersObj);
-                })
-                .catch(error => reject(error));
-        }, delay);
-    });
+          const trailersObj = createTrailerObject(imdbId, data.results);
+          return resolve(trailersObj);
+        })
+        .catch(error => reject(error));
+    }, delay);
+  });
 }
 
 /**
@@ -410,18 +426,23 @@ function getTrailersRequest(url, imdbId, delay) {
  * @returns {Object} trailersObj - newly created trailer object
  */
 function createTrailerObject(imdbId, trailers) {
-    const trailersObj = {
-        imdb: imdbId,
-        data: []
+  const trailersObj = {
+    imdb: imdbId,
+    data: []
+  };
+
+  const trailer = t => {
+    return {
+      id: t.id,
+      url: `https://www.youtube.com/embed/${t.key}?rel=0`,
+      size: t.size,
+      name: t.name
     };
+  };
 
-    const trailer = t => {
-        return {id: t.id, url: `https://www.youtube.com/embed/${t.key}?rel=0`, size: t.size, name: t.name};
-    };
+  trailersObj.data = trailers.map(trailer);
 
-    trailersObj.data = trailers.map(trailer);
-
-    return trailersObj;
+  return trailersObj;
 }
 
 /**
@@ -432,21 +453,22 @@ function createTrailerObject(imdbId, trailers) {
  * @returns {Promise} promise - Promise witch returns images object
  */
 function getImagesRequest(url, imdbId, delay) {
-    return new Promise((resolve, reject) => {
-        setTimeout(() => {
-            fetch(url)
-                .then(res => res.json())
-                .then(data => {
-                    if (data.status_code && data.status_code === 34 && !data.results) { // Status code for resource not be found.
-                        return resolve();
-                    }
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      fetch(url)
+        .then(res => res.json())
+        .then(data => {
+          if (data.status_code && data.status_code === 34 && !data.results) {
+            // Status code for resource not be found.
+            return resolve();
+          }
 
-                    const imagesObj = createImagesObject(imdbId, data);
-                    return resolve(imagesObj);
-                })
-                .catch(error => reject(error));
-        }, delay);
-    });
+          const imagesObj = createImagesObject(imdbId, data);
+          return resolve(imagesObj);
+        })
+        .catch(error => reject(error));
+    }, delay);
+  });
 }
 
 /**
@@ -456,35 +478,31 @@ function getImagesRequest(url, imdbId, delay) {
  * @returns {Object} imagesObj - newly created images object
  */
 function createImagesObject(imdbId, images) {
-    let imagesObj = {
-        imdb: imdbId,
-        backdrops: [],
-        posters: []
-    };
+  let imagesObj = {
+    imdb: imdbId,
+    backdrops: [],
+    posters: []
+  };
 
-    const sizes = [300, 1920]; // also avaliable 500 and 1000
+  const sizes = [300, 1920]; // also avaliable 500 and 1000
 
-    if (images.backdrops && images.backdrops.length > 0) {
-        imagesObj.backdrops = sizes.map(size => {
-            return images
-                .backdrops
-                .map(backdrop => {
-                    return `http://image.tmdb.org/t/p/w${size}${backdrop.file_path}`;
-                });
-        });
-    }
+  if (images.backdrops && images.backdrops.length > 0) {
+    imagesObj.backdrops = sizes.map(size => {
+      return images.backdrops.map(backdrop => {
+        return `http://image.tmdb.org/t/p/w${size}${backdrop.file_path}`;
+      });
+    });
+  }
 
-    if (images.posters && images.posters.length > 0) {
-        imagesObj.posters = sizes.map(size => {
-            return images
-                .posters
-                .map(poster => {
-                    return `http://image.tmdb.org/t/p/w${size}${poster.file_path}`;
-                });
-        });
-    }
+  if (images.posters && images.posters.length > 0) {
+    imagesObj.posters = sizes.map(size => {
+      return images.posters.map(poster => {
+        return `http://image.tmdb.org/t/p/w${size}${poster.file_path}`;
+      });
+    });
+  }
 
-    return imagesObj;
+  return imagesObj;
 }
 
 /**
@@ -494,33 +512,32 @@ function createImagesObject(imdbId, images) {
  * @returns {Promise} promise - When all promises have resolved then omdbArr is returned
  */
 function getOmdbData(movies) {
-    return new Promise((resolve, reject) => {
-        let omdbArr = []; // Contains all trailers object
-        let promises = [];
+  return new Promise((resolve, reject) => {
+    let omdbArr = []; // Contains all trailers object
+    let promises = [];
 
-        for (let i = 0; i < movies.length; i++) {
-            const movie = movies[i];
+    for (let i = 0; i < movies.length; i++) {
+      const movie = movies[i];
 
-            if (movie.ids && movie.ids.imdb) {
-                const imdbId = formatImdbId(movie.ids.imdb);
-                const url = `http://www.omdbapi.com/?i=${imdbId}&plot=true&tomatoes=true&r=json`;
+      if (movie.ids && movie.ids.imdb) {
+        const imdbId = formatImdbId(movie.ids.imdb);
+        const url = `http://www.omdbapi.com/?i=${imdbId}&plot=true&tomatoes=true&r=json`;
 
-                const request = fetch(url)
-                    .then(res => res.json())
-                    .then(data => {
-                        omdbArr.push({imdb: data.imdbID, data: data});
-                    })
-                    .catch(error => reject(error));
+        const request = fetch(url)
+          .then(res => res.json())
+          .then(data => {
+            omdbArr.push({ imdb: data.imdbID, data: data });
+          })
+          .catch(error => reject(error));
 
-                promises.push(request);
-            }
-        }
+        promises.push(request);
+      }
+    }
 
-        Promise
-            .all(promises)
-            .then(() => resolve(omdbArr))
-            .catch(error => reject(error));
-    });
+    Promise.all(promises)
+      .then(() => resolve(omdbArr))
+      .catch(error => reject(error));
+  });
 }
 
 /**
@@ -529,16 +546,16 @@ function getOmdbData(movies) {
  * @returns {Array} newArray
  */
 function mergeMovieArrays(array) {
-    let newArray = [];
+  let newArray = [];
 
-    // Push each movie into array
-    for (let i = 0; i < array.length; i++) {
-        for (let j = 0; j < array[i].data.length; j++) {
-            newArray.push(array[i].data[j]);
-        }
+  // Push each movie into array
+  for (let i = 0; i < array.length; i++) {
+    for (let j = 0; j < array[i].data.length; j++) {
+      newArray.push(array[i].data[j]);
     }
+  }
 
-    return newArray;
+  return newArray;
 }
 
 /**
@@ -547,7 +564,5 @@ function mergeMovieArrays(array) {
  * @returns {String} imdb id formatted
  */
 function formatImdbId(imdbId) {
-    return imdbId.indexOf('tt') > -1
-        ? imdbId
-        : `tt${imdbId}`;
+  return imdbId.indexOf('tt') > -1 ? imdbId : `tt${imdbId}`;
 }

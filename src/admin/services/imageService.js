@@ -15,12 +15,11 @@ export function resizeImage(orginalPath, newPath, width, height) {
   height = height || Jimp.AUTO;
 
   return new Promise((resolve, reject) => {
-    Jimp
-      .read(orginalPath)
+    Jimp.read(orginalPath)
       .then(image => {
         image
-          .resize(width, height)    // resize
-          .quality(100)             // set JPEG quality
+          .resize(width, height) // resize
+          .quality(100) // set JPEG quality
           .write(newPath, resolve(image)); // save
       })
       .catch(error => reject(error));

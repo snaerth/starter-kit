@@ -8,15 +8,10 @@ import errorHandlers from '../server/middleware/errorHandlers';
 import middleware from './middleware';
 import config from '../config';
 import db from './db';
-import {createDefaultDirectorys} from './services/fileService';
+import { createDefaultDirectorys } from './services/fileService';
 
 // VARIABLES
-const {
-  ADMIN_HOST,
-  ADMIN_PORT,
-  DB_URL,
-  SESSION_SECRET
-} = config();
+const { ADMIN_HOST, ADMIN_PORT, DB_URL, SESSION_SECRET } = config();
 
 // Create default directorys if not exist
 createDefaultDirectorys();
@@ -72,5 +67,9 @@ server.listen(ADMIN_PORT, error => {
   if (error) {
     console.error(error);
   }
-  console.info('==> ✅  Admin server is running on %s:%s.', ADMIN_HOST, ADMIN_PORT);
+  console.info(
+    '==> ✅  Admin server is running on %s:%s.',
+    ADMIN_HOST,
+    ADMIN_PORT
+  );
 });

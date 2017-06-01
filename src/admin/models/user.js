@@ -69,7 +69,7 @@ const schema = {
 const userSchema = new Schema(schema);
 
 // On save, encrypt password Before saving user model, run this function
-userSchema.pre('save', function (next) {
+userSchema.pre('save', function(next) {
   const user = this;
 
   // Encrypt our password using the salt above
@@ -85,14 +85,13 @@ userSchema.pre('save', function (next) {
 });
 
 // Compare password to encrypted password
-userSchema.methods.comparePassword = function (candidatePassword, callback) {
-  bcrypt
-    .compare(candidatePassword, this.password, function (error, isMatch) {
-      if (error) {
-        return callback(error);
-      }
-      callback(null, isMatch);
-    });
+userSchema.methods.comparePassword = function(candidatePassword, callback) {
+  bcrypt.compare(candidatePassword, this.password, function(error, isMatch) {
+    if (error) {
+      return callback(error);
+    }
+    callback(null, isMatch);
+  });
 };
 
 export default mongoose.model('user', userSchema);

@@ -10,15 +10,33 @@ import { validateEmail } from '../services/utils';
  * @author Snær Seljan Þóroddsson
  */
 export async function createNews(req, res) {
-    const { title, shortDescription, description, author, authorEmail } = req.body;
-    try {
-        await validateNewsProps({ title, shortDescription, description, author, authorEmail });
-        const news = new News({ title, shortDescription, description, author, authorEmail });
-        const newNews = await saveNews(news);
-        return res.status(200).send(newNews);
-    } catch (error) {
-        return res.status(422).send({error});
-    }
+  const {
+    title,
+    shortDescription,
+    description,
+    author,
+    authorEmail
+  } = req.body;
+  try {
+    await validateNewsProps({
+      title,
+      shortDescription,
+      description,
+      author,
+      authorEmail
+    });
+    const news = new News({
+      title,
+      shortDescription,
+      description,
+      author,
+      authorEmail
+    });
+    const newNews = await saveNews(news);
+    return res.status(200).send(newNews);
+  } catch (error) {
+    return res.status(422).send({ error });
+  }
 }
 
 /**
@@ -29,20 +47,20 @@ export async function createNews(req, res) {
  * @author Snær Seljan Þóroddsson
  */
 function saveNews(news) {
-    return new Promise((resolve, reject) => {
-        if (news.constructor.name === 'model') {
-            // Save news to databases
-            news.save((error) => {
-                if (error) {
-                    return reject(error);
-                }
-
-                return resolve(news);
-            });
-        } else {
-            return reject('Object is not a mongoose object');
+  return new Promise((resolve, reject) => {
+    if (news.constructor.name === 'model') {
+      // Save news to databases
+      news.save(error => {
+        if (error) {
+          return reject(error);
         }
-    });
+
+        return resolve(news);
+      });
+    } else {
+      return reject('Object is not a mongoose object');
+    }
+  });
 }
 
 /**
@@ -53,32 +71,38 @@ function saveNews(news) {
  * @returns {Promise}
  * @author Snær Seljan Þóroddsson
  */
-function validateNewsProps({ title, shortDescription, description, author, authorEmail }) {
-    return new Promise((resolve, reject) => {
-        // Validate email
-        if (!validateEmail(authorEmail)) {
-            return reject(`${authorEmail} is not a valid email`);
-        }
+function validateNewsProps({
+  title,
+  shortDescription,
+  description,
+  author,
+  authorEmail
+}) {
+  return new Promise((resolve, reject) => {
+    // Validate email
+    if (!validateEmail(authorEmail)) {
+      return reject(`${authorEmail} is not a valid email`);
+    }
 
-        // Name has to have aleast two names
-        if (!/^([^0-9]*)$/.test(author) || author.trim().split(' ').length < 2) {
-            return reject('Name has aleast two 2 names consisting of letters');
-        }
+    // Name has to have aleast two names
+    if (!/^([^0-9]*)$/.test(author) || author.trim().split(' ').length < 2) {
+      return reject('Name has aleast two 2 names consisting of letters');
+    }
 
-        if (!title) {
-            return reject('Yout must provide news title');
-        }
+    if (!title) {
+      return reject('Yout must provide news title');
+    }
 
-        if (!shortDescription) {
-            return reject('Yout must provide news short description');
-        }
+    if (!shortDescription) {
+      return reject('Yout must provide news short description');
+    }
 
-        if (!description) {
-            return reject('Yout must provide news description');
-        }
+    if (!description) {
+      return reject('Yout must provide news description');
+    }
 
-        return resolve();
-    });
+    return resolve();
+  });
 }
 
 /**
@@ -90,8 +114,8 @@ function validateNewsProps({ title, shortDescription, description, author, autho
  * @author Snær Seljan Þóroddsson
  */
 export function deleteNews(req, res) {
-    // TODO implement
-    res.send('Deleting news');
+  // TODO implement
+  res.send('Deleting news');
 }
 
 /**
@@ -103,8 +127,8 @@ export function deleteNews(req, res) {
  * @author Snær Seljan Þóroddsson
  */
 export function updateNews(req, res) {
-    // TODO implement
-    res.send('Editing news');
+  // TODO implement
+  res.send('Editing news');
 }
 
 /**
@@ -116,6 +140,6 @@ export function updateNews(req, res) {
  * @author Snær Seljan Þóroddsson
  */
 export function getNews(req, res) {
-    // TODO implement
-    res.send('Getting news');
+  // TODO implement
+  res.send('Getting news');
 }

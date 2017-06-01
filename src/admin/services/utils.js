@@ -3,7 +3,7 @@
  * @param {String} email - Email string
  * @returns true if valid, false otherwise
  */
-exports.validateEmail = (email) => {
+exports.validateEmail = email => {
   const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   return re.test(email);
 };
@@ -17,8 +17,12 @@ exports.deepTrim = function deepTrim(obj) {
     const value = obj[prop];
     const type = typeof value;
 
-    if (value != null && (type == "string" || type == "object") && obj.hasOwnProperty(prop)) {
-      if (type == "object") {
+    if (
+      value != null &&
+      (type == 'string' || type == 'object') &&
+      obj.hasOwnProperty(prop)
+    ) {
+      if (type == 'object') {
         deepTrim(obj[prop]);
       } else {
         obj[prop] = obj[prop].trim();

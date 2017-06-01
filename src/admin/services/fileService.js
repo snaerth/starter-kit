@@ -9,18 +9,18 @@ const directorys = ['assets', 'assets/images', 'assets/images/users'];
  * @author Snær Seljan Þóroddsson
  */
 export function createDefaultDirectorys() {
-    for (let i = 0, len = directorys.length; i < len; i++) {
-        const dir = directorys[i];
-        fs.exists(dir, exists => {
-            if (!exists) {
-                fs.mkdir(dir, error => {
-                    if (error) {
-                        throw new Error(`Failed to create directory ${dir}`);
-                    }
-                });
-            }
+  for (let i = 0, len = directorys.length; i < len; i++) {
+    const dir = directorys[i];
+    fs.exists(dir, exists => {
+      if (!exists) {
+        fs.mkdir(dir, error => {
+          if (error) {
+            throw new Error(`Failed to create directory ${dir}`);
+          }
         });
-    }
+      }
+    });
+  }
 }
 
 /**
@@ -31,15 +31,15 @@ export function createDefaultDirectorys() {
  * @author Snær Seljan Þóroddsson
  */
 export function deleteFile(filePath) {
-    return new Promise((resolve, reject) => {
-        fs.unlink(filePath, error => {
-            if (error) {
-                return reject(error);
-            }
+  return new Promise((resolve, reject) => {
+    fs.unlink(filePath, error => {
+      if (error) {
+        return reject(error);
+      }
 
-            return resolve();
-        });
+      return resolve();
     });
+  });
 }
 
 /**
@@ -50,15 +50,15 @@ export function deleteFile(filePath) {
  * @author Snær Seljan Þóroddsson
  */
 export function fileExists(filePath) {
-    return new Promise((resolve, reject) => {
-        fs.exists(filePath, exists => {
-            if (!exists) {
-                return reject('File does not exist.');
-            }
+  return new Promise((resolve, reject) => {
+    fs.exists(filePath, exists => {
+      if (!exists) {
+        return reject('File does not exist.');
+      }
 
-            return resolve();
-        });
+      return resolve();
     });
+  });
 }
 
 /**
@@ -69,10 +69,10 @@ export function fileExists(filePath) {
  * @author Snær Seljan Þóroddsson
  */
 export function checkFileAndDelete(filePath) {
-    return new Promise((resolve, reject) => {
-        fileExists(filePath)
-        .then(() => deleteFile(filePath))
-        .then(() => resolve(filePath))
-        .catch(error => reject(error));
-    });
+  return new Promise((resolve, reject) => {
+    fileExists(filePath)
+      .then(() => deleteFile(filePath))
+      .then(() => resolve(filePath))
+      .catch(error => reject(error));
+  });
 }

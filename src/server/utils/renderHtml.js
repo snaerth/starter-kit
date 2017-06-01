@@ -1,7 +1,7 @@
 import serialize from 'serialize-javascript';
 
-export default ({html, preloadedState, assets}) => {
-    return `
+export default ({ html, preloadedState, assets }) => {
+  return `
         <!doctype html>
         <html lang="en">
             <head>
@@ -14,9 +14,9 @@ export default ({html, preloadedState, assets}) => {
             </head>
         <body>
             <div id="app">${process.env.NODE_ENV === 'production' ? html : ''}</div>
-            ${preloadedState ? `<script>window.__PRELOADED_STATE__ = ${serialize(preloadedState)}</script>`: ''}
-            <script defer src="${ assets ? assets.vendor.js : '/vendor.js' }"></script>
-            <script defer src="${ assets ? assets.main.js : '/main.js' }" ></script>
+            ${preloadedState ? `<script>window.__PRELOADED_STATE__ = ${serialize(preloadedState)}</script>` : ''}
+            <script defer src="${assets ? assets.vendor.js : '/vendor.js'}"></script>
+            <script defer src="${assets ? assets.main.js : '/main.js'}" ></script>
         </body>
     </html>`;
 };
