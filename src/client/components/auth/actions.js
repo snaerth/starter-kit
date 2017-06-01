@@ -78,7 +78,7 @@ export function signinFacebook() {
     axios
       .get('/admin/facebook')
       .then(response => {
-        const payload = response.data;
+        const payload = response.data; // eslint-disable-line
       })
       .catch(error => dispatch(authError(AUTH_ERROR, error)));
   };

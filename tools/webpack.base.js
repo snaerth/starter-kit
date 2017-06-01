@@ -165,7 +165,7 @@ const js = {
 };
 
 module.exports = {
-  CLIENT_ENTRY: path.join(process.cwd(), 'src/client/index.jsx'),
+  CLIENT_ENTRY: path.join(process.cwd(), 'src/client/index.js'),
   CLIENT_OUTPUT: path.join(process.cwd(), 'build/public'),
   SERVER_ENTRY: path.join(process.cwd(), 'src/server/server.js'),
   SERVER_OUTPUT: path.join(process.cwd(), 'build'),

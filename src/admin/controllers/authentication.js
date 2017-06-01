@@ -181,6 +181,7 @@ function findUserByEmail(email) {
  * @returns {Promise}
  * @author Snær Seljan Þóroddsson
  */
+// eslint-disable-next-line
 function checkUserByEmail(email) {
   // eslint-disable-line
   return new Promise((resolve, reject) => {
@@ -248,6 +249,7 @@ function saveUser(user, propsToDelArr) {
  * @returns {Object} res
  * @author Snær Seljan Þóroddsson
  */
+// eslint-disable-next-line
 function validateSignup({ email, password, newPassword, name, dateOfBirth }) {
   // eslint-disable-line
   return new Promise((resolve, reject) => {
