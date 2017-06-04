@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import styles from './imageBlurWrapper.scss';
 import classnames from 'classnames';
 import { processImage } from '../../../utils/stackBlur';

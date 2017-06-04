@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route, IndexRoute } from 'react-router';
+import { Route, IndexRoute } from 'react-router-dom';
 import requireAuth from './../containers/requireAuth';
 import pageWrapper from './../containers/pageWrapper';
 import App from './../components';
@@ -12,7 +12,6 @@ import ForgotPassword from './../components/auth/forgotPassword';
 import ResetPassword from './../components/auth/resetPassword';
 import Profile from './profile';
 import Admin from './admin';
-
 export { NotFound };
 
 export default (

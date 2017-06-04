@@ -1,12 +1,13 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import styles from '../input/input.scss';
 import ErrorText from '../errorText';
-import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
+import { CSSTransitionGroup } from 'react-transition-group';
 
 const Input = props => {
   return (
     <span className={styles.input}>
-      <ReactCSSTransitionGroup
+      <CSSTransitionGroup
         component="div"
         transitionName="fadeIn"
         transitionEnterTimeout={700}
@@ -15,7 +16,7 @@ const Input = props => {
         {props.meta.error && props.meta.touched
           ? <ErrorText key={props.id} id={props.id} error={props.meta.error} />
           : null}
-      </ReactCSSTransitionGroup>
+      </CSSTransitionGroup>
       <textarea
         {...props.input}
         className={styles.inputField}

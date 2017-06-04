@@ -1,5 +1,6 @@
-import React, { PropTypes } from 'react';
-import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
+import React from 'react';
+import PropTypes from 'prop-types';
+import { CSSTransitionGroup } from 'react-transition-group';
 import styles from './spinner.scss';
 
 /**
@@ -7,7 +8,7 @@ import styles from './spinner.scss';
  */
 const Spinner = props => {
   return (
-    <ReactCSSTransitionGroup
+    <CSSTransitionGroup
       component="div"
       transitionName="fadeInScale"
       transitionEnterTimeout={700}
@@ -19,7 +20,7 @@ const Spinner = props => {
         </svg>
         <p className={styles.text}>{props.children}</p>
       </div>
-    </ReactCSSTransitionGroup>
+    </CSSTransitionGroup>
   );
 };
 
