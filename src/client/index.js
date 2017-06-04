@@ -2,10 +2,10 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import configureStore from './store/configureStore';
-import { BrowserRouter as Router } from 'react-router-dom';
+import { Router } from 'react-router';
 import { syncHistoryWithStore } from 'react-router-redux';
 import { createBrowserHistory } from 'history';
-import routes from './routes';
+import App from './components';
 
 const preloadedState = window.__PRELOADED_STATE__;
 const store = configureStore(preloadedState);
@@ -14,11 +14,7 @@ const history = syncHistoryWithStore(createBrowserHistory(), store);
 
 ReactDOM.render(
   <Provider store={store}>
-    <Router
-      history={history}
-      routes={routes}
-      onUpdate={window.scrollTo(0, 0)}
-    />
+    <Router history={history}><App /></Router>
   </Provider>,
   document.getElementById('app')
 );
