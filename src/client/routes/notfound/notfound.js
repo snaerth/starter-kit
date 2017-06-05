@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router';
+import { Link } from 'react-router-dom';
 import styles from './notfound.scss';
 
 /**
  * Not Found component
  */
-export default class NotFound extends Component {
+class NotFound extends Component {
   /**
    * Render method
    * @return {Component}
@@ -34,3 +34,5 @@ export default class NotFound extends Component {
     );
   }
 }
+
+export default NotFound;

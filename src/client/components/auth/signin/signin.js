@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router';
+import { Link } from 'react-router-dom';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { reduxForm, Field } from 'redux-form';
@@ -39,10 +39,10 @@ class Signin extends Component {
     super(props);
     this.handleFormSubmit = this.handleFormSubmit.bind(this);
     this.toggleView = this.toggleView.bind(this);
-    this.timeline = new TimelineLite();
     this.state = {
       showEmailSignin: false,
-      animateButtons: false
+      animateButtons: false,
+      tl: new TimelineLite()
     };
   }
 
@@ -113,20 +113,21 @@ class Signin extends Component {
      * @author Snær Seljan Þóroddsson
      */
   toggleView() {
+    const { tl } = this.state;
     this.setState({ showEmailSignin: !this.state.showEmailSignin });
 
     if (!this.state.showEmailSignin) {
-      this.timeline
+      tl
         .to(this.refs.buttons, 0.2, {
           left: '-110%',
           opacity: 1,
           ease: Power3.easeOut
         }) // eslint-disable-line
         .to(this.refs.form, 0.2, { left: 0, opacity: 1, ease: Power3.easeOut }); // eslint-disable-line
-      this.timeline.pause();
-      this.timeline.play();
+      tl.pause();
+      tl.play();
     } else {
-      this.timeline.reverse();
+      tl.reverse();
     }
   }
 

@@ -1,8 +1,7 @@
 import React from 'react';
-import { Route, IndexRoute } from 'react-router-dom';
+import { Route } from 'react-router-dom';
 import requireAuth from './../containers/requireAuth';
 import pageWrapper from './../containers/pageWrapper';
-import App from './../components';
 import NotFound from './notfound';
 import Home from './home';
 import Signin from './../components/auth/signin';
@@ -15,8 +14,8 @@ import Admin from './admin';
 export { NotFound };
 
 export default (
-  <Route path="/" component={App}>
-    <IndexRoute name="My application name" component={Home} />
+  <div>
+    <Route path="/" name="My application name" component={Home} />
     <Route path="signin" name="Sign in" component={pageWrapper(Signin)} />
     <Route path="signup" name="Sign up" component={pageWrapper(Signup)} />
     <Route path="signout" name="Sign out" component={pageWrapper(Signout)} />
@@ -45,5 +44,5 @@ export default (
       name="404 Page not found"
       component={pageWrapper(NotFound)}
     />
-  </Route>
+  </div>
 );

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { Link, IndexLink } from 'react-router';
+import { Link } from 'react-router-dom';
 import styles from './Header.scss';
 import ModalWrapper from '../modal';
 import classnames from 'classnames';
@@ -104,6 +104,7 @@ class Header extends Component {
     } else {
       return [
         <Link
+          to="#"
           role="button"
           key="signin"
           className={styles.link}
@@ -112,6 +113,7 @@ class Header extends Component {
           Sign in
         </Link>,
         <Link
+          to="#"
           role="button"
           key="signup"
           className={styles.link}
@@ -129,13 +131,16 @@ class Header extends Component {
         <div className={styles.container}>
           <nav className={styles.navUpper}>
             <div>
-              <IndexLink
+              <Link
                 to="/"
-                activeClassName={styles.active}
-                className={classnames(styles.home_link, styles.link)}
+                className={classnames(
+                  styles.home_link,
+                  styles.link,
+                  styles.active
+                )}
               >
                 Home
-              </IndexLink>
+              </Link>
             </div>
             <div className={styles.links_right}>
               {this.renderAuthLinks()}

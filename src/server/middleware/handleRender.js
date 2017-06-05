@@ -4,7 +4,7 @@ import React from 'react';
 import { StaticRouter as Router, matchPath } from 'react-router';
 import { renderToString } from 'react-dom/server';
 import { Provider } from 'react-redux';
-import { NotFound } from '../../client/routes';
+import NotFound from '../../client/routes/notfound';
 import App from '../../client/components';
 import configureStore from '../../client/store/configureStore';
 let assets = require('../../../assets.json');

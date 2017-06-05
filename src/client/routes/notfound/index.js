@@ -1,2 +1,2 @@
-import notfound from './notfound';
-export default notfound;
+import NotFound from './notfound';
+export default NotFound;
