@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 import requireAuth from './../containers/requireAuth';
 import pageWrapper from './../containers/pageWrapper';
 import NotFound from './notfound';
@@ -14,35 +14,34 @@ import Admin from './admin';
 export { NotFound };
 
 export default (
-  <div>
+  <Switch>
     <Route path="/" name="My application name" component={Home} />
-    <Route path="signin" name="Sign in" component={pageWrapper(Signin)} />
-    <Route path="signup" name="Sign up" component={pageWrapper(Signup)} />
-    <Route path="signout" name="Sign out" component={pageWrapper(Signout)} />
+    <Route path="/signin" name="Sign in" component={pageWrapper(Signin)} />
+    <Route path="/signup" name="Sign up" component={pageWrapper(Signup)} />
+    <Route path="/signout" name="Sign out" component={pageWrapper(Signout)} />
     <Route
-      path="forgotpassword"
+      path="/forgotpassword"
       name="Forgot password"
       component={pageWrapper(ForgotPassword)}
     />
     <Route
-      path="reset/:token"
+      path="/reset/:token"
       name="Reset password"
       component={pageWrapper(ResetPassword)}
     />
     <Route
-      path="profile"
+      path="/profile"
       name="Profile"
       component={requireAuth(pageWrapper(Profile))}
     />
     <Route
-      path="admin"
+      path="/admin"
       name="Admin"
       component={requireAuth(pageWrapper(Admin), 'admin')}
     />
     <Route
-      path="*"
       name="404 Page not found"
       component={pageWrapper(NotFound)}
     />
-  </div>
+  </Switch>
 );

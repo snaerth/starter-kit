@@ -2,7 +2,7 @@
 import renderHtml from '../utils/renderHtml';
 import React from 'react';
 import { StaticRouter as Router, matchPath } from 'react-router';
-import { renderToString } from 'react-dom/server';
+import ReactDOMServer from 'react-dom/server';
 import { Provider } from 'react-redux';
 import NotFound from '../../client/routes/notfound';
 import App from '../../client/components';
@@ -43,7 +43,7 @@ export default function handleRender(req, res) {
   // Create a new Redux store instance
   const store = configureStore(preloadedState);
   // Render the component to a string
-  const html = renderToString(
+  const html = ReactDOMServer.renderToString(
     <Provider store={store}>
       <Router context={{}} location={req.url}>
         <App />

@@ -67,7 +67,7 @@ module.exports = {
     chunkFilename: '[name]_[chunkhash].js',
     sourceMapFilename: '[name]_[chunkhash].map',
     publicPath: '/',
-    path: 'build'
+    path: '/build'
   },
   plugins,
   module: {
