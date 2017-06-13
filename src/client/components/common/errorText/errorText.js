@@ -1,11 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styles from './errorText.scss';
-import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
+import CSSTransitionGroup  from 'react-transition-group';
 
 const ErrorText = ({ error, id }) => {
   return (
-    <ReactCSSTransitionGroup
+    <CSSTransitionGroup 
       transitionName="fadeIn"
       transitionEnterTimeout={700}
       transitionLeaveTimeout={700}
@@ -13,7 +13,7 @@ const ErrorText = ({ error, id }) => {
       <div key={id} className={styles.error} role="alert" aria-describedby={id}>
         {error}
       </div>
-    </ReactCSSTransitionGroup>
+    </CSSTransitionGroup>
   );
 };
 
