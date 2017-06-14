@@ -78,32 +78,20 @@ a.link-slideright::hover {
     color: darken($primary-pink, 20%);
 }
 
-a.link-slideright::after,
-a.link-slideright::before {
+a.link-slideright::after {
     content: '';
     position: absolute;
+    bottom: 0;
+    right: 0;
     width: 100%;
     height: 1px;
     background: darken($primary-pink, 20%);
     transition: transform .3s;
-}
-
-a.link-slideright::before {
-    bottom: 1px;
-    left: 0;
-    transform: scaleY(0.618) translateX(-100%);
-}
-
-a.link-slideright::after {
-    top: 0;
-    right: 0;
     transform: scaleY(0.618) translateX(100%);
 }
 
 a.link-slideright:focus::after,
-a.link-slideright:focus::before,
-a.link-slideright:hover::after,
-a.link-slideright:hover::before {
+a.link-slideright:hover::after {
     transform: scaleY(0.618) translateX(0);
 }
 
@@ -123,6 +111,7 @@ fieldset {
     background: $primary-card;
     padding: 1em 1em 0;
     position: relative;
+    overflow-x: hidden;
 }
 
 .container {

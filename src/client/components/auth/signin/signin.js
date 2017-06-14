@@ -44,13 +44,13 @@ class Signin extends Component {
     this.state = {
       showEmailSignin: false,
       animateButtons: false,
+      slideDirty: false,
       tl: new TimelineLite()
     };
   }
 
   componentWillMount() {
     this.props.actions.clean();
-    this.animateStart();
   }
 
   componentDidMount() {
@@ -67,15 +67,15 @@ class Signin extends Component {
      * @author Snær Seljan Þóroddsson
      */
   animateStart() {
-    if (this.refs.buttons) {
-      const tl = new TimelineLite();
-      tl.staggerFrom(
-        this.refs.buttons.children,
-        1,
-        { scale: 0.9, opacity: 0, delay: 0.1, ease: Power3.easeOut },
-        0.1
-      );
-    }
+    const { buttons } = this.refs;
+    const tl = new TimelineLite();
+
+    tl.staggerFrom(
+      buttons.children,
+      1,
+      { opacity: 0, delay: 0.1, ease: Power3.easeOut },
+      0.1
+    );
   }
 
   /**
@@ -116,19 +116,24 @@ class Signin extends Component {
      */
   toggleView(e) {
     e.preventDefault();
-    const { tl, showEmailSignin } = this.state;
+    const { tl, showEmailSignin, slideDirty } = this.state;
     const { form, buttons } = this.refs;
 
     this.setState({ showEmailSignin: !showEmailSignin });
 
     if (!showEmailSignin) {
-      tl
-        .to(buttons, 0.2, {
-          left: '-110%',
-          opacity: 1,
-          ease: Power3.easeOut
-        })
-        .to(form, 0.2, { left: '0%', opacity: 1, ease: Power3.easeOut });
+      if (!slideDirty) {
+        this.setState({ slideDirty: true });
+        tl
+          .to(buttons, 0.2, {
+            x: '-110%',
+            opacity: 1,
+            ease: Power3.easeOut
+          })
+          .to(form, 0.2, { x: '0%', opacity: 1, ease: Power3.easeOut });
+      } else {
+        tl.play();
+      }
     } else {
       tl.reverse();
     }
