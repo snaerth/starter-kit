@@ -20,14 +20,14 @@ ReactDOM.render(
 );
 
 const rootEl = document.getElementById('app');
-const renderApp = (Component) => {
-    ReactDOM.render(
-      <Provider store={store}>
-        <Router history={history}><App /></Router>
-      </Provider>,
-      rootEl
-    );
-}
+const renderApp = Component => {
+  ReactDOM.render(
+    <Provider store={store}>
+      <Router history={history}><Component /></Router>
+    </Provider>,
+    rootEl
+  );
+};
 
 renderApp(App);
 

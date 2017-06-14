@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import styles from './button.scss';
+import styles from './Button.scss';
 import classnames from 'classnames';
 
 /**

@@ -37,7 +37,7 @@ class Signin extends Component {
 
   constructor(props) {
     super(props);
-    
+
     this.handleFormSubmit = this.handleFormSubmit.bind(this);
     this.toggleView = this.toggleView.bind(this);
 
@@ -74,7 +74,7 @@ class Signin extends Component {
         1,
         { scale: 0.9, opacity: 0, delay: 0.1, ease: Power3.easeOut },
         0.1
-      ); // eslint-disable-line
+      );
     }
   }
 
@@ -116,20 +116,19 @@ class Signin extends Component {
      */
   toggleView(e) {
     e.preventDefault();
-    const { tl } = this.state;
-    
-    this.setState({ showEmailSignin: !this.state.showEmailSignin });
+    const { tl, showEmailSignin } = this.state;
+    const { form, buttons } = this.refs;
 
-    if (!this.state.showEmailSignin) {
+    this.setState({ showEmailSignin: !showEmailSignin });
+
+    if (!showEmailSignin) {
       tl
-        .to(this.refs.buttons, 0.2, {
+        .to(buttons, 0.2, {
           left: '-110%',
           opacity: 1,
           ease: Power3.easeOut
-        }) // eslint-disable-line
-        .to(this.refs.form, 0.2, { left: 0, opacity: 1, ease: Power3.easeOut }); // eslint-disable-line
-      tl.pause();
-      tl.play();
+        })
+        .to(form, 0.2, { left: '0%', opacity: 1, ease: Power3.easeOut });
     } else {
       tl.reverse();
     }
@@ -197,12 +196,18 @@ class Signin extends Component {
      * @returns {undefined}
      */
   renderSocials() {
+    const {
+      buttonContainer,
+      hidden,
+      iconFacebook,
+      iconArrowForward,
+      forgotPasswordContainer
+    } = styles;
+    const { animateButtons } = this.state;
+
     return (
       <div
-        className={classnames(
-          styles.buttonContainer,
-          !this.state.animateButtons ? styles.hidden : ''
-        )}
+        className={classnames(buttonContainer, !animateButtons ? hidden : '')}
         ref="buttons"
       >
         <ButtonLink
@@ -212,7 +217,7 @@ class Signin extends Component {
           color="facebook"
           className="fullWidth"
         >
-          <FacebookIcon className={styles.iconFacebook} />
+          <FacebookIcon className={iconFacebook} />
         </ButtonLink>
         <ButtonLink
           href="/admin/auth/twitter"
@@ -221,7 +226,7 @@ class Signin extends Component {
           color="twitter"
           className="fullWidth"
         >
-          <TwitterIcon className={styles.iconFacebook} />
+          <TwitterIcon className={iconFacebook} />
         </ButtonLink>
         <ButtonLink
           href="/admin/auth/google"
@@ -230,25 +235,19 @@ class Signin extends Component {
           color="google"
           className="fullWidth"
         >
-          <GoogleIcon className={styles.iconFacebook} />
+          <GoogleIcon className={iconFacebook} />
         </ButtonLink>
-        <ButtonLink
-          onClick={() => this.toggleView()}
-          text="Sign in with email"
-          ariaLabel="Sign in with email"
-          className="fullWidth"
-        >
-          <ArrowForward className={styles.iconArrowForward} />
-        </ButtonLink>
-        <Button
-          onClick={() => this.toggleView()}
-          text="Sign in with email"
-          ariaLabel="Sign in with email"
-          className="fullWidth"
-        >
-          <ArrowForward className={styles.iconArrowForward} />
-        </Button>
-        <div className={styles.forgotPasswordContainer}>
+        <div onClick={e => this.toggleView(e)}>
+          <ButtonLink
+            onClick={e => this.toggleView(e)}
+            text="Sign in with email"
+            title="Sign in with email"
+            className="fullWidth"
+          >
+            <ArrowForward className={iconArrowForward} />
+          </ButtonLink>
+        </div>
+        <div className={forgotPasswordContainer}>
           <Link to="forgotpassword" className="link-slideright">
             Forgot password?
           </Link>

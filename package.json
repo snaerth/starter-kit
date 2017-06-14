@@ -8,7 +8,7 @@
     "start-prod": "concurrent --kill-others \"npm run start-prod-server\" \"npm run start-prod-admin\"",
     "start-prod-server": "better-npm-run start-prod-server",
     "start-prod-admin": "better-npm-run start-prod-admin",
-    "start-dev": "concurrent --kill-others \"npm run start-dev-admin\" \"npm run start-dev-server\" \"npm run lint:watch\"",
+    "start-dev": "concurrent --kill-others \"npm run start-dev-admin \" \"npm run start-dev-server\" \"npm run lint:watch\"",
     "start-dev-server": "better-npm-run start-dev-server",
     "start-dev-admin": "better-npm-run start-dev-admin",
     "build": "better-npm-run build",

@@ -17,6 +17,7 @@ export async function createNews(req, res) {
     author,
     authorEmail
   } = req.body;
+
   try {
     await validateNewsProps({
       title,
@@ -32,7 +33,9 @@ export async function createNews(req, res) {
       author,
       authorEmail
     });
+
     const newNews = await saveNews(news);
+
     return res.status(200).send(newNews);
   } catch (error) {
     return res.status(422).send({ error });
