@@ -8,6 +8,7 @@ import classnames from 'classnames';
  */
 const ButtonLink = props => {
   const { href, text, title, color, className } = props;
+  
   return (
     <a
       className={classnames(
@@ -25,7 +26,7 @@ const ButtonLink = props => {
 };
 
 ButtonLink.propTypes = {
-  href: PropTypes.string.isRequired,
+  href: PropTypes.string,
   text: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
   color: PropTypes.string,

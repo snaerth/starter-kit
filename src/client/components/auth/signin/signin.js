@@ -37,8 +37,10 @@ class Signin extends Component {
 
   constructor(props) {
     super(props);
+    
     this.handleFormSubmit = this.handleFormSubmit.bind(this);
     this.toggleView = this.toggleView.bind(this);
+
     this.state = {
       showEmailSignin: false,
       animateButtons: false,
@@ -112,8 +114,10 @@ class Signin extends Component {
      * @returns {undefined}
      * @author Snær Seljan Þóroddsson
      */
-  toggleView() {
+  toggleView(e) {
+    e.preventDefault();
     const { tl } = this.state;
+    
     this.setState({ showEmailSignin: !this.state.showEmailSignin });
 
     if (!this.state.showEmailSignin) {
@@ -175,9 +179,10 @@ class Signin extends Component {
         </fieldset>
         <div className={styles.back}>
           <Link
+            to="/"
             role="button"
             className="link-slideright"
-            onClick={() => this.toggleView()}
+            onClick={this.toggleView}
           >
             Back to socials sign in
           </Link>
@@ -226,6 +231,14 @@ class Signin extends Component {
           className="fullWidth"
         >
           <GoogleIcon className={styles.iconFacebook} />
+        </ButtonLink>
+        <ButtonLink
+          onClick={() => this.toggleView()}
+          text="Sign in with email"
+          ariaLabel="Sign in with email"
+          className="fullWidth"
+        >
+          <ArrowForward className={styles.iconArrowForward} />
         </ButtonLink>
         <Button
           onClick={() => this.toggleView()}
