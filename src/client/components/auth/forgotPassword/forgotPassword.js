@@ -25,7 +25,8 @@ class Signin extends Component {
     actions: PropTypes.object.isRequired,
     errorMessage: PropTypes.string,
     message: PropTypes.string,
-    isFetching: PropTypes.bool
+    isFetching: PropTypes.bool,
+    hideHeading: PropTypes.bool
   };
 
   componentWillMount() {
@@ -69,7 +70,7 @@ class Signin extends Component {
   }
 
   render() {
-    const { handleSubmit, isFetching } = this.props;
+    const { handleSubmit, isFetching, hideHeading } = this.props;
 
     return (
       <div className="card">
@@ -77,7 +78,7 @@ class Signin extends Component {
         {isFetching
           ? <Spinner>Loading</Spinner>
           : <div>
-              <MainHeading text="Lost password" className="medium" />
+              {!hideHeading ? <MainHeading text="Lost password" className="medium" /> : null}
               <form
                 onSubmit={handleSubmit(this.handleFormSubmit.bind(this))}
                 noValidate
