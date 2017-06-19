@@ -43,10 +43,8 @@ class Signin extends Component {
 		this.toggleView = this.toggleView.bind(this);
 
 		this.state = {
-			showEmailSignin: false,
-			animateButtons: false,
-			slideDirty: false,
-			tl: new TimelineLite()
+			currentSlide: 0,
+			animateButtons: false
 		};
 	}
 
@@ -112,37 +110,69 @@ class Signin extends Component {
 	/**
      * Toggles signin views BUTTONS or SIGN IN with email
      * 
+	 * @param {Object} e - Click handler event
      * @returns {undefined}
      * @author Snær Seljan Þóroddsson
      */
-	toggleView(e) {
+	toggleView(e, slideNumber) {
 		e.preventDefault();
-		const { tl, showEmailSignin, slideDirty } = this.state;
+		const { slideDirty } = this.state;
+		let { currentSlide } = this.state;
 		const { form, buttons } = this.refs;
 
-		this.setState({ showEmailSignin: !showEmailSignin });
+		currentSlide = slideNumber;
 
-		if (!showEmailSignin) {
-			if (!slideDirty) {
-				this.setState({ slideDirty: true });
-				tl
-					.to(buttons, 0.2, {
-						x: '-110%',
-						opacity: 1,
-						ease: Power3.easeOut
-					})
-					.to(form, 0.2, { x: '0%', opacity: 1, ease: Power3.easeOut });
-			} else {
-				tl.play();
-			}
+		this.setState({ currentSlide });
+
+		if (slideNumber !== 0) {
+			this.animateSlide(buttons, form, true);
 		} else {
-			tl.reverse();
+			this.animateSlide(buttons, form, false);
+		}
+	}
+
+	/**
+     * Animates slidein 
+     * 
+	 * @param {Object} firstEl
+	 * @param {Object} secondEl
+     * @returns {undefined}
+     * @author Snær Seljan Þóroddsson
+     */
+	animateSlide(firstEl, secondEl, forward) {
+		const tl = new TimelineLite();
+
+		if (forward) {
+			tl
+				.to(firstEl, 0.2, {
+					x: '-110%',
+					opacity: 1,
+					ease: Power3.easeOut
+				})
+				.to(secondEl, 0.2, {
+					x: '0%',
+					opacity: 1,
+					ease: Power3.easeOut
+				});
+		} else {
+			tl
+				.to(secondEl, 0.2, {
+					x: '110%',
+					opacity: 1,
+					ease: Power3.easeOut
+				})
+				.to(firstEl, 0.2, {
+					x: '0%',
+					opacity: 1,
+					ease: Power3.easeOut
+				});
 		}
 	}
 
 	/**
      * Renders sign in form with email and password
      * 
+	 * @param {func} handleSubmit
      * @returns {undefined}
      */
 	renderForm(handleSubmit) {
@@ -190,7 +220,12 @@ class Signin extends Component {
 					</div>
 				</fieldset>
 				<div className={forgotPasswordContainer}>
-					<Link to="forgotpassword" className="link-slideright">
+					<Link
+						role="button"
+						to="forgotpassword"
+						className="link-slideright"
+						onClick={e => this.toggleView(e, 2)}
+					>
 						Forgot password?
 					</Link>
 				</div>
@@ -199,7 +234,7 @@ class Signin extends Component {
 						to="/"
 						role="button"
 						className="link-slideright"
-						onClick={this.toggleView}
+						onClick={e => this.toggleView(e, 0)}
 					>
 						Back to socials sign in
 					</Link>
@@ -255,9 +290,9 @@ class Signin extends Component {
 				>
 					<GoogleIcon className={iconFacebook} />
 				</ButtonLink>
-				<div onClick={e => this.toggleView(e)}>
+				<div onClick={e => this.toggleView(e, 1)}>
 					<ButtonLink
-						onClick={e => this.toggleView(e)}
+						role="button"
 						text="Sign in with email"
 						title="Sign in with email"
 						className="fullWidth"
@@ -275,8 +310,8 @@ class Signin extends Component {
      * @returns {undefined}
      */
 	renderForgotPassword() {
-    const {formContainer} = styles;
-    
+		const { formContainer } = styles;
+
 		return (
 			<div ref="forgotpassword" className={formContainer}>
 				<ForgotPassword hideHeading={true} />
