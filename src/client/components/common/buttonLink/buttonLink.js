@@ -7,7 +7,7 @@ import classnames from 'classnames';
  * ButtonLink component
  */
 const ButtonLink = props => {
-  const { href, text, title, color, className } = props;
+  const { href, text, title, color, className, onClick } = props;
 
   return (
     <a
@@ -18,6 +18,7 @@ const ButtonLink = props => {
       )}
       href={href}
       title={title}
+      onClick={onClick}
     >
       <span className={styles.icon}>{props.children}</span>
       {text}
@@ -31,7 +32,8 @@ ButtonLink.propTypes = {
   title: PropTypes.string.isRequired,
   color: PropTypes.string,
   className: PropTypes.string,
-  children: PropTypes.element
+  children: PropTypes.element,
+  onClick: PropTypes.func
 };
 
 export default ButtonLink;
