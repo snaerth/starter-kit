@@ -118,17 +118,26 @@ class Signin extends Component {
 		e.preventDefault();
 		const { slideDirty } = this.state;
 		let { currentSlide } = this.state;
-		const { form, buttons } = this.refs;
+		const { form, buttons, forgotpassword } = this.refs;
+		let forward = true;
+
+		// Check if backwards
+		if (slideNumber > currentSlide) {
+			let forward = false;
+		}
 
 		currentSlide = slideNumber;
-
 		this.setState({ currentSlide });
 
-		if (slideNumber !== 0) {
-			this.animateSlide(buttons, form, true);
-		} else {
-			this.animateSlide(buttons, form, false);
+		let el1 = buttons;
+		let el2 = form;
+
+		if (slideNumber === 2) {
+			let el1 = form;
+			let el2 = forgotpassword;
 		}
+
+		this.animateSlide(el1, el2, forward);
 	}
 
 	/**
@@ -219,13 +228,11 @@ class Signin extends Component {
 						</Button>
 					</div>
 				</fieldset>
-				<div className={forgotPasswordContainer}>
-					<Link
-						role="button"
-						to="forgotpassword"
-						className="link-slideright"
-						onClick={e => this.toggleView(e, 2)}
-					>
+				<div
+					className={forgotPasswordContainer}
+					onClick={e => this.toggleView(e, 2)}
+				>
+					<Link role="button" to="forgotpassword" className="link-slideright">
 						Forgot password?
 					</Link>
 				</div>
