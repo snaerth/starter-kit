@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { reduxForm, Field } from 'redux-form';
-import { TimelineLite, Power3 } from 'gsap';
+import { TimelineLite, Power2 } from 'gsap';
 import classnames from 'classnames';
 import Input from '../../common/input';
 import Password from '../../common/password';
@@ -27,119 +27,119 @@ import GoogleIcon from '../../../common/svg/google.svg';
  * Signin component
  */
 class Signin extends Component {
-  static propTypes = {
-    fields: PropTypes.array.isRequired,
-    handleSubmit: PropTypes.func.isRequired,
-    signinUser: PropTypes.func,
-    actions: PropTypes.object.isRequired,
-    errorMessage: PropTypes.string,
-    isFetching: PropTypes.bool
-  };
+	static propTypes = {
+		fields: PropTypes.array.isRequired,
+		handleSubmit: PropTypes.func.isRequired,
+		signinUser: PropTypes.func,
+		actions: PropTypes.object.isRequired,
+		errorMessage: PropTypes.string,
+		isFetching: PropTypes.bool
+	};
 
-  constructor(props) {
-    super(props);
+	constructor(props) {
+		super(props);
 
-    this.handleFormSubmit = this.handleFormSubmit.bind(this);
-    this.toggleView = this.toggleView.bind(this);
+		this.handleFormSubmit = this.handleFormSubmit.bind(this);
+		this.toggleView = this.toggleView.bind(this);
 
-    this.state = {
-      currentSlide: 0,
-      animateButtons: false
-    };
-  }
+		this.state = {
+			currentSlide: 0,
+			animateButtons: false
+		};
+	}
 
-  componentWillMount() {
-    this.props.actions.clean();
-  }
+	componentWillMount() {
+		this.props.actions.clean();
+	}
 
-  componentDidMount() {
-    setTimeout(() => {
-      this.animateStart();
-      this.setState({ animateButtons: true });
-    }, 100);
-  }
+	componentDidMount() {
+		setTimeout(() => {
+			this.animateStart();
+			this.setState({ animateButtons: true });
+		}, 100);
+	}
 
-  /**
+	/**
      * Sign in start animation for buttons
      * 
      * @returns {undefined}
      * @author Snær Seljan Þóroddsson
      */
-  animateStart() {
-    const { buttons } = this.refs;
-    const tl = new TimelineLite();
+	animateStart() {
+		const { el_0 } = this.refs;
+		const tl = new TimelineLite();
 
-    tl.staggerFrom(
-      buttons.children,
-      1,
-      { opacity: 0, delay: 0.1, ease: Power3.easeOut },
-      0.1
-    );
-  }
+		tl.staggerFrom(
+			el_0.children,
+			1,
+			{ opacity: 0, delay: 0.1, ease: Power2.easeOut },
+			0.1
+		);
+	}
 
-  /**
+	/**
      * Handles form submit event
      *
      * @param {Object}
      * @returns {undefined}
      * @author Snær Seljan Þóroddsson
      */
-  handleFormSubmit({ email, password }) {
-    this.props.actions.isFetching();
-    this.props.actions.signinUser({ email, password });
-  }
+	handleFormSubmit({ email, password }) {
+		this.props.actions.isFetching();
+		this.props.actions.signinUser({ email, password });
+	}
 
-  /**
+	/**
      * Renders error message box
      *
      * @returns {JSX}
      * @author Snær Seljan Þóroddsson
      */
-  renderError() {
-    const { errorMessage } = this.props;
+	renderError() {
+		const { errorMessage } = this.props;
 
-    if (errorMessage) {
-      return (
-        <fieldset>
-          <NotifyBox strongText="Error: " text={errorMessage} type="error" />
-        </fieldset>
-      );
-    }
-  }
+		if (errorMessage) {
+			return (
+				<fieldset>
+					<NotifyBox strongText="Error: " text={errorMessage} type="error" />
+				</fieldset>
+			);
+		}
+	}
 
-  /**
+	/**
      * Toggles signin views BUTTONS or SIGN IN with email
      * 
 	 * @param {Object} e - Click handler event
      * @returns {undefined}
      * @author Snær Seljan Þóroddsson
      */
-  toggleView(e, slideNumber) {
-    e.preventDefault();
-    let { currentSlide } = this.state;
-    const { form, buttons, forgotpassword } = this.refs;
-    let forward = true;
+	toggleView(e, slideNumber) {
+		e.preventDefault();
+		let { currentSlide } = this.state;
+		let elements = [];
 
-    // Check if backwards
-    if (currentSlide !== 0 && slideNumber > currentSlide) {
-      forward = false;
-    }
+		let forward = true;
 
-    currentSlide = slideNumber;
-    this.setState({ currentSlide });
+		console.log(currentSlide, slideNumber);
 
-    let el1 = buttons;
-    let el2 = form;
+		let firstEl = this.refs['el_' + currentSlide];
+		let secondEl = this.refs['el_' + slideNumber];
 
-    if (slideNumber === 2) {
-      el1 = form;
-      el2 = forgotpassword;
-    }
+		// Check if backwards
+		if (currentSlide > slideNumber) {
+			forward = false;
+			firstEl = this.refs['el_' + slideNumber];
+			secondEl = this.refs['el_' + currentSlide];
+		}
 
-    this.animateSlide(el1, el2, forward);
-  }
+		this.animateSlide(firstEl, secondEl, forward);
 
-  /**
+		currentSlide = slideNumber;
+		this.setState({ currentSlide });
+	}
+
+	/**
      * Animates slidein 
      * 
 	 * @param {Object} firstEl
@@ -147,198 +147,208 @@ class Signin extends Component {
      * @returns {undefined}
      * @author Snær Seljan Þóroddsson
      */
-  animateSlide(firstEl, secondEl, forward) {
-    const tl = new TimelineLite();
+	animateSlide(firstEl, secondEl, forward) {
+		const tl = new TimelineLite();
 
-    if (forward) {
-      tl
-        .to(firstEl, 0.2, {
-          x: '-110%',
-          opacity: 1,
-          ease: Power3.easeOut
-        })
-        .to(secondEl, 0.2, {
-          x: '0%',
-          opacity: 1,
-          ease: Power3.easeOut
-        });
-    } else {
-      tl
-        .to(secondEl, 0.2, {
-          x: '110%',
-          opacity: 1,
-          ease: Power3.easeOut
-        })
-        .to(firstEl, 0.2, {
-          x: '0%',
-          opacity: 1,
-          ease: Power3.easeOut
-        });
-    }
-  }
+		if (forward) {
+			tl
+				.to(firstEl, 0.2, {
+					x: '-110%',
+					opacity: 1,
+					ease: Power2.easeOut
+				})
+				.to(secondEl, 0.2, {
+					x: '0%',
+					opacity: 1,
+					ease: Power2.easeOut
+				});
+		} else {
+			tl
+				.to(secondEl, 0.2, {
+					x: '110%',
+					opacity: 1,
+					ease: Power2.easeOut
+				})
+				.to(firstEl, 0.2, {
+					x: '0%',
+					opacity: 1,
+					ease: Power2.easeOut
+				});
+		}
+	}
 
-  /**
+	/**
      * Renders sign in form with email and password
      * 
 	 * @param {func} handleSubmit
      * @returns {undefined}
      */
-  renderForm(handleSubmit) {
-    const {
-      forgotPasswordContainer,
-      formContainer,
-      iconArrowForward,
-      back
-    } = styles;
+	renderForm(handleSubmit) {
+		const {
+			forgotPasswordContainer,
+			formContainer,
+			iconArrowForward,
+			back
+		} = styles;
 
-    return (
-      <form
-        onSubmit={handleSubmit(this.handleFormSubmit)}
-        noValidate
-        ref="form"
-        className={formContainer}
-      >
-        <fieldset>
-          <Field
-            component={Input}
-            name="email"
-            id="email"
-            type="email"
-            label="Email"
-            placeholder="someone@example.com"
-          >
-            <Email />
-          </Field>
-        </fieldset>
-        <fieldset>
-          <Field
-            component={Password}
-            name="password"
-            id="password"
-            type="password"
-            label="Password"
-            placeholder="Must have at least 6 characters"
-          />
-        </fieldset>
-        <fieldset>
-          <div>
-            <Button text="Sign in" ariaLabel="Sign in" className="fullWidth">
-              <ArrowForward className={iconArrowForward} />
-            </Button>
-          </div>
-        </fieldset>
-        <div
-          className={forgotPasswordContainer}
-          onClick={e => this.toggleView(e, 2)}
-        >
-          <Link role="button" to="forgotpassword" className="link-slideright">
-            Forgot password?
-          </Link>
-        </div>
-        <div className={back}>
-          <a
-            href="javascript: void(0)"
-            role="button"
-            className="link-slideright"
-            onClick={e => this.toggleView(e, 0)}
-          >
-            Back to socials sign in
-          </a>
-        </div>
-      </form>
-    );
-  }
+		return (
+			<form
+				onSubmit={handleSubmit(this.handleFormSubmit)}
+				noValidate
+				ref="el_1"
+				className={formContainer}
+			>
+				<fieldset>
+					<Field
+						component={Input}
+						name="email"
+						id="email"
+						type="email"
+						label="Email"
+						placeholder="someone@example.com"
+					>
+						<Email />
+					</Field>
+				</fieldset>
+				<fieldset>
+					<Field
+						component={Password}
+						name="password"
+						id="password"
+						type="password"
+						label="Password"
+						placeholder="Must have at least 6 characters"
+					/>
+				</fieldset>
+				<fieldset>
+					<div>
+						<Button text="Sign in" ariaLabel="Sign in" className="fullWidth">
+							<ArrowForward className={iconArrowForward} />
+						</Button>
+					</div>
+				</fieldset>
+				<div
+					className={forgotPasswordContainer}
+					onClick={e => this.toggleView(e, 2)}
+				>
+					<Link role="button" to="forgotpassword" className="link-slideright">
+						Forgot password?
+					</Link>
+				</div>
+				<div className={back}>
+					<a
+						href="javascript: void(0)"
+						role="button"
+						className="link-slideright"
+						onClick={e => this.toggleView(e, 0)}
+					>
+						Back
+					</a>
+				</div>
+			</form>
+		);
+	}
 
-  /**
+	/**
      * Renders socials sign in or sign up buttons
      * 
      * @returns {undefined}
      */
-  renderSocials() {
-    const { buttonContainer, hidden, iconFacebook, iconArrowForward } = styles;
-    const { animateButtons } = this.state;
+	renderSocials() {
+		const { buttonContainer, hidden, iconFacebook, iconArrowForward } = styles;
+		const { animateButtons } = this.state;
 
-    return (
-      <div
-        className={classnames(buttonContainer, !animateButtons ? hidden : '')}
-        ref="buttons"
-      >
-        <ButtonLink
-          href="/admin/auth/facebook"
-          text="Continue with facebook"
-          title="Facebook login"
-          color="facebook"
-          className="fullWidth"
-        >
-          <FacebookIcon className={iconFacebook} />
-        </ButtonLink>
-        <ButtonLink
-          href="/admin/auth/twitter"
-          text="Continue with Twitter"
-          title="Twitter login"
-          color="twitter"
-          className="fullWidth"
-        >
-          <TwitterIcon className={iconFacebook} />
-        </ButtonLink>
-        <ButtonLink
-          href="/admin/auth/google"
-          text="Continue with Google"
-          title="Google login"
-          color="google"
-          className="fullWidth"
-        >
-          <GoogleIcon className={iconFacebook} />
-        </ButtonLink>
-        <ButtonLink
-          href="javascript: void(0)"
-          onClick={e => this.toggleView(e, 1)}
-          text="Sign in with email"
-          title="Sign in with email"
-          className="fullWidth"
-        >
-          <ArrowForward className={iconArrowForward} />
-        </ButtonLink>
-      </div>
-    );
-  }
+		return (
+			<div
+				className={classnames(buttonContainer, !animateButtons ? hidden : '')}
+				ref="el_0"
+			>
+				<ButtonLink
+					href="/admin/auth/facebook"
+					text="Continue with facebook"
+					title="Facebook login"
+					color="facebook"
+					className="fullWidth"
+				>
+					<FacebookIcon className={iconFacebook} />
+				</ButtonLink>
+				<ButtonLink
+					href="/admin/auth/twitter"
+					text="Continue with Twitter"
+					title="Twitter login"
+					color="twitter"
+					className="fullWidth"
+				>
+					<TwitterIcon className={iconFacebook} />
+				</ButtonLink>
+				<ButtonLink
+					href="/admin/auth/google"
+					text="Continue with Google"
+					title="Google login"
+					color="google"
+					className="fullWidth"
+				>
+					<GoogleIcon className={iconFacebook} />
+				</ButtonLink>
+				<ButtonLink
+					href="javascript: void(0)"
+					onClick={e => this.toggleView(e, 1)}
+					text="Sign in with email"
+					title="Sign in with email"
+					className="fullWidth"
+				>
+					<ArrowForward className={iconArrowForward} />
+				</ButtonLink>
+			</div>
+		);
+	}
 
-  /**
+	/**
      * Renders ForgotPassword component
      * 
      * @returns {undefined}
      */
-  renderForgotPassword() {
-    const { formContainer } = styles;
+	renderForgotPassword() {
+		const { formContainer, back } = styles;
 
-    return (
-      <div ref="forgotpassword" className={formContainer}>
-        <ForgotPassword hideHeading={true} />
-      </div>
-    );
-  }
+		return (
+			<div ref="el_2" className={formContainer}>
+				<ForgotPassword hideHeading={true} />
+				<div className={back}>
+					<a
+						href="javascript: void(0)"
+						role="button"
+						className="link-slideright"
+						onClick={e => this.toggleView(e, 1)}
+					>
+						Back
+					</a>
+				</div>
+			</div>
+		);
+	}
 
-  render() {
-    const { handleSubmit, isFetching } = this.props;
+	render() {
+		const { handleSubmit, isFetching } = this.props;
 
-    return (
-      <div>
-        <div className={classnames('card', styles.cardExtend)}>
-          {isFetching
-            ? <Spinner>Signing in</Spinner>
-            : <div>
-                <MainHeading text="SIGN IN" />
-                {this.renderError()}
-                <div className={styles.relative}>
-                  {this.renderForm(handleSubmit)}
-                  {this.renderSocials()}
-                  {this.renderForgotPassword()}
-                </div>
-              </div>}
-        </div>
-      </div>
-    );
-  }
+		return (
+			<div>
+				<div className={classnames('card', styles.cardExtend)}>
+					{isFetching
+						? <Spinner>Signing in</Spinner>
+						: <div>
+								<MainHeading text="SIGN IN" />
+								{this.renderError()}
+								<div className={styles.relative}>
+									{this.renderForm(handleSubmit)}
+									{this.renderSocials()}
+									{this.renderForgotPassword()}
+								</div>
+							</div>}
+				</div>
+			</div>
+		);
+	}
 }
 
 /**
@@ -350,32 +360,32 @@ class Signin extends Component {
  * @author Snær Seljan Þóroddsson
  */
 function validate({ email, password }) {
-  const errors = {};
+	const errors = {};
 
-  // Email
-  if (!validateEmail(email)) {
-    errors.email = `Email ${email} is not valid email`;
-  }
+	// Email
+	if (!validateEmail(email)) {
+		errors.email = `Email ${email} is not valid email`;
+	}
 
-  if (!email) {
-    errors.email = 'Email required';
-  }
+	if (!email) {
+		errors.email = 'Email required';
+	}
 
-  // Password
-  if (!/[0-9]/.test(password) || !/[A-Z]/.test(password)) {
-    errors.password =
-      'Password must contain at least one number (0-9) and one uppercase letter (A-Z)';
-  }
+	// Password
+	if (!/[0-9]/.test(password) || !/[A-Z]/.test(password)) {
+		errors.password =
+			'Password must contain at least one number (0-9) and one uppercase letter (A-Z)';
+	}
 
-  if (password && password.length < 6) {
-    errors.password = 'The password must be of minimum length 6 characters';
-  }
+	if (password && password.length < 6) {
+		errors.password = 'The password must be of minimum length 6 characters';
+	}
 
-  if (!password) {
-    errors.password = 'Password required';
-  }
+	if (!password) {
+		errors.password = 'Password required';
+	}
 
-  return errors;
+	return errors;
 }
 
 /**
@@ -386,7 +396,7 @@ function validate({ email, password }) {
  * @author Snær Seljan Þóroddsson
  */
 function mapStateToProps(state) {
-  return { errorMessage: state.auth.error, isFetching: state.auth.isFetching };
+	return { errorMessage: state.auth.error, isFetching: state.auth.isFetching };
 }
 
 /**
@@ -397,15 +407,15 @@ function mapStateToProps(state) {
  * @author Snær Seljan Þóroddsson
  */
 function mapDispatchToProps(dispatch) {
-  return {
-    actions: bindActionCreators(actionCreators, dispatch)
-  };
+	return {
+		actions: bindActionCreators(actionCreators, dispatch)
+	};
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(
-  reduxForm({
-    form: 'signin',
-    fields: ['email', 'password'],
-    validate
-  })(Signin)
+	reduxForm({
+		form: 'signin',
+		fields: ['email', 'password'],
+		validate
+	})(Signin)
 );
