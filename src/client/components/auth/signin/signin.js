@@ -117,12 +117,7 @@ class Signin extends Component {
 	toggleView(e, slideNumber) {
 		e.preventDefault();
 		let { currentSlide } = this.state;
-		let elements = [];
-
 		let forward = true;
-
-		console.log(currentSlide, slideNumber);
-
 		let firstEl = this.refs['el_' + currentSlide];
 		let secondEl = this.refs['el_' + slideNumber];
 

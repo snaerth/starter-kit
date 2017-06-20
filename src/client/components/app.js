@@ -1,30 +1,24 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
+import React, { PropTypes } from 'react';
 import { CSSTransitionGroup } from 'react-transition-group';
 import AppLayout from './app-layout';
 import Header from './common/header';
-import routes from './../routes';
 
-class App extends Component {
-	render() {
-		return (
-			<AppLayout>
-				<Header name={'dfdf'} />
-				<CSSTransitionGroup
-					component="div"
-					transitionName="fadeInScale"
-					transitionEnterTimeout={700}
-					transitionLeaveTimeout={700}
-				>
-					{routes}
-				</CSSTransitionGroup>
-			</AppLayout>
-		);
-	}
-}
+const App = ({ children }) => (
+  <AppLayout>
+    <Header name={'sdfds'} />
+    <CSSTransitionGroup
+      component="div"
+      transitionName="fadeInScale"
+      transitionEnterTimeout={700}
+      transitionLeaveTimeout={700}
+    >
+      {children}
+    </CSSTransitionGroup>
+  </AppLayout>
+);
 
-function mapStateToProps(state) {
-	console.log(state);
-}
+App.propTypes = {
+  children: PropTypes.object.isRequired
+};
 
-export default connect(mapStateToProps)(App);
+export default App;

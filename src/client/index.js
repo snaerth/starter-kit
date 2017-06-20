@@ -6,24 +6,18 @@ import { BrowserRouter as Router } from 'react-router-dom';
 import { syncHistoryWithStore } from 'react-router-redux';
 import { createBrowserHistory } from 'history';
 import App from './components';
+import routes from './routes';
 
 const preloadedState = window.__PRELOADED_STATE__;
 const store = configureStore(preloadedState);
 // Create an enhanced history that syncs navigation events with the store
 const history = syncHistoryWithStore(createBrowserHistory(), store);
-
-ReactDOM.render(
-  <Provider store={store}>
-    <Router history={history}><App /></Router>
-  </Provider>,
-  document.getElementById('app')
-);
-
 const rootEl = document.getElementById('app');
+
 const renderApp = Component => {
   ReactDOM.render(
     <Provider store={store}>
-      <Router history={history}><Component /></Router>
+      <Router history={history}><div><Component />{routes}</div></Router>
     </Provider>,
     rootEl
   );
