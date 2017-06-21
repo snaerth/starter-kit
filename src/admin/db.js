@@ -1,4 +1,3 @@
-/* eslint no-console: 0 */
 import mongoose from 'mongoose';
 
 export default (mongoUri, callback) => {

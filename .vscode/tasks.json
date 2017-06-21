@@ -2,18 +2,17 @@
   "version": "0.1.0",
   "command": "${workspaceRoot}/node_modules/.bin/babel",
   "isShellCommand": true,
-  "tasks": [
-    {
-      "taskName": "watch",
-      "args": [
-        "src",
-        "--out-dir",
-        "dist",
-        "--watch",
-        "--source-maps"
-      ],
-      "suppressTaskName": true,
-      "isBuildCommand": true
-    }
-  ]
+  "tasks": [{
+    "taskName": "watch",
+    "args": [
+      "src",
+      "--out-dir",
+      "dist",
+      "--watch",
+      "--source-maps"
+    ],
+    "suppressTaskName": true,
+    "isBuildCommand": true,
+    "isWatching": true
+  }]
 }

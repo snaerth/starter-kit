@@ -4,7 +4,6 @@
     {
       "name": "Launch",
       "type": "node",
-      "protocol": "inspector",
       "request": "launch",
       "program": "${workspaceRoot}/src/admin/index.js",
       "stopOnEntry": false,
