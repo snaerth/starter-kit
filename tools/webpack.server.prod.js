@@ -14,6 +14,7 @@ const {
 const root = (folder = '.') => path.join(__dirname, '..', folder);
 
 const plugins = [
+  new webpack.optimize.ModuleConcatenationPlugin(),
   new webpack.DefinePlugin({
     'process.env': {
       NODE_ENV: JSON.stringify(process.env.NODE_ENV),

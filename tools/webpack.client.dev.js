@@ -16,6 +16,7 @@ const {
 
 //  PLUGINS
 const plugins = [
+  new webpack.optimize.ModuleConcatenationPlugin(),
   new ExtractTextPlugin({ filename: 'styles.css', allChunks: true }),
   new webpack.optimize.OccurrenceOrderPlugin(),
   new webpack.HotModuleReplacementPlugin(),

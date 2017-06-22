@@ -99,6 +99,7 @@ server.listen(port, error => {
   if (error) {
     console.error(error);
   }
+  
   console.info(
     '==> ✅  %s is running, talking to ADMIN server on %s.',
     ADMIN_HOST,

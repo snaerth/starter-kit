@@ -6,6 +6,7 @@ const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
 const { ADMIN_ENTRY, ADMIN_OUTPUT } = CONFIG;
 
 const plugins = [
+  new webpack.optimize.ModuleConcatenationPlugin(),
   new webpack.DefinePlugin({
     'process.env': {
       NODE_ENV: JSON.stringify(process.env.NODE_ENV),
