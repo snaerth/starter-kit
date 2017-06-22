@@ -2,47 +2,6 @@ import News from '../models/news';
 import { validateEmail } from '../services/utils';
 
 /**
- * Creates news
- *
- * @param {Object} req
- * @param {Object} res
- * @returns {res}
- * @author Snær Seljan Þóroddsson
- */
-export async function createNews(req, res) {
-  const {
-    title,
-    shortDescription,
-    description,
-    author,
-    authorEmail
-  } = req.body;
-
-  try {
-    await validateNewsProps({
-      title,
-      shortDescription,
-      description,
-      author,
-      authorEmail
-    });
-    const news = new News({
-      title,
-      shortDescription,
-      description,
-      author,
-      authorEmail
-    });
-
-    const newNews = await saveNews(news);
-
-    return res.status(200).send(newNews);
-  } catch (error) {
-    return res.status(422).send({ error });
-  }
-}
-
-/**
  * Create new news and save to database
  *
  * @param {Object} news - Mongoose news schema object
@@ -53,7 +12,7 @@ function saveNews(news) {
   return new Promise((resolve, reject) => {
     if (news.constructor.name === 'model') {
       // Save news to databases
-      news.save(error => {
+      news.save((error) => {
         if (error) {
           return reject(error);
         }
@@ -79,7 +38,7 @@ function validateNewsProps({
   shortDescription,
   description,
   author,
-  authorEmail
+  authorEmail,
 }) {
   return new Promise((resolve, reject) => {
     // Validate email
@@ -106,6 +65,47 @@ function validateNewsProps({
 
     return resolve();
   });
+}
+
+/**
+ * Creates news
+ *
+ * @param {Object} req
+ * @param {Object} res
+ * @returns {res}
+ * @author Snær Seljan Þóroddsson
+ */
+export async function createNews(req, res) {
+  const {
+    title,
+    shortDescription,
+    description,
+    author,
+    authorEmail,
+  } = req.body;
+
+  try {
+    await validateNewsProps({
+      title,
+      shortDescription,
+      description,
+      author,
+      authorEmail,
+    });
+    const news = new News({
+      title,
+      shortDescription,
+      description,
+      author,
+      authorEmail,
+    });
+
+    const newNews = await saveNews(news);
+
+    return res.status(200).send(newNews);
+  } catch (error) {
+    return res.status(422).send({ error });
+  }
 }
 
 /**
