@@ -10,7 +10,6 @@ class App extends Component {
 		children: PropTypes.object.isRequired
 	};
 
-
 	render() {
 		return (
 			<AppLayout>
@@ -29,17 +28,16 @@ class App extends Component {
 }
 
 function mapStateToProps(state, ownProps) {
-  let name = 'My application';
-  console.log(ownProps);
-  const routes = ownProps.children.props.children;
+	const routes = ownProps.children.props.children;
+	const pathName = state.routing.location.pathname;
 
-  	for (let i = 0; i < routes; i++) {
-  		if (routes[i] && routes[i].props.path === state.routing.location.pathname) {
-			  name = children[i].props.name
+	// Filter route by current location path
+	const route = routes.filter(route => {
+		if (route && route.props.path === pathName) {
+			return route.props.name;
 		}
-	}
-
-	return { ...state, name};
+	});
+	return { ...state, name: route[0].props.name };
 }
 
 export default connect(mapStateToProps)(App);
