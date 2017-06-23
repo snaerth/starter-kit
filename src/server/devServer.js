@@ -30,8 +30,8 @@ const {
   PROTOCOL,
   HOST,
   PORT,
-  NODE_ENV
-} = config();
+  NODE_ENV,
+} = config;
 const port = PORT || 3000;
 const target = `${ADMIN_PROTOCOL}://${ADMIN_HOST}:${ADMIN_PORT}`;
 
@@ -71,16 +71,16 @@ app.use(
       timings: true,
       chunks: false,
       chunkModules: false,
-      modules: false
-    }
-  })
+      modules: false,
+    },
+  }),
 );
 app.use(webpackHotMiddleware(compiler));
 
 const renderHtmlObj = {
   html: null,
   finalState: null,
-  assets: null
+  assets: null,
 };
 
 app.get('*', function response(req, res) {
@@ -99,15 +99,15 @@ server.listen(port, error => {
   if (error) {
     console.error(error);
   }
-  
+
   console.info(
     '==> ✅  %s is running, talking to ADMIN server on %s.',
     ADMIN_HOST,
-    ADMIN_PORT
+    ADMIN_PORT,
   );
   console.info(
     `==> 💻  Open ${PROTOCOL}://%s:%s in a browser to view the app.`,
     HOST,
-    PORT
+    PORT,
   );
 });

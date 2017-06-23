@@ -18,10 +18,10 @@ const defaultMiddlewares = [
   // Content Security Policy
   helmet(),
   // Dynamically or statically enable CORS
-  cors()
+  cors(),
 ];
 
-export default otherMiddleware => {
+function middleware(otherMiddleware) {
   if (otherMiddleware && otherMiddleware.length > 0) {
     // Run functions parallel or async for more page speed
     return parallel([...defaultMiddlewares, ...otherMiddleware]);
@@ -29,4 +29,6 @@ export default otherMiddleware => {
 
   // Run functions parallel or async for more page speed
   return parallel(defaultMiddlewares);
-};
+}
+
+export default middleware;

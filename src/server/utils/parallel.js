@@ -1,13 +1,13 @@
 import async from 'async';
 
-export function parallel(middlewares) {
-  return function(req, res, next) {
+export default function parallel(middlewares) {
+  return function fn(req, res, next) {
     async.each(
       middlewares,
-      function(mw, cb) {
+      (mw, cb) => {
         mw(req, res, cb);
       },
-      next
+      next,
     );
   };
 }

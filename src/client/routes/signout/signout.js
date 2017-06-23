@@ -11,7 +11,7 @@ import * as actions from '../../components/auth/actions';
  */
 class Signout extends Component {
   static propTypes = {
-    signoutUser: PropTypes.func
+    signoutUser: PropTypes.func,
   };
 
   componentWillMount() {
@@ -23,7 +23,8 @@ class Signout extends Component {
       <div className="container">
         <div className={styles.center}>
           <p>
-            You have successfully been signed out. You can sign in again at any time.
+            You have successfully been signed out. You can sign in again at any
+            time.
           </p>
           <br />
           <Link to="/">

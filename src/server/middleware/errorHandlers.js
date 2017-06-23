@@ -11,7 +11,7 @@ function notFoundMiddlware(req, res) {
   res.status(404);
   res.send({
     status: 404,
-    message: 'Page not found'
+    message: 'Page not found',
   });
 }
 
@@ -27,9 +27,8 @@ function notFoundMiddlware(req, res) {
 */
 function unhandledErrorMiddleware(err, req, res, next) {
   res.set('content-type', 'text/html');
-  res.status(500), res.send(
-    `</head><body><h1>500 Server Error</h1><p>${err}</p></body></html>`
-  );
+  res.status(500);
+  res.send(`</head><body><h1>500 Server Error</h1><p>${err}</p></body></html>`);
   res.end();
   next(err);
 }

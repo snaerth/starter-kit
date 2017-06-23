@@ -1,3 +1,4 @@
+/* eslint-disable */
 /*
     StackBlur - a fast almost Gaussian Blur For Canvas
     Version:     0.5
@@ -286,7 +287,7 @@ const mul_table = [
   265,
   263,
   261,
-  259
+  259,
 ];
 
 const shg_table = [
@@ -544,7 +545,7 @@ const shg_table = [
   24,
   24,
   24,
-  24
+  24,
 ];
 
 export function processImage(img, canvas, radius) {
@@ -590,7 +591,7 @@ function processCanvasRGB(canvas, top_x, top_y, width, height, radius) {
     top_y,
     width,
     height,
-    radius
+    radius,
   );
 
   canvas.getContext('2d').putImageData(imageData, top_x, top_y);

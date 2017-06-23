@@ -1,14 +1,14 @@
 // React server rendering
-import renderHtml from '../utils/renderHtml';
 import React from 'react';
 import { StaticRouter as Router, matchPath } from 'react-router';
 import ReactDOMServer from 'react-dom/server';
 import { Provider } from 'react-redux';
+import renderHtml from '../utils/renderHtml';
 import NotFound from '../../client/routes/notfound';
 import App from '../../client/components';
 import configureStore from '../../client/store/configureStore';
-let assets = require('../../../assets.json');
 
+let assets = require('../../../assets.json'); // eslint-disable-line
 const routes = [
   '/',
   '/signin',
@@ -17,7 +17,7 @@ const routes = [
   '/forgotpassword',
   '/reset/:token',
   '/profile',
-  '/admin'
+  '/admin',
 ];
 /**
  * Handles all request and renders react universally
@@ -30,7 +30,7 @@ export default function handleRender(req, res) {
 
   const match = routes.reduce(
     (acc, route) => matchPath(req.url, route, { exact: true }) || acc,
-    null
+    null,
   );
 
   if (!match) {
@@ -48,7 +48,7 @@ export default function handleRender(req, res) {
       <Router context={{}} location={req.url}>
         <App />
       </Router>
-    </Provider>
+    </Provider>,
   );
 
   // Grab the initial state from Redux store
@@ -57,7 +57,7 @@ export default function handleRender(req, res) {
   const renderHtmlObj = {
     html,
     finalState,
-    assets
+    assets,
   };
 
   res.status(200);

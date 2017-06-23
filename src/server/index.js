@@ -1,13 +1,9 @@
 if (process.env.NODE_ENV !== 'production') {
   require('babel-core/register')({
-    presets: ['es2015', 'react']
+    presets: ['es2015', 'react'],
   });
-  require.extensions['.scss'] = () => {
-    return;
-  };
-  require.extensions['.css'] = () => {
-    return;
-  };
+  require.extensions['.scss'] = () => {};
+  require.extensions['.css'] = () => {};
   require('./devServer');
 } else {
   require('./server');
