@@ -14,7 +14,7 @@ import ButtonLink from '../../common/buttonLink';
 import NotifyBox from '../../common/notifyBox';
 import MainHeading from '../../common/mainheading';
 import ForgotPassword from '../forgotPassword';
-import { validateEmail } from './../../../utils/validate';
+import validateEmail from './../../../utils/validate';
 import Spinner from '../../common/spinner';
 import * as actionCreators from '../actions';
 import Email from '../../../common/svg/email.svg';

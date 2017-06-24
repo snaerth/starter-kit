@@ -1,7 +1,7 @@
 import nodemailer from 'nodemailer';
 import config from '../../config';
 
-const { EMAIL_USERNAME, EMAIL_PASSWORD } = config();
+const { EMAIL_USERNAME, EMAIL_PASSWORD } = config;
 
 /**
  * Sends email to requested recipient

@@ -17,7 +17,7 @@ import RateLimit from 'express-rate-limit';
 import httpProxy from 'http-proxy';
 
 // Others
-import { Proxy } from './proxy';
+import Proxy from './proxy';
 import middleware from './middleware';
 import config from '../config';
 import renderHtml from './utils/renderHtml';
@@ -83,7 +83,7 @@ const renderHtmlObj = {
   assets: null,
 };
 
-app.get('*', function response(req, res) {
+app.get('*', (req, res) => {
   res
     .set('content-type', 'text/html')
     .status(200)
@@ -95,7 +95,7 @@ app.get('*', function response(req, res) {
 app.use(...errorHandlers);
 
 // Start server
-server.listen(port, error => {
+server.listen(port, (error) => {
   if (error) {
     console.error(error);
   }

@@ -11,7 +11,7 @@ import RateLimit from 'express-rate-limit';
 import httpProxy from 'http-proxy';
 
 // Others
-import { Proxy } from './proxy';
+import Proxy from './proxy';
 import middleware from './middleware';
 import config from '../config';
 import renderHtml from './utils/renderHtml';
@@ -57,7 +57,7 @@ app.get('*', handleRender);
 app.use(...errorHandlers);
 
 // Start server
-server.listen(port, error => {
+server.listen(port, (error) => {
   if (error) {
     console.error(error);
   }

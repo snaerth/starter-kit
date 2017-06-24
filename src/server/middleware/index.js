@@ -3,7 +3,7 @@ import hpp from 'hpp';
 import helmet from 'helmet';
 import bodyParser from 'body-parser';
 import cors from 'cors';
-import { parallel } from '../utils/parallel';
+import parallel from '../utils/parallel';
 
 const defaultMiddlewares = [
   // Let app use compression

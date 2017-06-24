@@ -44,7 +44,7 @@
       }
     },
     "start-dev-admin": {
-      "command": "babel-node src/admin/index.js",
+      "command": "babel-node src/admin/server.js",
       "env": {
         "NODE_ENV": "development",
         "ADMIN_PORT": 3030,

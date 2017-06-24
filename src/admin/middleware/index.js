@@ -4,7 +4,7 @@ import helmet from 'helmet';
 import bodyParser from 'body-parser';
 import cors from 'cors';
 import passport from 'passport';
-import { parallel } from '../../server/utils/parallel';
+import parallel from '../utils/parallel';
 
 // Default middlewares
 const defaultMiddlewares = [

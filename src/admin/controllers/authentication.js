@@ -11,7 +11,7 @@ import User from '../models/user';
 import config from '../../config';
 
 // VARIABLES
-const { PORT, HOST } = config();
+const { PORT, HOST } = config;
 
 /**
  * Checks if user exist by email.

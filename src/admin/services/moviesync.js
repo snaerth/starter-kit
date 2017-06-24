@@ -6,7 +6,7 @@ import config from '../../config';
 
 // TODO use async await instead of promises then
 // VARIABLES
-const { API_KEY_KVIKMYNDIR, API_KEY_TMDB } = config();
+const { API_KEY_KVIKMYNDIR, API_KEY_TMDB } = config;
 
 /**
  * Adds tt before imdb id if not exist

@@ -27,7 +27,7 @@ const ButtonLink = (props) => {
 };
 
 ButtonLink.propTypes = {
-  href: PropTypes.strings,
+  href: PropTypes.string,
   text: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
   color: PropTypes.string,

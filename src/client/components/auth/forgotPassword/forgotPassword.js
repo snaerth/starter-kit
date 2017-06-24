@@ -8,7 +8,7 @@ import MainHeading from '../../common/mainheading';
 import Input from '../../common/input';
 import Button from '../../common/button';
 import NotifyBox from '../../common/notifyBox';
-import { validateEmail } from './../../../utils/validate';
+import validateEmail from './../../../utils/validate';
 import * as actionCreators from '../actions';
 import Spinner from '../../common/spinner';
 import Email from '../../../common/svg/email.svg';

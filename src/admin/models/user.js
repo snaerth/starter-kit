@@ -85,7 +85,8 @@ userSchema.pre('save', (next) => {
 });
 
 // Compare password to encrypted password
-userSchema.methods.comparePassword = (candidatePassword, callback) => {
+/* eslint func-names: ["error", "never"]*/
+userSchema.methods.comparePassword = function (candidatePassword, callback) {
   bcrypt.compare(candidatePassword, this.password, (error, isMatch) => {
     if (error) {
       return callback(error);

@@ -7,8 +7,8 @@ const autoprefixerConfig = autoprefixer({
     '>1%',
     'last 4 versions',
     'Firefox ESR',
-    'not ie < 9' // React doesn't support IE8 anyway
-  ]
+    'not ie < 9', // React doesn't support IE8 anyway
+  ],
 });
 
 const vendor = [
@@ -25,29 +25,29 @@ const vendor = [
   'classnames',
   'lodash',
   'isomorphic-fetch',
-  'core-decorators'
+  'core-decorators',
 ];
 
 // RULES
 const urlLoader = {
   test: /\.(png|gif|jpe?g|svg)$/,
   include: path.join(process.cwd(), 'assets/images'),
-  use: 'url-loader?limit=20480&name=./assets/images/[name]-[hash].[ext]'
+  use: 'url-loader?limit=20480&name=./assets/images/[name]-[hash].[ext]',
 };
 
 const json = {
   test: /\.json?$/,
-  use: 'json-loader'
+  use: 'json-loader',
 };
 
 const file = {
   test: /\.(woff2?|jpe?g|png|gif|ico)$/,
-  use: 'file-loader?name=./assets/images/[name].[ext]'
+  use: 'file-loader?name=./assets/images/[name].[ext]',
 };
 
 const svg = {
   test: /\.svg$/,
-  use: ['react-svgdom-loader', 'svgo-loader']
+  use: ['react-svgdom-loader', 'svgo-loader'],
 };
 
 // Development
@@ -60,11 +60,11 @@ const devCss = {
       query: {
         modules: true,
         sourceMap: false,
-        localIdentName: '[hash:base64:5]'
-      }
+        localIdentName: '[hash:base64:5]',
+      },
     },
-    'postcss-loader'
-  ]
+    'postcss-loader',
+  ],
 };
 
 const devScss = {
@@ -76,12 +76,12 @@ const devScss = {
       query: {
         modules: true,
         sourceMap: false,
-        localIdentName: '[hash:base64:5]'
-      }
+        localIdentName: '[hash:base64:5]',
+      },
     },
     'postcss-loader',
-    'sass-loader'
-  ]
+    'sass-loader',
+  ],
 };
 
 const devJs = {
@@ -96,17 +96,17 @@ const devJs = {
           [
             'es2015',
             {
-              modules: false
-            }
+              modules: false,
+            },
           ],
           'react',
           'stage-0',
-          'react-hmre'
+          'react-hmre',
         ],
-        plugins: ['transform-decorators-legacy']
-      }
-    }
-  ]
+        plugins: ['transform-decorators-legacy'],
+      },
+    },
+  ],
 };
 
 // Production
@@ -121,16 +121,14 @@ const css = {
           modules: true,
           importLoaders: 2,
           localIdentName: '[name]__[local]__[hash:base64:5]',
-          plugins: () => {
-            return [autoprefixerConfig];
-          }
-        }
+          plugins: () => [autoprefixerConfig],
+        },
       },
       {
-        loader: 'postcss-loader'
-      }
-    ]
-  })
+        loader: 'postcss-loader',
+      },
+    ],
+  }),
 };
 
 const scss = {
@@ -144,15 +142,13 @@ const scss = {
           modules: true,
           sourceMap: false,
           localIdentName: '[name]__[local]__[hash:base64:5]',
-          plugins: () => {
-            return [autoprefixerConfig];
-          }
-        }
+          plugins: () => [autoprefixerConfig],
+        },
       },
       'postcss-loader',
-      'sass-loader'
-    ]
-  })
+      'sass-loader',
+    ],
+  }),
 };
 
 const js = {
@@ -160,8 +156,8 @@ const js = {
   exclude: /node_modules/,
   loader: 'babel-loader',
   query: {
-    presets: ['es2015', 'stage-0', 'react', 'react-optimize']
-  }
+    presets: ['es2015', 'stage-0', 'react', 'react-optimize'],
+  },
 };
 
 module.exports = {
@@ -174,19 +170,19 @@ module.exports = {
   PUBLIC_PATH: '/assets/',
   VENDOR: vendor,
   RULES_COMMON: {
-    json: json,
-    svg: svg,
-    file: file,
-    urlLoader: urlLoader
+    json,
+    svg,
+    file,
+    urlLoader,
   },
   RULES_DEV: {
     js: devJs,
     scss: devScss,
-    css: devCss
+    css: devCss,
   },
   RULES_PROD: {
     js,
     css,
-    scss
-  }
+    scss,
+  },
 };

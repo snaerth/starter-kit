@@ -12,7 +12,7 @@ const {
   PUBLIC_PATH,
   VENDOR,
   RULES_PROD,
-  RULES_COMMON
+  RULES_COMMON,
 } = CONFIG;
 
 // Plugins
@@ -24,7 +24,7 @@ const plugins = [
   new webpack.optimize.CommonsChunkPlugin({
     name: 'vendor',
     filename: 'vendor_[hash].js',
-    minChunks: 2
+    minChunks: 2,
   }),
   new AssetsPlugin({ filename: 'assets.json', prettyPrint: true }),
   new webpack.NamedModulesPlugin(),
@@ -34,20 +34,20 @@ const plugins = [
     'process.env': {
       NODE_ENV: JSON.stringify(process.env.NODE_ENV),
       PORT: JSON.stringify(process.env.PORT),
-      HOST: JSON.stringify(process.env.HOST)
+      HOST: JSON.stringify(process.env.HOST),
     },
     __CLIENT__: true,
     __SERVER__: false,
     __DEVELOPMENT__: false,
-    __DEVTOOLS__: false
+    __DEVTOOLS__: false,
   }),
   new webpack.optimize.UglifyJsPlugin(),
   new webpack.LoaderOptionsPlugin({
     minimize: true,
     options: {
-      postcss: [autoprefixer]
-    }
-  })
+      postcss: [autoprefixer],
+    },
+  }),
 ];
 
 // RULES
@@ -59,7 +59,7 @@ const rules = [js, css, scss, json, file, svg];
 module.exports = {
   entry: {
     main: [CLIENT_ENTRY],
-    vendor: VENDOR
+    vendor: VENDOR,
   },
   target: 'web',
   devtool: false,
@@ -68,10 +68,10 @@ module.exports = {
     chunkFilename: '[name]_[chunkhash].js',
     sourceMapFilename: '[name]_[chunkhash].map',
     publicPath: '/',
-    path: '/build'
+    path: '/build',
   },
   plugins,
   module: {
-    rules
-  }
+    rules,
+  },
 };

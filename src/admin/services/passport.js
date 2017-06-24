@@ -13,7 +13,7 @@ const {
   ADMIN_PROTOCOL,
   ADMIN_HOST,
   ADMIN_PORT,
-} = config();
+} = config;
 
 // Setup options for local strategy
 const localOptions = {

@@ -11,7 +11,7 @@ import db from './db';
 import { createDefaultDirectorys } from './services/fileService';
 
 // VARIABLES
-const { ADMIN_HOST, ADMIN_PORT, DB_URL, SESSION_SECRET } = config();
+const { ADMIN_HOST, ADMIN_PORT, DB_URL, SESSION_SECRET } = config;
 
 // Create default directorys if not exist
 createDefaultDirectorys();

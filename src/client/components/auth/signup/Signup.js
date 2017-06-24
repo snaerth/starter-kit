@@ -12,7 +12,7 @@ import NotifyBox from '../../common/notifyBox';
 import FileUploader from '../../common/fileUploader';
 import Spinner from '../../common/spinner';
 import * as actionCreators from '../actions';
-import { validateEmail } from './../../../utils/validate';
+import validateEmail from './../../../utils/validate';
 import Person from '../../../common/svg/person.svg';
 import Email from '../../../common/svg/email.svg';
 import ArrowForward from '../../../common/svg/arrow_forward.svg';

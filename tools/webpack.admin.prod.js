@@ -14,26 +14,26 @@ const plugins = [
       HOST: JSON.stringify(process.env.ADMIN_HOST),
       DB_URL: JSON.stringify(process.env.DB_URL),
       DB_USERNAME: JSON.stringify(process.env.DB_USERNAME),
-      DB_PASSWORD: JSON.stringify(process.env.DB_PASSWORD)
+      DB_PASSWORD: JSON.stringify(process.env.DB_PASSWORD),
     },
     __CLIENT__: false,
     __SERVER__: true,
     __DEVELOPMENT__: false,
-    __DEVTOOLS__: false
+    __DEVTOOLS__: false,
   }),
   new webpack.NamedModulesPlugin(),
   new CaseSensitivePathsPlugin(),
   new webpack.BannerPlugin({
     banner: 'require("source-map-support").install();',
     raw: true,
-    entryOnly: false
-  })
+    entryOnly: false,
+  }),
 ];
 
 // RULES
 const json = {
   test: /\.json?$/,
-  use: 'json-loader'
+  use: 'json-loader',
 };
 
 const js = {
@@ -41,8 +41,8 @@ const js = {
   loader: 'babel-loader',
   exclude: /(node_modules)/,
   query: {
-    presets: ['es2015', 'stage-0']
-  }
+    presets: ['es2015', 'stage-0'],
+  },
 };
 
 const rules = [js, json];
@@ -55,22 +55,22 @@ module.exports = {
     path: ADMIN_OUTPUT,
     filename: 'admin.js',
     sourceMapFilename: 'admin.map',
-    libraryTarget: 'commonjs2'
+    libraryTarget: 'commonjs2',
   },
   node: {
     __filename: true,
-    __dirname: true
+    __dirname: true,
   },
   externals: externals({
     whitelist: [
       /\.(eot|woff|woff2|ttf|otf)$/,
       /\.(svg|png|jpg|jpeg|gif|ico|webm)$/,
       /\.(mp4|mp3|ogg|swf|webp)$/,
-      /\.(css|scss|sass|less|styl)$/
-    ]
+      /\.(css|scss|sass|less|styl)$/,
+    ],
   }),
   plugins,
   module: {
-    rules
-  }
+    rules,
+  },
 };

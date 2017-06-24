@@ -1,4 +1,4 @@
-'use strict';
+
 
 const path = require('path');
 const webpack = require('webpack');
@@ -11,7 +11,7 @@ const {
   PUBLIC_PATH,
   VENDOR,
   RULES_DEV,
-  RULES_COMMON
+  RULES_COMMON,
 } = CONFIG;
 
 //  PLUGINS
@@ -25,18 +25,18 @@ const plugins = [
     __CLIENT__: true,
     __SERVER__: false,
     __DEVELOPMENT__: true,
-    __DEVTOOLS__: true // <-------- DISABLE redux-devtools HERE
+    __DEVTOOLS__: true, // <-------- DISABLE redux-devtools HERE
   }),
   new webpack.LoaderOptionsPlugin({
     options: {
-      postcss: [autoprefixer]
-    }
+      postcss: [autoprefixer],
+    },
   }),
   new webpack.optimize.CommonsChunkPlugin({
     name: 'vendor',
     minChunks: 6,
-    filename: 'vendor.js'
-  })
+    filename: 'vendor.js',
+  }),
 ];
 
 // RULES
@@ -53,25 +53,25 @@ module.exports = {
     main: [
       'webpack/hot/only-dev-server',
       'webpack-hot-middleware/client',
-      CLIENT_ENTRY
+      CLIENT_ENTRY,
     ],
-    vendor: VENDOR
+    vendor: VENDOR,
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: '[name].js',
     sourceMapFilename: '[name].map',
-    publicPath: '/'
+    publicPath: '/',
   },
   devServer: {
     compress: true,
     historyApiFallback: true,
     hot: true,
     https: false,
-    noInfo: true
+    noInfo: true,
   },
   plugins,
   module: {
-    rules
-  }
+    rules,
+  },
 };
