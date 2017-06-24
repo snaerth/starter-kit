@@ -37,7 +37,7 @@ class Error extends Component {
     return (
       <div
         className={classnames(styles.box, this.checkBoxType(type))}
-        refs={c => this.container = c}
+        ref={c => this.container = c}
       >
         {strongText ? <strong>{strongText}</strong> : null}
         {text}
