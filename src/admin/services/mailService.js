@@ -1,4 +1,3 @@
-'use strict';
 import nodemailer from 'nodemailer';
 import config from '../../config';
 
@@ -16,21 +15,21 @@ const { EMAIL_USERNAME, EMAIL_PASSWORD } = config();
  */
 export default function sendMail(to, subject, text, html, callback) {
   // Create transport
-  let transporter = nodemailer.createTransport({
+  const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
       user: EMAIL_USERNAME,
-      pass: EMAIL_PASSWORD
-    }
+      pass: EMAIL_PASSWORD,
+    },
   });
 
   // Email options
   const mailOptions = {
     from: EMAIL_USERNAME,
-    to: to,
-    subject: subject,
-    text: text,
-    html: html
+    to,
+    subject,
+    text,
+    html,
   };
 
   // Send mail

@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Link } from 'react-router-dom';
+import classnames from 'classnames';
 import styles from './Header.scss';
 import ModalWrapper from '../modal';
-import classnames from 'classnames';
 import Signup from '../../auth/signup';
 import Signin from '../../auth/signin';
 import * as actionCreators from '../../auth/actions';
@@ -18,16 +18,15 @@ class Header extends Component {
     authenticated: PropTypes.bool,
     roles: PropTypes.array,
     name: PropTypes.string,
-    activeModal: PropTypes.string,
     modalOpen: PropTypes.bool,
-    actions: PropTypes.object.isRequired
+    actions: PropTypes.object.isRequired,
   };
 
   constructor(props) {
     super(props);
 
     this.state = {
-      activeModal: 'signin'
+      activeModal: 'signin',
     };
     this.openModal = this.openModal.bind(this);
     this.closeModal = this.closeModal.bind(this);
@@ -50,12 +49,11 @@ class Header extends Component {
 
   /**
      * Changes state for modal component and opens modal
-     * 
-     * @param {String} modalName 
+     * @param {String} modalName
      */
   changeModalComponent(modalName) {
     this.setState({
-      activeModal: modalName === 'signup' ? 'signup' : 'signin'
+      activeModal: modalName === 'signup' ? 'signup' : 'signin',
     });
     this.openModal();
   }
@@ -63,12 +61,11 @@ class Header extends Component {
   /**
      * Renders auth links. If authenticated then signout link
      * else signin and signup
-     * 
-     * @returns {Component} Link 
+     * @returns {Component} Link
      */
   renderAuthLinks() {
     if (this.props.authenticated) {
-      let links = [
+      const links = [
         <Link
           to="/profile"
           key="profile"
@@ -84,7 +81,7 @@ class Header extends Component {
           className={styles.link}
         >
           Sign out
-        </Link>
+        </Link>,
       ];
 
       if (this.props.roles && this.props.roles.indexOf('admin') > -1) {
@@ -96,33 +93,32 @@ class Header extends Component {
             className={styles.link}
           >
             Admin
-          </Link>
+          </Link>,
         );
       }
 
       return links;
-    } else {
-      return [
-        <Link
-          to="#"
-          role="button"
-          key="signin"
-          className={styles.link}
-          onClick={() => this.changeModalComponent('signin')}
-        >
-          Sign in
-        </Link>,
-        <Link
-          to="#"
-          role="button"
-          key="signup"
-          className={styles.link}
-          onClick={() => this.changeModalComponent('signup')}
-        >
-          Sign up
-        </Link>
-      ];
     }
+    return [
+      <Link
+        to="#"
+        role="button"
+        key="signin"
+        className={styles.link}
+        onClick={() => this.changeModalComponent('signin')}
+      >
+        Sign in
+      </Link>,
+      <Link
+        to="#"
+        role="button"
+        key="signup"
+        className={styles.link}
+        onClick={() => this.changeModalComponent('signup')}
+      >
+        Sign up
+      </Link>,
+    ];
   }
 
   render() {
@@ -136,7 +132,7 @@ class Header extends Component {
                 className={classnames(
                   styles.home_link,
                   styles.link,
-                  styles.active
+                  styles.active,
                 )}
               >
                 Home
@@ -163,20 +159,18 @@ class Header extends Component {
 
 /**
  * Maps dispatch to components props
- *
  * @param {Object} dispatch - Redux dispatch medhod
  * @returns {Object}
  * @author Snær Seljan Þóroddsson
  */
 function mapDispatchToProps(dispatch) {
   return {
-    actions: bindActionCreators(actionCreators, dispatch)
+    actions: bindActionCreators(actionCreators, dispatch),
   };
 }
 
 /**
  * Maps state to props
- *
  * @param {Object} state - Application state
  * @returns {Object}
  * @author Snær Seljan Þóroddsson
@@ -184,10 +178,9 @@ function mapDispatchToProps(dispatch) {
 function mapStateToProps(state) {
   const { authenticated } = state.auth;
   const { modalOpen } = state.common;
-
-  let newStateToProps = {
+  const newStateToProps = {
     authenticated,
-    modalOpen
+    modalOpen,
   };
 
   if (state.auth.user && state.auth.user.roles) {

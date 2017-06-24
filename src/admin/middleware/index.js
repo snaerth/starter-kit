@@ -16,7 +16,7 @@ const defaultMiddlewares = [
   bodyParser.urlencoded({
     extended: true,
     parameterLimit: 100000,
-    limit: 1024 * 1024 * 50
+    limit: 1024 * 1024 * 50,
   }),
   // Initialize passport
   passport.initialize(),
@@ -27,10 +27,10 @@ const defaultMiddlewares = [
   // Content Security Policy
   helmet(),
   // Dynamically or statically enable CORS
-  cors()
+  cors(),
 ];
 
-export default otherMiddleware => {
+export default (otherMiddleware) => {
   if (otherMiddleware && otherMiddleware.length > 0) {
     // Run functions parallel or async for more page speed
     return parallel([...defaultMiddlewares, ...otherMiddleware]);

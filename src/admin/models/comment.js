@@ -3,21 +3,21 @@ import mongoose, { Schema } from 'mongoose';
 const schema = {
   text: {
     type: String,
-    required: true
+    required: true,
   },
   email: {
     type: String,
     lowercase: true,
-    required: true
+    required: true,
   },
   name: {
     type: String,
-    required: true
+    required: true,
   },
   createdAt: {
     type: Date,
-    default: Date.now
-  }
+    default: Date.now,
+  },
 };
 
 // Define user model

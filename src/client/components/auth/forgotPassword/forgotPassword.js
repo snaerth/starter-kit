@@ -57,7 +57,6 @@ class Signin extends Component {
      */
   renderMessages() {
     const { errorMessage, message } = this.props;
-
     if (errorMessage) {
       return (
         <fieldset>
@@ -71,6 +70,8 @@ class Signin extends Component {
         </fieldset>
       );
     }
+
+    return null;
   }
 
   render() {

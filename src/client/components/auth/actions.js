@@ -76,7 +76,7 @@ export function setPreviewUserImage(image) {
  * @author Snær Seljan Þóroddsson
  */
 export function signinUser({ email, password }) {
-  return function (dispatch) {
+  return (dispatch) => {
     // Post email/password to admin server for sign in Get token back from server
     axios
       .post('/admin/signin', { email, password })
@@ -102,7 +102,7 @@ export function signinUser({ email, password }) {
  * @author Snær Seljan Þóroddsson
  */
 export function signinFacebook() {
-  return function (dispatch) {
+  return (dispatch) => {
     axios
       .get('/admin/facebook')
       .then((response) => {

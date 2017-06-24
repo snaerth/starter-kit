@@ -11,9 +11,9 @@ const directorys = ['assets', 'assets/images', 'assets/images/users'];
 export function createDefaultDirectorys() {
   for (let i = 0, len = directorys.length; i < len; i++) {
     const dir = directorys[i];
-    fs.exists(dir, exists => {
+    fs.exists(dir, (exists) => {
       if (!exists) {
-        fs.mkdir(dir, error => {
+        fs.mkdir(dir, (error) => {
           if (error) {
             throw new Error(`Failed to create directory ${dir}`);
           }
@@ -32,7 +32,7 @@ export function createDefaultDirectorys() {
  */
 export function deleteFile(filePath) {
   return new Promise((resolve, reject) => {
-    fs.unlink(filePath, error => {
+    fs.unlink(filePath, (error) => {
       if (error) {
         return reject(error);
       }
@@ -51,7 +51,7 @@ export function deleteFile(filePath) {
  */
 export function fileExists(filePath) {
   return new Promise((resolve, reject) => {
-    fs.exists(filePath, exists => {
+    fs.exists(filePath, (exists) => {
       if (!exists) {
         return reject('File does not exist.');
       }

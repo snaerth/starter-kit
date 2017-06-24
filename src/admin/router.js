@@ -6,13 +6,13 @@ import {
   resetPassword,
   isAdmin,
   uploadUserImage,
-  updateUser
+  updateUser,
 } from './controllers/authentication';
 import {
   getNews,
   deleteNews,
   createNews,
-  updateNews
+  updateNews,
 } from './controllers/news';
 import { jwtLogin, localLogin, facebookLogin } from './services/passport';
 
@@ -27,7 +27,7 @@ const requireSignin = passport.authenticate('local');
 const facebookAuth = passport.authenticate('facebook', { scope: 'email' });
 const facebookAuthCallback = passport.authenticate('facebook', {
   successRedirect: '/auth/facebook/callback',
-  failureRedirect: '/'
+  failureRedirect: '/',
 });
 
 /**
@@ -35,7 +35,7 @@ const facebookAuthCallback = passport.authenticate('facebook', {
  * @param {Object} app - Express app referece
  * @returns {undefined}
  */
-export default function(app) {
+export default function (app) {
   // Authentication
   app.post('/signup', signup);
   app.post('/signin', requireSignin, signin);
@@ -61,7 +61,7 @@ export default function(app) {
         res.status(400);
         res.render('error', { message: err.message });
       }
-    }
+    },
   );
 
   // Upload images

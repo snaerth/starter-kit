@@ -12,7 +12,7 @@ const ModalStyles = {
     right: 0,
     bottom: 0,
     backgroundColor: 'rgba(55, 58, 71, 0.9)',
-    zIndex: 1000
+    zIndex: 1000,
   },
   content: {
     zIndex: 1001,
@@ -33,30 +33,25 @@ const ModalStyles = {
     borderRadius: '0',
     WebkitOverflowScrolling: 'touch',
     pointerEvents: 'none',
-    backgroundColor: 'transparent'
-  }
+    backgroundColor: 'transparent',
+  },
 };
 
 /**
  * Modal component
  */
-const ModalWrapper = props => {
-  return (
-    <Modal {...props} closeTimeoutMS={300} style={ModalStyles}>
-      <div className={styles.modalInner}>
-        <ExitIcon className={styles.exit} onClick={props.onRequestClose} />
-        {props.children}
-      </div>
-    </Modal>
-  );
-};
+const ModalWrapper = props => (
+  <Modal {...props} closeTimeoutMS={300} style={ModalStyles}>
+    <div className={styles.modalInner}>
+      <ExitIcon className={styles.exit} onClick={props.onRequestClose} />
+      {props.children}
+    </div>
+  </Modal>
+);
 
 ModalWrapper.propTypes = {
-  isOpen: PropTypes.bool.isRequired,
-  onAfterOpen: PropTypes.func,
   onRequestClose: PropTypes.func.isRequired,
-  contentLabel: PropTypes.string.isRequired,
-  children: PropTypes.element
+  children: PropTypes.element,
 };
 
 export default ModalWrapper;

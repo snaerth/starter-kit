@@ -1,24 +1,27 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import classnames from 'classnames';
 import styles from './profile.scss';
 import CircleImage from '../../components/common/circleImage';
 import ModalWrapper from '../../components/common/modal';
 import ImageBlurWrapper from '../../components/common/imageBlurWrapper';
-import classnames from 'classnames';
 
+/**
+ * Profile component
+ */
 class Profile extends Component {
   static propTypes = {
     user: PropTypes.object,
     imageUrl: PropTypes.string,
-    name: PropTypes.string
+    name: PropTypes.string,
   };
 
   constructor(props) {
     super(props);
 
     this.state = {
-      modalIsOpen: false
+      modalIsOpen: false,
     };
     this.openModal = this.openModal.bind(this);
     this.closeModal = this.closeModal.bind(this);

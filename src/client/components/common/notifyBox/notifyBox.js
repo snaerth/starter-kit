@@ -8,6 +8,12 @@ import styles from './notifyBox.scss';
  * Error component
  */
 class Error extends Component {
+  static propTypes = {
+    strongText: PropTypes.string,
+    text: PropTypes.string,
+    type: PropTypes.string.isRequired,
+  };
+
   componentDidMount() {
     TweenMax.fromTo(this.container, 0.5, { y: 10 }, { y: 0 });
   }
@@ -39,11 +45,5 @@ class Error extends Component {
     );
   }
 }
-
-Error.propTypes = {
-  strongText: PropTypes.string,
-  text: PropTypes.string,
-  type: PropTypes.string.isRequired,
-};
 
 export default Error;

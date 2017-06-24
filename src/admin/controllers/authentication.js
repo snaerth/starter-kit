@@ -164,7 +164,7 @@ function saveUser(user, propsToDelArr) {
   return new Promise((resolve, reject) => {
     if (user.constructor.name === 'model') {
       // Save user to databases
-      user.save((error) => {
+      return user.save((error) => {
         if (error) {
           return reject(error);
         }
@@ -176,9 +176,8 @@ function saveUser(user, propsToDelArr) {
           ...newUser,
         });
       });
-    } else {
-      return reject('Object is not a mongoose object');
     }
+    return reject('Object is not a mongoose object');
   });
 }
 
@@ -265,7 +264,8 @@ export async function updateUser(req, res) {
     user.name = name;
     user.dateOfBirth = dateOfBirth;
     user.phone = phone;
-    user.comparePassword(password, async (error, isMatch) => {
+
+    return user.comparePassword(password, async (error, isMatch) => {
       if (error) {
         return Promise.reject({ error });
       }
@@ -514,7 +514,7 @@ function updateUserPassword({ token, password }) {
         user.resetPasswordExpires = undefined;
 
         // Save user to databases
-        user.save((err) => {
+        return user.save((err) => {
           if (err) {
             return reject(err);
           }
@@ -549,7 +549,7 @@ export async function resetPassword(req, res) {
       return res.send({ error: 'Password is invalid or token has expired.' });
     }
   } else {
-    res.send({ error: 'Token and password are required' });
+    return res.send({ error: 'Token and password are required' });
   }
 }
 

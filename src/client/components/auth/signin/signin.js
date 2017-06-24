@@ -92,14 +92,12 @@ class Signin extends Component {
      */
   renderError() {
     const { errorMessage } = this.props;
-
-    if (errorMessage) {
-      return (
-        <fieldset>
-          <NotifyBox strongText="Error: " text={errorMessage} type="error" />
-        </fieldset>
-      );
-    }
+    if (!errorMessage) return null;
+    return (
+      <fieldset>
+        <NotifyBox strongText="Error: " text={errorMessage} type="error" />
+      </fieldset>
+    );
   }
 
   /**
@@ -165,7 +163,7 @@ class Signin extends Component {
     }
   }
 
- /**
+  /**
   * Renders sign in form with email and password
   * @param {func} handleSubmit
   * @returns {undefined}
@@ -182,7 +180,7 @@ class Signin extends Component {
       <form
         onSubmit={handleSubmit(this.handleFormSubmit)}
         noValidate
-        ref={c => (this.el1 = c)}
+        ref={c => this.el1 = c}
         className={formContainer}
       >
         <fieldset>
@@ -248,7 +246,7 @@ class Signin extends Component {
     return (
       <div
         className={classnames(buttonContainer, !animateButtons ? hidden : '')}
-        ref={c => (this.el0 = c)}
+        ref={c => this.el0 = c}
       >
         <ButtonLink
           href="/admin/auth/facebook"
@@ -299,7 +297,7 @@ class Signin extends Component {
     const { formContainer, back } = styles;
 
     return (
-      <div ref={c => (this.el2 = c)} className={formContainer}>
+      <div ref={c => this.el2 = c} className={formContainer}>
         <ForgotPassword hideHeading />
         <div className={back}>
           <button

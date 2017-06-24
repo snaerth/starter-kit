@@ -2,42 +2,38 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
-export default function(ComposedComponent, userRole) {
+export default function (ComposedComponent, userRole) {
   class Authentication extends Component {
     static propTypes = {
       authenticated: PropTypes.bool,
-      roles: PropTypes.array
+      roles: PropTypes.array,
     };
 
     static contextTypes = {
-      router: PropTypes.object
+      router: PropTypes.object,
     };
 
     componentWillMount() {
       if (!this.props.authenticated) {
         this.context.router.push('/signin');
-      } else {
-        if (
-          userRole === 'admin' &&
-          this.props.roles &&
-          this.props.roles.indexOf('admin') > -1
-        ) {
-          this.context.router.push('/');
-        }
+      } else if (
+        userRole === 'admin' &&
+        this.props.roles &&
+        this.props.roles.indexOf('admin') > -1
+      ) {
+        this.context.router.push('/');
       }
     }
 
     componentWillUpdate(nextProps) {
       if (!nextProps.authenticated) {
         this.context.router.push('/signin');
-      } else {
-        if (
-          userRole === 'admin' &&
-          nextProps.roles &&
-          nextProps.roles.indexOf('admin') > -1
-        ) {
-          this.context.router.push('/');
-        }
+      } else if (
+        userRole === 'admin' &&
+        nextProps.roles &&
+        nextProps.roles.indexOf('admin') > -1
+      ) {
+        this.context.router.push('/');
       }
     }
 
@@ -47,8 +43,8 @@ export default function(ComposedComponent, userRole) {
   }
 
   function mapStateToProps(state) {
-    let newStateToProps = {
-      authenticated: state.auth.authenticated
+    const newStateToProps = {
+      authenticated: state.auth.authenticated,
     };
 
     if (state.auth.user && state.auth.user.roles) {

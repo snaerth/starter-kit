@@ -1,18 +1,25 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import styles from './circleImage.scss';
 import classnames from 'classnames';
+import styles from './circleImage.scss';
 import BrokenImage from '../../../common/svg/brokenImage.svg';
 
 /**
  * CircleImage component
  */
 class CircleImage extends Component {
+  static propTypes = {
+    src: PropTypes.string.isRequired,
+    alt: PropTypes.string.isRequired,
+    className: PropTypes.string,
+    onClick: PropTypes.func,
+  };
+
   constructor() {
     super();
 
     this.state = {
-      imageBroken: false
+      imageBroken: false,
     };
   }
 
@@ -22,7 +29,7 @@ class CircleImage extends Component {
       this.setState({ imageBroken: true });
     }
 
-    let image = new Image();
+    const image = new Image();
     image.src = src;
 
     image.onerror = () => {
@@ -37,33 +44,27 @@ class CircleImage extends Component {
       <div>
         <div
           style={{
-            backgroundImage: `url(${src})`
+            backgroundImage: `url(${src})`,
           }}
-          role="img"
+          role="button"
+          tabIndex={0}
           aria-label={alt}
           onClick={onClick}
           className={classnames(className || '', styles.circle)}
         >
           {this.state.imageBroken
             ? <span className={styles.brokenImageContainer}>
-                <BrokenImage
-                  width="50"
-                  height="50"
-                  className={styles.brokenImage}
-                />
-              </span>
+              <BrokenImage
+                width="50"
+                height="50"
+                className={styles.brokenImage}
+              />
+            </span>
             : null}
         </div>
       </div>
     );
   }
 }
-
-CircleImage.propTypes = {
-  src: PropTypes.string.isRequired,
-  alt: PropTypes.string.isRequired,
-  className: PropTypes.string,
-  onClick: PropTypes.func
-};
 
 export default CircleImage;

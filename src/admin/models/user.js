@@ -11,65 +11,65 @@ const schema = {
     type: String,
     unique: true,
     lowercase: true,
-    required: true
+    required: true,
   },
   password: {
     type: String,
-    required: false
+    required: false,
   },
   name: {
     type: String,
-    required: true
+    required: true,
   },
   createdAt: {
     type: Date,
-    default: Date.now
+    default: Date.now,
   },
   roles: {
     type: Array,
     required: true,
-    default: ['user']
+    default: ['user'],
   },
   imageUrl: {
     type: String,
-    required: false
+    required: false,
   },
   thumbnailUrl: {
     type: String,
-    required: false
+    required: false,
   },
   dateOfBirth: {
     type: Date,
-    required: false
+    required: false,
   },
   phone: {
     type: String,
-    required: false
+    required: false,
   },
   resetPasswordToken: {
     type: String,
-    required: false
+    required: false,
   },
   resetPasswordExpires: {
-    type: Date
+    type: Date,
   },
   oauthID: {
     type: Number,
-    required: false
+    required: false,
   },
   facebook: {
     id: String,
     token: String,
     email: String,
-    name: String
-  }
+    name: String,
+  },
 };
 
 // Define user model
 const userSchema = new Schema(schema);
 
 // On save, encrypt password Before saving user model, run this function
-userSchema.pre('save', function(next) {
+userSchema.pre('save', (next) => {
   const user = this;
 
   // Encrypt our password using the salt above
@@ -85,12 +85,12 @@ userSchema.pre('save', function(next) {
 });
 
 // Compare password to encrypted password
-userSchema.methods.comparePassword = function(candidatePassword, callback) {
-  bcrypt.compare(candidatePassword, this.password, function(error, isMatch) {
+userSchema.methods.comparePassword = (candidatePassword, callback) => {
+  bcrypt.compare(candidatePassword, this.password, (error, isMatch) => {
     if (error) {
       return callback(error);
     }
-    callback(null, isMatch);
+    return callback(null, isMatch);
   });
 };
 

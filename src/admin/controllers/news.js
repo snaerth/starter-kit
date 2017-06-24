@@ -12,16 +12,15 @@ function saveNews(news) {
   return new Promise((resolve, reject) => {
     if (news.constructor.name === 'model') {
       // Save news to databases
-      news.save((error) => {
+      return news.save((error) => {
         if (error) {
           return reject(error);
         }
 
         return resolve(news);
       });
-    } else {
-      return reject('Object is not a mongoose object');
     }
+    return reject('Object is not a mongoose object');
   });
 }
 

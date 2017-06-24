@@ -11,14 +11,11 @@ import Jimp from 'jimp';
  * @author Snær Seljan Þóroddsson
  */
 export function resizeImage(orginalPath, newPath, width, height) {
-  width = width || Jimp.AUTO;
-  height = height || Jimp.AUTO;
-
   return new Promise((resolve, reject) => {
     Jimp.read(orginalPath)
-      .then(image => {
+      .then((image) => {
         image
-          .resize(width, height) // resize
+          .resize(width || Jimp.AUTO, height || Jimp.AUTO) // resize
           .quality(100) // set JPEG quality
           .write(newPath, resolve(image)); // save
       })
@@ -54,7 +51,7 @@ export function isImage(file) {
  */
 export function saveImageToDisk(data, path) {
   return new Promise((resolve, reject) => {
-    fs.writeFile(path, data, 'binary', error => {
+    fs.writeFile(path, data, 'binary', (error) => {
       if (error) {
         return reject('Cound not save image');
       }

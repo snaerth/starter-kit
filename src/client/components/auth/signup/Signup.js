@@ -93,13 +93,12 @@ class Signup extends Component {
      * @author Snær Seljan Þóroddsson
      */
   renderError(errorMessage) {
-    if (errorMessage) {
-      return (
-        <fieldset>
-          <NotifyBox strongText="Error: " text={errorMessage} type="error" />
-        </fieldset>
-      );
-    }
+    if (!errorMessage) return null;
+    return (
+      <fieldset>
+        <NotifyBox strongText="Error: " text={errorMessage} type="error" />
+      </fieldset>
+    );
   }
 
   /**

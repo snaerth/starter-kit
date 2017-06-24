@@ -11,6 +11,7 @@ import ForgotPassword from './../components/auth/forgotPassword';
 import ResetPassword from './../components/auth/resetPassword';
 import Profile from './profile';
 import Admin from './admin';
+
 export { NotFound };
 
 export default (

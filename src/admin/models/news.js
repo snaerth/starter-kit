@@ -4,33 +4,33 @@ import Comment from './comment';
 const schema = {
   title: {
     type: String,
-    required: true
+    required: true,
   },
   shortDescription: {
     type: String,
-    required: true
+    required: true,
   },
   description: {
     type: String,
-    required: true
+    required: true,
   },
   author: {
     type: String,
-    required: true
+    required: true,
   },
   authorEmail: {
     type: String,
-    required: false
+    required: false,
   },
   createdAt: {
     type: Date,
-    default: Date.now
+    default: Date.now,
   },
   comments: {
     type: Array,
     schema: [Comment],
-    required: false
-  }
+    required: false,
+  },
 };
 
 // Define user model

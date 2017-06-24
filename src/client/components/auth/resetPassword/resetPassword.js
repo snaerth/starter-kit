@@ -79,42 +79,53 @@ class ResetPassword extends Component {
         </div>
       );
     }
+
+    return null;
+  }
+
+  /**
+   * Renders form
+   * @returns {JSX}
+   * @author Snær Seljan Þóroddsson
+   */
+  renderForm() {
+    const { handleSubmit, message } = this.props;
+    if (!message) return null;
+    return (
+      <form
+        onSubmit={handleSubmit(this.handleFormSubmit.bind(this))}
+        noValidate
+        autoComplete="off"
+      >
+        <fieldset>
+          <Field
+            component={Password}
+            name="password"
+            id="password"
+            type="password"
+            label="New password"
+          />
+        </fieldset>
+        <fieldset>
+          <Button
+            text="Reset password"
+            ariaLabel="Reset password"
+            className="fullWidth"
+          >
+            <ArrowForward className={styles.iconArrowForward} />
+          </Button>
+        </fieldset>
+      </form>
+    );
   }
 
   render() {
-    const { handleSubmit, isFetching, message } = this.props;
+    const { isFetching } = this.props;
 
     return (
       <div className="card">
         {!isFetching ? this.renderMessages() : null}
-        {isFetching
-          ? <Spinner>Resetting password</Spinner>
-          : !message
-              ? <form
-                  onSubmit={handleSubmit(this.handleFormSubmit.bind(this))}
-                  noValidate
-                  autoComplete="off"
-                >
-                  <fieldset>
-                    <Field
-                      component={Password}
-                      name="password"
-                      id="password"
-                      type="password"
-                      label="New password"
-                    />
-                  </fieldset>
-                  <fieldset>
-                    <Button
-                      text="Reset password"
-                      ariaLabel="Reset password"
-                      className="fullWidth"
-                    >
-                      <ArrowForward className={styles.iconArrowForward} />
-                    </Button>
-                  </fieldset>
-                </form>
-              : null}
+        {isFetching ? <Spinner>Resetting password</Spinner> : this.renderForm()}
       </div>
     );
   }
@@ -171,7 +182,7 @@ function mapStateToProps(state) {
  */
 function mapDispatchToProps(dispatch) {
   return {
-    actions: bindActionCreators(actionCreators, dispatch)
+    actions: bindActionCreators(actionCreators, dispatch),
   };
 }
 
