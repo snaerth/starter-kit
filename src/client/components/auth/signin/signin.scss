@@ -20,6 +20,9 @@
     text-align: center;
     padding-bottom: 1em;
     cursor: pointer;
+    position: absolute;
+    left: 10px;
+    top: 10px;
 }
 
 .iconArrowForward,
@@ -34,7 +37,7 @@
 
 .buttonContainer {
     margin: 0 2px;
-    padding: 2em .625em .75em;
+    padding: 3em .625em .75em;
 }
 
 .buttonContainer,
@@ -51,4 +54,8 @@
 
 .formContainer {
     transform: translate3d(110%, 0, 0);
+}
+
+.extendedCard {
+    min-height: 500px;
 }

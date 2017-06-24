@@ -51,6 +51,11 @@ h6 {
     color: $text-dark;
 }
 
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+
 a::active,
 a::link,
 a::visited {
@@ -62,7 +67,7 @@ a::hover {
     color: $primary-red;
 }
 
-a.link-slideright {
+.link-slideright {
     color: $primary-pink;
     position: relative;
     display: inline-block;
@@ -74,11 +79,18 @@ a.link-slideright {
     padding-bottom: 2px;
 }
 
-a.link-slideright::hover {
+button.link-slideright {
+    background: transparent;
+    border: 0;
+    padding: 0 0 2px 0;
+    cursor: pointer;
+}
+
+.link-slideright::hover {
     color: darken($primary-pink, 20%);
 }
 
-a.link-slideright::after {
+.link-slideright::after {
     content: '';
     position: absolute;
     bottom: 0;
@@ -90,8 +102,8 @@ a.link-slideright::after {
     transform: scaleY(0.618) translateX(100%);
 }
 
-a.link-slideright:focus::after,
-a.link-slideright:hover::after {
+.link-slideright:focus::after,
+.link-slideright:hover::after {
     transform: scaleY(0.618) translateX(0);
 }
 
@@ -107,7 +119,7 @@ fieldset {
 
 .card {
     max-width: $max-480;
-    margin: 5em auto 0;
+    margin: 0 auto;
     background: $primary-card;
     padding: 3em 1em 0;
     position: relative;

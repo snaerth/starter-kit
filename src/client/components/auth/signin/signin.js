@@ -79,26 +79,29 @@ class Signin extends Component {
   /**
      * Toggles signin views BUTTONS or SIGN IN with email
      * @param {Object} e - Click handler event
+     * @param {Int} slideNumber = Slide number index
+     * @param {bool} back
      * @returns {undefined}
      * @author Snær Seljan Þóroddsson
      */
-  toggleView(e, slideNumber) {
+  toggleView(e, slideNumber, back) {
     e.preventDefault();
     let { currentSlide } = this.state;
+    const cS = currentSlide === 0 ? currentSlide : currentSlide - 1;
+    const sN = slideNumber || cS;
     let forward = true;
     let firstEl = this[`el${currentSlide}`];
-    let secondEl = this[`el${slideNumber}`];
+    let secondEl = this[`el${sN}`];
 
     // Check if backwards
-    if (currentSlide > slideNumber) {
+    if (back) {
       forward = false;
-      firstEl = this[`el${slideNumber}`];
+      firstEl = this[`el${sN}`];
       secondEl = this[`el${currentSlide}`];
     }
 
     this.animateSlide(firstEl, secondEl, forward);
-
-    currentSlide = slideNumber;
+    currentSlide = sN;
     this.setState({ currentSlide });
   }
 
@@ -145,12 +148,7 @@ class Signin extends Component {
   * @returns {undefined}
   */
   renderForm(handleSubmit) {
-    const {
-      forgotPasswordContainer,
-      formContainer,
-      iconArrowForward,
-      back,
-    } = styles;
+    const { forgotPasswordContainer, formContainer, iconArrowForward } = styles;
 
     return (
       <form
@@ -197,14 +195,6 @@ class Signin extends Component {
           <Link role="button" to="forgotpassword" className="link-slideright">
             Forgot password?
           </Link>
-        </div>
-        <div className={back}>
-          <button
-            className="link-slideright"
-            onClick={e => this.toggleView(e, 0)}
-          >
-            Back
-          </button>
         </div>
       </form>
     );
@@ -266,29 +256,33 @@ class Signin extends Component {
      * @returns {undefined}
      */
   renderForgotPassword() {
-    const { formContainer, back } = styles;
+    const { formContainer } = styles;
 
     return (
       <div ref={c => this.el2 = c} className={formContainer}>
         <ForgotPassword hideHeading />
-        <div className={back}>
-          <button
-            className="link-slideright"
-            onClick={e => this.toggleView(e, 1)}
-          >
-            Back
-          </button>
-        </div>
       </div>
     );
   }
 
   render() {
     const { handleSubmit, isFetching } = this.props;
+    const { extendedCard, back } = styles;
+    const { currentSlide } = this.state;
 
     return (
       <div>
-        <div className={classnames('card')}>
+        {currentSlide
+          ? <div className={back}>
+            <button
+              className="link-slideright"
+              onClick={e => this.toggleView(e, null, true)}
+            >
+                Back
+              </button>
+          </div>
+          : null}
+        <div className={classnames('card', extendedCard)}>
           {isFetching
             ? <Spinner>Signing in</Spinner>
             : <div>

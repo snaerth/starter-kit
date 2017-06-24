@@ -4,10 +4,8 @@ Version: 2.8.1
 Upload Summary
 
 --------------------
-GITHUB TOKEN: a6681c726c1f8d08114896cd8d5e60f672858754
 GITHUB GIST: 042e4fca6ab90df12184683e2fb7debc
 GITHUB GIST TYPE: Secret
-
 --------------------
 
 If current theme / file icon extension is not installed. Restart will be Required to Apply Theme and File Icon.
