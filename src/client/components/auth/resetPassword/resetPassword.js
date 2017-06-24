@@ -123,9 +123,13 @@ class ResetPassword extends Component {
     const { isFetching } = this.props;
 
     return (
-      <div className="card">
-        {!isFetching ? this.renderMessages() : null}
-        {isFetching ? <Spinner>Resetting password</Spinner> : this.renderForm()}
+      <div className="cardContainer">
+        <div className="card">
+          {!isFetching ? this.renderMessages() : null}
+          {isFetching
+            ? <Spinner>Resetting password</Spinner>
+            : this.renderForm()}
+        </div>
       </div>
     );
   }

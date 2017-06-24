@@ -117,81 +117,83 @@ class Signup extends Component {
     const { handleSubmit, errorMessage, isFetching } = this.props;
 
     return (
-      <div className="card">
-        <MainHeading text="SIGN UP" />
-        {!isFetching ? this.renderError(errorMessage) : null}
-        {isFetching
-          ? <Spinner>Signing up</Spinner>
-          : <form
-            onSubmit={handleSubmit(this.handleFormSubmit)}
-            noValidate
-            autoComplete="off"
-          >
-            <fieldset>
-              <Field
-                component={Input}
-                name="name"
-                id="name"
-                type="text"
-                label="Name"
-                placeholder="Full name"
-              >
-                <Person />
-              </Field>
-            </fieldset>
-            <fieldset>
-              <Field
-                component={Input}
-                name="email"
-                id="email"
-                type="email"
-                label="Email"
-                placeholder="someone@example.com"
-              >
-                <Email />
-              </Field>
-            </fieldset>
-            <fieldset>
-              <Field
-                component={Password}
-                name="password"
-                id="password"
-                type="password"
-                label="Password"
-                placeholder="Must have at least 6 characters"
-              />
-            </fieldset>
-            <fieldset className={styles.noPaddingBottom}>
-              <Button
-                onClick={() => this.fileUploaderToggler()}
-                text="Add profile image"
-                color="purple"
-                ariaLabel="Add profile image"
-                type="button"
-                className="fullWidth"
-              />
-              {' '}
-              {this.state.showImageLoader
-                  ? <FileUploader
-                    accept="image/*"
-                    onDrop={this.onDrop}
-                    multiple={false}
-                    image={this.props.image}
-                  />
-                  : null}
-            </fieldset>
-            <fieldset className={styles.fieldsetButton}>
-              <div>
-                <Button
-                  text="Sign up"
-                  ariaLabel="Sign up"
-                  className="fullWidth"
+      <div className="cardContainer">
+        <div className="card">
+          <MainHeading text="Sign up" />
+          {!isFetching ? this.renderError(errorMessage) : null}
+          {isFetching
+            ? <Spinner>Signing up</Spinner>
+            : <form
+              onSubmit={handleSubmit(this.handleFormSubmit)}
+              noValidate
+              autoComplete="off"
+            >
+              <fieldset>
+                <Field
+                  component={Input}
+                  name="name"
+                  id="name"
+                  type="text"
+                  label="Name"
+                  placeholder="Full name"
                 >
-                  <ArrowForward className={styles.iconArrowForward} />
-                </Button>
-              </div>
-            </fieldset>
-          </form>}
+                  <Person />
+                </Field>
+              </fieldset>
+              <fieldset>
+                <Field
+                  component={Input}
+                  name="email"
+                  id="email"
+                  type="email"
+                  label="Email"
+                  placeholder="someone@example.com"
+                >
+                  <Email />
+                </Field>
+              </fieldset>
+              <fieldset>
+                <Field
+                  component={Password}
+                  name="password"
+                  id="password"
+                  type="password"
+                  label="Password"
+                  placeholder="Must have at least 6 characters"
+                />
+              </fieldset>
+              <fieldset className={styles.noPaddingBottom}>
+                <Button
+                  onClick={() => this.fileUploaderToggler()}
+                  text="Add profile image"
+                  color="purple"
+                  ariaLabel="Add profile image"
+                  type="button"
+                  className="fullWidth"
+                />
+                {' '}
+                {this.state.showImageLoader
+                    ? <FileUploader
+                      accept="image/*"
+                      onDrop={this.onDrop}
+                      multiple={false}
+                      image={this.props.image}
+                    />
+                    : null}
+              </fieldset>
+              <fieldset className={styles.fieldsetButton}>
+                <div>
+                  <Button
+                    text="Sign up"
+                    ariaLabel="Sign up"
+                    className="fullWidth"
+                  >
+                    <ArrowForward className={styles.iconArrowForward} />
+                  </Button>
+                </div>
+              </fieldset>
+            </form>}
+        </div>
       </div>
     );
   }

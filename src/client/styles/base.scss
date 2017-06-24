@@ -113,13 +113,17 @@ fieldset {
 
 .page {
     width: 100%;
-    padding: 2em 0 2em;
-    position: absolute;
+    padding: 3em 0 2em;
+    position: relative;
+    min-height: 500px;
+}
+
+.cardContainer {
+    max-width: $max-480;
+    margin: 0 auto;
 }
 
 .card {
-    max-width: $max-480;
-    margin: 0 auto;
     background: $primary-card;
     padding: 3em 1em 0;
     position: relative;

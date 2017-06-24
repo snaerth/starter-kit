@@ -17,7 +17,7 @@ export { NotFound };
 export default (
   <Switch>
     <Route exact path="/" name="My application name" component={Home} />
-    <Route path="/signin" name="Sign in" component={Signin} />
+    <Route path="/signin" name="Sign in" component={pageWrapper(Signin)} />
     <Route path="/signup" name="Sign up" component={pageWrapper(Signup)} />
     <Route path="/signout" name="Sign out" component={pageWrapper(Signout)} />
     <Route

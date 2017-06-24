@@ -19,6 +19,7 @@ import Spinner from '../../common/spinner';
 import * as actionCreators from '../actions';
 import Email from '../../../common/svg/email.svg';
 import ArrowForward from '../../../common/svg/arrow_forward.svg';
+import ArrowBackward from '../../../common/svg/arrow_backward.svg';
 import FacebookIcon from '../../../common/svg/facebook.svg';
 import TwitterIcon from '../../../common/svg/twitter.svg';
 import GoogleIcon from '../../../common/svg/google.svg';
@@ -148,55 +149,56 @@ class Signin extends Component {
   * @returns {undefined}
   */
   renderForm(handleSubmit) {
-    const { forgotPasswordContainer, formContainer, iconArrowForward } = styles;
+    const { forgotPasswordContainer, container, iconArrowForward } = styles;
 
     return (
-      <form
-        onSubmit={handleSubmit(this.handleFormSubmit)}
-        noValidate
-        ref={c => this.el1 = c}
-        className={formContainer}
-      >
-        <fieldset>
-          <Field
-            component={Input}
-            name="email"
-            id="email"
-            type="email"
-            label="Email"
-            placeholder="someone@example.com"
-          >
-            <Email />
-          </Field>
-        </fieldset>
-        <fieldset>
-          <Field
-            component={Password}
-            name="password"
-            id="password"
-            type="password"
-            label="Password"
-            placeholder="Must have at least 6 characters"
-          />
-        </fieldset>
-        <fieldset>
-          <div>
-            <Button text="Sign in" ariaLabel="Sign in" className="fullWidth">
-              <ArrowForward className={iconArrowForward} />
-            </Button>
-          </div>
-        </fieldset>
-        <div
-          role="button"
-          tabIndex={0}
-          className={forgotPasswordContainer}
-          onClick={e => this.toggleView(e, 2)}
+        <form
+          onSubmit={handleSubmit(this.handleFormSubmit)}
+          noValidate
+          ref={c => this.el1 = c}
+          className={container}
         >
-          <Link role="button" to="forgotpassword" className="link-slideright">
-            Forgot password?
-          </Link>
-        </div>
-      </form>
+          <MainHeading text="Sign in with email" className="medium" />
+          <fieldset>
+            <Field
+              component={Input}
+              name="email"
+              id="email"
+              type="email"
+              label="Email"
+              placeholder="someone@example.com"
+            >
+              <Email />
+            </Field>
+          </fieldset>
+          <fieldset>
+            <Field
+              component={Password}
+              name="password"
+              id="password"
+              type="password"
+              label="Password"
+              placeholder="Must have at least 6 characters"
+            />
+          </fieldset>
+          <fieldset>
+            <div>
+              <Button text="Sign in" ariaLabel="Sign in" className="fullWidth">
+                <ArrowForward className={iconArrowForward} />
+              </Button>
+            </div>
+          </fieldset>
+          <div className={forgotPasswordContainer}>
+            <Link
+              role="button"
+              to="forgotpassword"
+              className="link-slideright"
+              onClick={e => this.toggleView(e, 2)}
+            >
+              Forgot password?
+            </Link>
+          </div>
+        </form>
     );
   }
 
@@ -206,47 +208,48 @@ class Signin extends Component {
      * @returns {undefined}
      */
   renderSocials() {
-    const { buttonContainer, iconFacebook, iconArrowForward } = styles;
+    const { container, iconFacebook, iconArrowForward, containerFirst } = styles;
 
     return (
-      <div className={buttonContainer} ref={c => this.el0 = c}>
-        <ButtonLink
-          href="/admin/auth/facebook"
-          text="Continue with facebook"
-          title="Facebook login"
-          color="facebook"
-          className="fullWidth"
-        >
-          <FacebookIcon className={iconFacebook} />
-        </ButtonLink>
-        <ButtonLink
-          href="/admin/auth/twitter"
-          text="Continue with Twitter"
-          title="Twitter login"
-          color="twitter"
-          className="fullWidth"
-        >
-          <TwitterIcon className={iconFacebook} />
-        </ButtonLink>
-        <ButtonLink
-          href="/admin/auth/google"
-          text="Continue with Google"
-          title="Google login"
-          color="google"
-          className="fullWidth"
-        >
-          <GoogleIcon className={iconFacebook} />
-        </ButtonLink>
-        <ButtonLink
-          href="#"
-          onClick={e => this.toggleView(e, 1)}
-          text="Sign in with email"
-          title="Sign in with email"
-          className="fullWidth"
-        >
-          <ArrowForward className={iconArrowForward} />
-        </ButtonLink>
-      </div>
+        <div className={classnames(container, containerFirst)} ref={c => this.el0 = c}>
+          <MainHeading text="Sign in with a social network" className="medium" />
+          <ButtonLink
+            href="/admin/auth/facebook"
+            text="Continue with facebook"
+            title="Facebook login"
+            color="facebook"
+            className="fullWidth"
+          >
+            <FacebookIcon className={iconFacebook} />
+          </ButtonLink>
+          <ButtonLink
+            href="/admin/auth/twitter"
+            text="Continue with Twitter"
+            title="Twitter login"
+            color="twitter"
+            className="fullWidth"
+          >
+            <TwitterIcon className={iconFacebook} />
+          </ButtonLink>
+          <ButtonLink
+            href="/admin/auth/google"
+            text="Continue with Google"
+            title="Google login"
+            color="google"
+            className="fullWidth"
+          >
+            <GoogleIcon className={iconFacebook} />
+          </ButtonLink>
+          <ButtonLink
+            href="#"
+            onClick={e => this.toggleView(e, 1)}
+            text="Sign in with email"
+            title="Sign in with email"
+            className="fullWidth"
+          >
+            <ArrowForward className={iconArrowForward} />
+          </ButtonLink>
+        </div>
     );
   }
 
@@ -256,10 +259,11 @@ class Signin extends Component {
      * @returns {undefined}
      */
   renderForgotPassword() {
-    const { formContainer } = styles;
+    const { container } = styles;
 
     return (
-      <div ref={c => this.el2 = c} className={formContainer}>
+      <div ref={c => this.el2 = c} className={container}>
+        <MainHeading text="Reset password" className="medium" />
         <ForgotPassword hideHeading />
       </div>
     );
@@ -267,26 +271,25 @@ class Signin extends Component {
 
   render() {
     const { handleSubmit, isFetching } = this.props;
-    const { extendedCard, back } = styles;
+    const { extendedCard, back, iconArrowBackward } = styles;
     const { currentSlide } = this.state;
 
     return (
-      <div>
-        {currentSlide
-          ? <div className={back}>
-            <button
-              className="link-slideright"
-              onClick={e => this.toggleView(e, null, true)}
-            >
-                Back
-              </button>
-          </div>
-          : null}
+      <div className="cardContainer">
         <div className={classnames('card', extendedCard)}>
+          {currentSlide
+            ? <div className={back}>
+              <button
+                className="link-slideright"
+                onClick={e => this.toggleView(e, null, true)}
+              >
+                <ArrowBackward className={iconArrowBackward} />
+              </button>
+            </div>
+            : null}
           {isFetching
             ? <Spinner>Signing in</Spinner>
             : <div>
-              <MainHeading text="SIGN IN" />
               {this.renderError()}
               <div className={styles.relative}>
                 {this.renderForm(handleSubmit)}
