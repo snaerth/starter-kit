@@ -14,8 +14,36 @@ import {
   IS_FETCHING,
   MODAL_OPEN,
   MODAL_CLOSE,
-  CLEAN
+  CLEAN,
 } from './types';
+
+/**
+ * Handles error from server
+ *
+ * @returns {Object} action
+ * @author Snær Seljan Þóroddsson
+ */
+export function authError(type, error) {
+  const errorMessage = error.response.data.error
+    ? error.response.data.error
+    : error.response.data;
+
+  let payload = errorMessage;
+
+  if (error.response.status === 401) {
+    payload = 'Bad login credentials';
+  }
+
+  if (
+    errorMessage &&
+    typeof errorMessage === 'string' &&
+    errorMessage.toLowerCase() === 'proxy_error'
+  ) {
+    payload = 'Error connecting to server';
+  }
+
+  return { type, payload };
+}
 
 /**
  * Is fetching data state
@@ -48,13 +76,13 @@ export function setPreviewUserImage(image) {
  * @author Snær Seljan Þóroddsson
  */
 export function signinUser({ email, password }) {
-  return function(dispatch) {
+  return function (dispatch) {
     // Post email/password to admin server for sign in Get token back from server
     axios
       .post('/admin/signin', { email, password })
-      .then(response => {
+      .then((response) => {
         const payload = {
-          user: response.data.user
+          user: response.data.user,
         };
         // Dispatch admin action to authReducer
         dispatch({ type: AUTH_USER, payload });
@@ -74,10 +102,10 @@ export function signinUser({ email, password }) {
  * @author Snær Seljan Þóroddsson
  */
 export function signinFacebook() {
-  return function(dispatch) {
+  return function (dispatch) {
     axios
       .get('/admin/facebook')
-      .then(response => {
+      .then((response) => {
         const payload = response.data; // eslint-disable-line
       })
       .catch(error => dispatch(authError(AUTH_ERROR, error)));
@@ -96,13 +124,13 @@ export function signinFacebook() {
  * @author Snær Seljan Þóroddsson
  */
 export function signupUser({ email, password, name, formData }) {
-  return dispatch => {
+  return (dispatch) => {
     // Post email/password to admin server to register user Get token back from server
     axios
       .post('/admin/signup', { email, password, name })
-      .then(response => {
+      .then((response) => {
         const payload = {
-          user: response.data
+          user: response.data,
         };
 
         // Save token to localStorage
@@ -115,18 +143,18 @@ export function signupUser({ email, password, name, formData }) {
         if (formData) {
           const config = {
             headers: {
-              authorization: response.data.token
-            }
+              authorization: response.data.token,
+            },
           };
 
           axios
             .post('/admin/userimage', formData, config)
-            .then(response => {
+            .then((res) => {
               // Dispatch USER_UPDATED action to authReducer
-              dispatch({ type: USER_UPDATED, payload: response.data });
+              dispatch({ type: USER_UPDATED, payload: res.data });
               // Save token to localStorage
               localStorage.setItem('user', {
-                user: JSON.stringify(response.data)
+                user: JSON.stringify(res.data),
               });
             })
             .catch(error => dispatch(authError(AUTH_ERROR, error)));
@@ -148,16 +176,16 @@ export function signupUser({ email, password, name, formData }) {
  * @author Snær Seljan Þóroddsson
  */
 export function addUserImage(formData, token) {
-  return dispatch => {
+  return (dispatch) => {
     const config = {
       headers: {
-        authorization: token
-      }
+        authorization: token,
+      },
     };
 
     axios
       .post('/admin/userimage', formData, config)
-      .then(response => {
+      .then((response) => {
         // Dispatch USER_UPDATED action to authReducer
         dispatch({ type: USER_UPDATED, payload: response.data });
         // Save token to localStorage
@@ -218,12 +246,12 @@ export function signoutUser() {
  * @author Snær Seljan Þóroddsson
  */
 export function forgotPassword({ email }) {
-  return dispatch => {
+  return (dispatch) => {
     // Post email to admin server to retreive new password
     axios
       .post('/admin/forgot', { email })
       .then(response =>
-        dispatch({ type: FORGOT_PASSWORD_SUCCESS, payload: response.data })
+        dispatch({ type: FORGOT_PASSWORD_SUCCESS, payload: response.data }),
       )
       .catch(error => dispatch(authError(FORGOT_PASSWORD_ERROR, error)));
   };
@@ -237,51 +265,23 @@ export function forgotPassword({ email }) {
  * @author Snær Seljan Þóroddsson
  */
 export function resetPassword({ password, token }) {
-  return dispatch => {
+  return (dispatch) => {
     // Post email to admin server to retreive new password
     axios
       .post(`/admin/reset/${token}`, { password })
-      .then(response => {
+      .then((response) => {
         if (!response.data.error) {
           dispatch({
             type: RESET_PASSWORD_SUCCESS,
-            payload: response.data.message
+            payload: response.data.message,
           });
         } else {
           const error = {
-            response
+            response,
           };
           dispatch(authError(RESET_PASSWORD_ERROR, error));
         }
       })
       .catch(error => dispatch(authError(RESET_PASSWORD_ERROR, error)));
   };
-}
-
-/**
- * Handles error from server
- *
- * @returns {Object} action
- * @author Snær Seljan Þóroddsson
- */
-export function authError(type, error) {
-  const errorMessage = error.response.data.error
-    ? error.response.data.error
-    : error.response.data;
-
-  let payload = errorMessage;
-
-  if (error.response.status === 401) {
-    payload = 'Bad login credentials';
-  }
-
-  if (
-    errorMessage &&
-    typeof errorMessage === 'string' &&
-    errorMessage.toLowerCase() === 'proxy_error'
-  ) {
-    payload = 'Error connecting to server';
-  }
-
-  return { type, payload };
 }

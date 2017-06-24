@@ -1,22 +1,21 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import styles from './button.scss';
 import classnames from 'classnames';
+import styles from './button.scss';
 
 /**
  * Button component
  */
-const Button = props => {
+const Button = (props) => {
   const { text, ariaLabel, color, className, onClick, type } = props;
   return (
     <button
       className={classnames(
         styles.button,
-        styles[color ? color : 'default'],
-        styles[className]
+        styles[color || 'default'],
+        styles[className],
       )}
-      role="button"
-      type={type ? type : 'submit'}
+      type={type || 'submit'}
       aria-label={ariaLabel}
       onClick={onClick}
     >
@@ -33,7 +32,7 @@ Button.propTypes = {
   className: PropTypes.string,
   onClick: PropTypes.func,
   type: PropTypes.string,
-  children: PropTypes.element
+  children: PropTypes.element,
 };
 
 export default Button;

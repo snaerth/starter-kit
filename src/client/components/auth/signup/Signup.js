@@ -22,13 +22,12 @@ import ArrowForward from '../../../common/svg/arrow_forward.svg';
  */
 class Signup extends Component {
   static propTypes = {
-    fields: PropTypes.array.isRequired,
     handleSubmit: PropTypes.func.isRequired,
     signupUser: PropTypes.func,
     actions: PropTypes.object.isRequired,
     errorMessage: PropTypes.string,
     image: PropTypes.object,
-    isFetching: PropTypes.bool
+    isFetching: PropTypes.bool,
   };
 
   constructor(props) {
@@ -39,7 +38,7 @@ class Signup extends Component {
     this.fileUploaderToggler = this.fileUploaderToggler.bind(this);
 
     this.state = {
-      showImageLoader: false
+      showImageLoader: false,
     };
   }
 
@@ -111,7 +110,7 @@ class Signup extends Component {
      */
   fileUploaderToggler() {
     this.setState({
-      showImageLoader: !this.state.showImageLoader
+      showImageLoader: !this.state.showImageLoader,
     });
   }
 
@@ -125,75 +124,75 @@ class Signup extends Component {
         {isFetching
           ? <Spinner>Signing up</Spinner>
           : <form
-              onSubmit={handleSubmit(this.handleFormSubmit)}
-              noValidate
-              autoComplete="off"
-            >
-              <fieldset>
-                <Field
-                  component={Input}
-                  name="name"
-                  id="name"
-                  type="text"
-                  label="Name"
-                  placeholder="Full name"
-                >
-                  <Person />
-                </Field>
-              </fieldset>
-              <fieldset>
-                <Field
-                  component={Input}
-                  name="email"
-                  id="email"
-                  type="email"
-                  label="Email"
-                  placeholder="someone@example.com"
-                >
-                  <Email />
-                </Field>
-              </fieldset>
-              <fieldset>
-                <Field
-                  component={Password}
-                  name="password"
-                  id="password"
-                  type="password"
-                  label="Password"
-                  placeholder="Must have at least 6 characters"
-                />
-              </fieldset>
-              <fieldset className={styles.noPaddingBottom}>
-                <Button
-                  onClick={() => this.fileUploaderToggler()}
-                  text="Add profile image"
-                  color="purple"
-                  ariaLabel="Add profile image"
-                  type="button"
-                  className="fullWidth"
-                />
-                {' '}
-                {this.state.showImageLoader
+            onSubmit={handleSubmit(this.handleFormSubmit)}
+            noValidate
+            autoComplete="off"
+          >
+            <fieldset>
+              <Field
+                component={Input}
+                name="name"
+                id="name"
+                type="text"
+                label="Name"
+                placeholder="Full name"
+              >
+                <Person />
+              </Field>
+            </fieldset>
+            <fieldset>
+              <Field
+                component={Input}
+                name="email"
+                id="email"
+                type="email"
+                label="Email"
+                placeholder="someone@example.com"
+              >
+                <Email />
+              </Field>
+            </fieldset>
+            <fieldset>
+              <Field
+                component={Password}
+                name="password"
+                id="password"
+                type="password"
+                label="Password"
+                placeholder="Must have at least 6 characters"
+              />
+            </fieldset>
+            <fieldset className={styles.noPaddingBottom}>
+              <Button
+                onClick={() => this.fileUploaderToggler()}
+                text="Add profile image"
+                color="purple"
+                ariaLabel="Add profile image"
+                type="button"
+                className="fullWidth"
+              />
+              {' '}
+              {this.state.showImageLoader
                   ? <FileUploader
-                      accept="image/*"
-                      onDrop={this.onDrop}
-                      multiple={false}
-                      image={this.props.image}
-                    />
+                    accept="image/*"
+                    onDrop={this.onDrop}
+                    multiple={false}
+                    image={this.props.image}
+                  />
                   : null}
-              </fieldset>
-              <fieldset className={styles.fieldsetButton}>
-                <div>
-                  <Button
-                    text="Sign up"
-                    ariaLabel="Sign up"
-                    className="fullWidth"
-                  >
-                    <ArrowForward className={styles.iconArrowForward} />
-                  </Button>
-                </div>
-              </fieldset>
-            </form>}
+            </fieldset>
+            <fieldset className={styles.fieldsetButton}>
+              <div>
+                <Button
+                  text="Sign up"
+                  ariaLabel="Sign up"
+                  className="fullWidth"
+                >
+                  <ArrowForward className={styles.iconArrowForward} />
+                </Button>
+              </div>
+            </fieldset>
+          </form>}
       </div>
     );
   }
@@ -259,7 +258,7 @@ function mapStateToProps(state) {
   return {
     errorMessage: state.auth.error,
     image: state.auth.image,
-    isFetching: state.auth.isFetching
+    isFetching: state.auth.isFetching,
   };
 }
 
@@ -272,7 +271,7 @@ function mapStateToProps(state) {
  */
 function mapDispatchToProps(dispatch) {
   return {
-    actions: bindActionCreators(actionCreators, dispatch)
+    actions: bindActionCreators(actionCreators, dispatch),
   };
 }
 
@@ -280,6 +279,6 @@ export default connect(mapStateToProps, mapDispatchToProps)(
   reduxForm({
     form: 'signup',
     fields: ['name', 'email', 'password', 'image'],
-    validate
-  })(Signup)
+    validate,
+  })(Signup),
 );

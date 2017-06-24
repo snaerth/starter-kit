@@ -12,24 +12,24 @@ import {
   IS_FETCHING,
   MODAL_OPEN,
   MODAL_CLOSE,
-  CLEAN
+  CLEAN,
 } from './types';
 
 const user = JSON.parse(localStorage.getItem('user'));
 
 const initialState = {
   isFetching: false,
-  authenticated: user && user.token ? true : false,
+  authenticated: !!(user && user.token),
   user: user || null,
-  modalOpen: false
+  modalOpen: false,
 };
 
-export default function(state = initialState, action) {
+export default function (state = initialState, action) {
   switch (action.type) {
     case IS_FETCHING:
       return {
         ...state,
-        isFetching: true
+        isFetching: true,
       };
 
     case AUTH_USER:
@@ -38,7 +38,7 @@ export default function(state = initialState, action) {
         authenticated: true,
         isFetching: false,
         error: '',
-        user: action.payload.user
+        user: action.payload.user,
       };
 
     case UNAUTH_USER:
@@ -47,7 +47,7 @@ export default function(state = initialState, action) {
         user: null,
         isFetching: false,
         authenticated: false,
-        image: null
+        image: null,
       };
 
     case USER_UPDATED:
@@ -55,7 +55,7 @@ export default function(state = initialState, action) {
         ...state,
         authenticated: true,
         isFetching: false,
-        user: action.payload
+        user: action.payload,
       };
 
     case SIGNUP_USER:
@@ -63,69 +63,70 @@ export default function(state = initialState, action) {
         ...state,
         authenticated: true,
         isFetching: false,
-        user: action.payload.user
+        user: action.payload.user,
       };
 
     case AUTH_ERROR:
       return {
         ...state,
         isFetching: false,
-        error: action.payload
+        error: action.payload,
       };
 
     case FORGOT_PASSWORD_SUCCESS:
       return {
         ...state,
         isFetching: false,
-        message: action.payload
+        message: action.payload,
       };
 
     case FORGOT_PASSWORD_ERROR:
       return {
         ...state,
         isFetching: false,
-        error: action.payload
+        error: action.payload,
       };
 
     case RESET_PASSWORD_SUCCESS:
       return {
         ...state,
         isFetching: false,
-        message: action.payload
+        message: action.payload,
       };
 
     case RESET_PASSWORD_ERROR:
       return {
         ...state,
         isFetching: false,
-        error: action.payload
+        error: action.payload,
       };
 
     case SET_PREVIEW_USER_IMAGE:
       return {
         ...state,
-        image: action.payload
+        image: action.payload,
       };
 
     case MODAL_OPEN:
       return {
         ...state,
-        modalOpen: true
+        modalOpen: true,
       };
 
     case MODAL_CLOSE:
       return {
         ...state,
-        modalOpen: false
+        modalOpen: false,
       };
 
     case CLEAN:
       return {
         ...state,
         error: '',
-        image: null
+        image: null,
       };
-  }
 
-  return state;
+    default:
+      return { ...state };
+  }
 }
