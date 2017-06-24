@@ -43,35 +43,11 @@ class Signin extends Component {
 
     this.state = {
       currentSlide: 0,
-      animateButtons: false,
     };
   }
 
   componentWillMount() {
     this.props.actions.clean();
-  }
-
-  componentDidMount() {
-    setTimeout(() => {
-      this.animateStart();
-      this.setState({ animateButtons: true });
-    }, 100);
-  }
-
-  /**
-     * Sign in start animation for buttons
-     * @returns {undefined}
-     * @author Snær Seljan Þóroddsson
-     */
-  animateStart() {
-    const tl = new TimelineLite();
-
-    tl.staggerFrom(
-      this.el0.children,
-      1,
-      { opacity: 0, delay: 0.1, ease: Power2.easeOut },
-      0.1,
-    );
   }
 
   /**
@@ -240,14 +216,10 @@ class Signin extends Component {
      * @returns {undefined}
      */
   renderSocials() {
-    const { buttonContainer, hidden, iconFacebook, iconArrowForward } = styles;
-    const { animateButtons } = this.state;
+    const { buttonContainer, iconFacebook, iconArrowForward } = styles;
 
     return (
-      <div
-        className={classnames(buttonContainer, !animateButtons ? hidden : '')}
-        ref={c => this.el0 = c}
-      >
+      <div className={buttonContainer} ref={c => this.el0 = c}>
         <ButtonLink
           href="/admin/auth/facebook"
           text="Continue with facebook"
@@ -316,7 +288,7 @@ class Signin extends Component {
 
     return (
       <div>
-        <div className={classnames('card', styles.cardExtend)}>
+        <div className={classnames('card')}>
           {isFetching
             ? <Spinner>Signing in</Spinner>
             : <div>

@@ -46,14 +46,9 @@
 }
 
 .formContainer {
+    padding-top: 2em;
+}
+
+.formContainer {
     transform: translate3d(110%, 0, 0);
-}
-
-.cardExtend {
-    min-height: 450px;
-}
-
-.hidden {
-    display: none;
-    visibility: hidden;
 }
