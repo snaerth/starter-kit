@@ -18,7 +18,6 @@ import ArrowForward from '../../../common/svg/arrow_forward.svg';
  */
 class ResetPassword extends Component {
   static propTypes = {
-    fields: PropTypes.array.isRequired,
     handleSubmit: PropTypes.func.isRequired,
     resetPassword: PropTypes.func,
     actions: PropTypes.object.isRequired,
@@ -26,7 +25,7 @@ class ResetPassword extends Component {
     message: PropTypes.string,
     token: PropTypes.string,
     params: PropTypes.object,
-    isFetching: PropTypes.bool
+    isFetching: PropTypes.bool,
   };
 
   componentWillMount() {
@@ -159,7 +158,7 @@ function mapStateToProps(state) {
   return {
     errorMessage: state.auth.error,
     message: state.auth.message,
-    isFetching: state.auth.isFetching
+    isFetching: state.auth.isFetching,
   };
 }
 
@@ -178,6 +177,6 @@ function mapDispatchToProps(dispatch) {
 
 export default connect(mapStateToProps, mapDispatchToProps)(
   reduxForm({ form: 'resetPassword', fields: ['password'], validate })(
-    ResetPassword
-  )
+    ResetPassword,
+  ),
 );

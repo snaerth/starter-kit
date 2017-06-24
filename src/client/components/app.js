@@ -1,21 +1,23 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { CSSTransitionGroup } from 'react-transition-group';
 import AppLayout from './app-layout';
 import Header from './common/header';
 
-const App = ({ children, name }) =>
+const App = ({ children, name }) => (
   <AppLayout>
     <Header name={name} />
     <CSSTransitionGroup
       component="div"
       transitionName="fadeInScale"
       transitionEnterTimeout={700}
-      transitionLeaveTimeout={700}>
+      transitionLeaveTimeout={700}
+    >
       <main>{children}</main>
     </CSSTransitionGroup>
-  </AppLayout>;
+  </AppLayout>
+);
 
 App.propTypes = {
   children: PropTypes.object.isRequired,
@@ -27,13 +29,17 @@ function mapStateToProps(state, ownProps) {
   const pathName = state.routing.location.pathname;
 
   // Filter route by current location path
-  const route = routes.filter(route => {
+  const filteredRoute = routes.filter((route) => {
+    let name = '';
+
     if (route && route.props.path === pathName) {
-      return route.props.name;
+      name = route.props.name;
     }
+
+    return name;
   });
 
-  return { ...state, name: route[0].props.name };
+  return { ...state, name: filteredRoute[0].props.name };
 }
 
 export default connect(mapStateToProps)(App);

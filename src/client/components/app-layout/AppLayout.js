@@ -13,5 +13,5 @@ export default class AppLayout extends Component {
 }
 
 AppLayout.propTypes = {
-  children: PropTypes.node
+  children: PropTypes.node,
 };

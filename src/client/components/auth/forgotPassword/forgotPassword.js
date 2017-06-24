@@ -19,15 +19,19 @@ import ArrowForward from '../../../common/svg/arrow_forward.svg';
  */
 class Signin extends Component {
   static propTypes = {
-    fields: PropTypes.array.isRequired,
     handleSubmit: PropTypes.func.isRequired,
-    signinUser: PropTypes.func,
     actions: PropTypes.object.isRequired,
     errorMessage: PropTypes.string,
     message: PropTypes.string,
     isFetching: PropTypes.bool,
-    hideHeading: PropTypes.bool
+    hideHeading: PropTypes.bool,
   };
+
+  constructor(props) {
+    super(props);
+
+    this.handleFormSubmit = this.handleFormSubmit.bind(this);
+  }
 
   componentWillMount() {
     this.props.actions.clean();
@@ -78,36 +82,38 @@ class Signin extends Component {
         {isFetching
           ? <Spinner>Loading</Spinner>
           : <div>
-              {!hideHeading ? <MainHeading text="Lost password" className="medium" /> : null}
-              <form
-                onSubmit={handleSubmit(this.handleFormSubmit.bind(this))}
-                noValidate
-                autoComplete="off"
-              >
-                <fieldset>
-                  <Field
-                    component={Input}
-                    name="email"
-                    id="email"
-                    type="email"
-                    label="Email"
+            {!hideHeading
+                ? <MainHeading text="Lost password" className="medium" />
+                : null}
+            <form
+              onSubmit={handleSubmit(this.handleFormSubmit)}
+              noValidate
+              autoComplete="off"
+            >
+              <fieldset>
+                <Field
+                  component={Input}
+                  name="email"
+                  id="email"
+                  type="email"
+                  label="Email"
+                >
+                  <Email />
+                </Field>
+              </fieldset>
+              <fieldset>
+                <div>
+                  <Button
+                    text="Reset password"
+                    ariaLabel="Reset password"
+                    className="fullWidth"
                   >
-                    <Email />
-                  </Field>
-                </fieldset>
-                <fieldset>
-                  <div>
-                    <Button
-                      text="Reset password"
-                      ariaLabel="Reset password"
-                      className="fullWidth"
-                    >
-                      <ArrowForward className={styles.iconArrowForward} />
-                    </Button>
-                  </div>
-                </fieldset>
-              </form>
-            </div>}
+                    <ArrowForward className={styles.iconArrowForward} />
+                  </Button>
+                </div>
+              </fieldset>
+            </form>
+          </div>}
       </div>
     );
   }
@@ -146,7 +152,7 @@ function mapStateToProps(state) {
   return {
     errorMessage: state.auth.error,
     message: state.auth.message,
-    isFetching: state.auth.isFetching
+    isFetching: state.auth.isFetching,
   };
 }
 
@@ -159,10 +165,10 @@ function mapStateToProps(state) {
  */
 function mapDispatchToProps(dispatch) {
   return {
-    actions: bindActionCreators(actionCreators, dispatch)
+    actions: bindActionCreators(actionCreators, dispatch),
   };
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(
-  reduxForm({ form: 'forgotPassword', fields: ['email'], validate })(Signin)
+  reduxForm({ form: 'forgotPassword', fields: ['email'], validate })(Signin),
 );

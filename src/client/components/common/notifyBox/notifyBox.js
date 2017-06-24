@@ -1,17 +1,15 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import ReactDOM from 'react-dom';
-import styles from './notifyBox.scss';
 import classnames from 'classnames';
 import { TweenMax } from 'gsap';
+import styles from './notifyBox.scss';
 
 /**
  * Error component
  */
 class Error extends Component {
   componentDidMount() {
-    const node = ReactDOM.findDOMNode(this);
-    TweenMax.fromTo(node, 0.5, { y: 10 }, { y: 0 });
+    TweenMax.fromTo(this.container, 0.5, { y: 10 }, { y: 0 });
   }
 
   checkBoxType(type) {
@@ -31,7 +29,10 @@ class Error extends Component {
     const { text, strongText, type } = this.props;
 
     return (
-      <div className={classnames(styles.box, this.checkBoxType(type))}>
+      <div
+        className={classnames(styles.box, this.checkBoxType(type))}
+        refs={c => this.container = c}
+      >
         {strongText ? <strong>{strongText}</strong> : null}
         {text}
       </div>
@@ -42,7 +43,7 @@ class Error extends Component {
 Error.propTypes = {
   strongText: PropTypes.string,
   text: PropTypes.string,
-  type: PropTypes.string.isRequired
+  type: PropTypes.string.isRequired,
 };
 
 export default Error;

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import styles from './imageBlurWrapper.scss';
 import classnames from 'classnames';
+import styles from './imageBlurWrapper.scss';
 import { processImage } from '../../../utils/stackBlur';
 
 /**
@@ -15,20 +15,20 @@ class ImageBlurWrapper extends Component {
     super();
 
     this.state = {
-      loaded: false
+      loaded: false,
     };
   }
 
   componentDidMount() {
     const { blur, thumbnail, src, id } = this.props;
-    let img = new Image();
+    const img = new Image();
     img.src = thumbnail || 'images/public/person-placeholder-thumbnail.png';
     img.onload = () => {
-      let canvas = document.getElementById('canvas-blur-' + id);
+      const canvas = document.getElementById(`canvas-blur-${id}`);
       processImage(img, canvas, blur || 10);
     };
 
-    let imgBig = new Image();
+    const imgBig = new Image();
     imgBig.src = src;
     imgBig.onload = () => {
       this.setState({ loaded: true });
@@ -44,14 +44,14 @@ class ImageBlurWrapper extends Component {
           alt={alt}
           className={classnames(
             styles.image,
-            this.state.loaded ? styles.show : ''
+            this.state.loaded ? styles.show : '',
           )}
         />
         <canvas
-          id={'canvas-blur-' + id}
+          id={`canvas-blur-${id}`}
           className={classnames(
             styles.canvas,
-            this.state.loaded ? styles.hide : ''
+            this.state.loaded ? styles.hide : '',
           )}
         />
       </div>
@@ -64,7 +64,7 @@ ImageBlurWrapper.propTypes = {
   alt: PropTypes.string.isRequired,
   thumbnail: PropTypes.string.isRequired,
   blur: PropTypes.string,
-  id: PropTypes.string.isRequired
+  id: PropTypes.string.isRequired,
 };
 
 export default ImageBlurWrapper;
