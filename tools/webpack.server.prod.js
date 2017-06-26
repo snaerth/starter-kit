@@ -11,7 +11,6 @@ const {
   RULES_DEV,
   RULES_PROD,
 } = CONFIG;
-const root = (folder = '.') => path.join(__dirname, '..', folder);
 
 const plugins = [
   new webpack.optimize.ModuleConcatenationPlugin(),
@@ -39,7 +38,6 @@ const plugins = [
 const { json, svg } = RULES_COMMON;
 const { scss, css } = RULES_DEV;
 const { js } = RULES_PROD;
-
 const rules = [js, css, scss, json, svg];
 
 module.exports = {

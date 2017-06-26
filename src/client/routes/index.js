@@ -2,15 +2,21 @@ import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 import requireAuth from './../containers/requireAuth';
 import pageWrapper from './../containers/pageWrapper';
-import NotFound from './notfound';
-import Home from './home';
-import Signin from './../components/auth/signin';
-import Signup from './../components/auth/signup';
-import Signout from './signout';
-import ForgotPassword from './../components/auth/forgotPassword';
-import ResetPassword from './../components/auth/resetPassword';
-import Profile from './profile';
-import Admin from './admin';
+import asyncRoute from '../containers/asyncRoute';
+
+const Home = asyncRoute(() => System.import('./home'));
+const Signin = asyncRoute(() => System.import('./../components/auth/signin'));
+const Signup = asyncRoute(() => System.import('./../components/auth/signup'));
+const Signout = asyncRoute(() => System.import('./signout'));
+const ForgotPassword = asyncRoute(() =>
+  System.import('./../components/auth/forgotPassword'),
+);
+const ResetPassword = asyncRoute(() =>
+  System.import('./../components/auth/resetPassword'),
+);
+const Profile = asyncRoute(() => System.import('./profile'));
+const Admin = asyncRoute(() => System.import('./admin'));
+const NotFound = asyncRoute(() => System.import('./notfound'));
 
 export { NotFound };
 

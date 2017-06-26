@@ -165,8 +165,6 @@ module.exports = {
   CLIENT_OUTPUT: path.join(process.cwd(), 'build/public'),
   SERVER_ENTRY: path.join(process.cwd(), 'src/server/server.js'),
   SERVER_OUTPUT: path.join(process.cwd(), 'build'),
-  ADMIN__ENTRY: path.join(process.cwd(), 'src/admin/index.js'),
-  ADMIN__OUTPUT: path.join(process.cwd(), 'build'),
   PUBLIC_PATH: '/assets/',
   VENDOR: vendor,
   RULES_COMMON: {

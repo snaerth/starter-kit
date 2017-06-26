@@ -1,9 +1,10 @@
 const webpack = require('webpack');
 const path = require('path');
-const CONFIG = require('./webpack.base');
+const config = require('./webpack.base');
 const externals = require('webpack-node-externals');
 const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
-const { ADMIN_ENTRY, ADMIN_OUTPUT } = CONFIG;
+
+const { ADMIN_ENTRY, ADMIN_OUTPUT } = config;
 
 const plugins = [
   new webpack.optimize.ModuleConcatenationPlugin(),
@@ -50,9 +51,9 @@ const rules = [js, json];
 module.exports = {
   target: 'node',
   devtool: 'source-map',
-  entry: ADMIN_ENTRY,
+  entry: path.join(process.cwd(), 'src/admin/server.js'),
   output: {
-    path: ADMIN_OUTPUT,
+    path: path.join(process.cwd(), 'build'),
     filename: 'admin.js',
     sourceMapFilename: 'admin.map',
     libraryTarget: 'commonjs2',
