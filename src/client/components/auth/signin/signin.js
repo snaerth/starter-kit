@@ -130,7 +130,7 @@ class Signin extends Component {
     if (forward) {
       tl
         .to(firstEl, 0.2, {
-          x: `-${110 * multiplier}%`,
+          x: `-${100 * multiplier}%`,
           opacity: 1,
           ease: Power2.easeOut,
         })
@@ -223,12 +223,11 @@ class Signin extends Component {
       container,
       iconFacebook,
       iconArrowForward,
-      containerFirst,
     } = styles;
 
     return (
       <div
-        className={classnames(container, containerFirst)}
+        className={container}
         ref={c => this.el0 = c}
       >
         <MainHeading text="Sign in with a social network" className="medium" />

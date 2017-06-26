@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { browserHistory } from 'react-router';
+import { browserHistory } from 'react-router-dom';
 import {
   AUTH_USER,
   UNAUTH_USER,
@@ -138,7 +138,10 @@ export function signupUser({ email, password, name, formData }) {
         // Dispatch admin action to authReducer
         dispatch({ type: SIGNUP_USER, payload });
         // Reroute user to home page
-        browserHistory.push('/');
+        if (!formData) {
+          // Reroute user to profile page
+          browserHistory.push('/profile');
+        }
 
         if (formData) {
           const config = {
@@ -156,6 +159,9 @@ export function signupUser({ email, password, name, formData }) {
               localStorage.setItem('user', {
                 user: JSON.stringify(res.data),
               });
+
+              // Reroute user to profile page
+              browserHistory.push('/profile');
             })
             .catch(error => dispatch(authError(AUTH_ERROR, error)));
         }

@@ -69,7 +69,7 @@ const schema = {
 const userSchema = new Schema(schema);
 
 // On save, encrypt password Before saving user model, run this function
-userSchema.pre('save', (next) => {
+userSchema.pre('save', function (next) {
   const user = this;
 
   // Encrypt our password using the salt above
