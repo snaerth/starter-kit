@@ -109,7 +109,7 @@ class Signin extends Component {
       secondEl = this[`el${currentSlide}`];
     }
 
-    this.animateSlide(firstEl, secondEl, forward);
+    this.animateSlide(firstEl, secondEl, forward, sN);
     currentSlide = sN;
     this.setState({ currentSlide });
   }
@@ -118,33 +118,36 @@ class Signin extends Component {
    * Animates slidein
    * @param {Object} firstEl
    * @param {Object} secondEl
+   * @param {bool} forward
+   * @param {Int} slideNumber
    * @returns {undefined}
    * @author Snær Seljan Þóroddsson
    */
-  animateSlide(firstEl, secondEl, forward) {
+  animateSlide(firstEl, secondEl, forward, slideNumber) {
     const tl = new TimelineLite();
+    const multiplier = slideNumber;
 
     if (forward) {
       tl
         .to(firstEl, 0.2, {
-          x: '-110%',
+          x: `-${110 * multiplier}%`,
           opacity: 1,
           ease: Power2.easeOut,
         })
         .to(secondEl, 0.2, {
-          x: '0%',
+          x: `-${100 * multiplier}%`,
           opacity: 1,
           ease: Power2.easeOut,
         });
     } else {
       tl
         .to(secondEl, 0.2, {
-          x: '110%',
+          x: `10 + ${multiplier * 100}%`,
           opacity: 1,
           ease: Power2.easeOut,
         })
         .to(firstEl, 0.2, {
-          x: '0%',
+          x: `-${100 * multiplier}%`,
           opacity: 1,
           ease: Power2.easeOut,
         });
@@ -287,18 +290,12 @@ class Signin extends Component {
 
   render() {
     const { handleSubmit, isFetching } = this.props;
-    const {
-      extendedCard,
-      back,
-      iconArrowBackward,
-      almostHidden,
-      relative,
-    } = styles;
+    const { back, iconArrowBackward, almostHidden, signinContainer } = styles;
     const { currentSlide } = this.state;
 
     return (
       <div className="cardContainer">
-        <div className={classnames('card', extendedCard)}>
+        <div className="card">
           {currentSlide
             ? <div className={back}>
               <button
@@ -312,9 +309,9 @@ class Signin extends Component {
           {isFetching ? <Spinner>Signing in</Spinner> : null}
           <div className={isFetching ? almostHidden : ''}>
             {this.renderError()}
-            <div className={relative}>
-              {this.renderForm(handleSubmit)}
+            <div className={signinContainer}>
               {this.renderSocials()}
+              {this.renderForm(handleSubmit)}
               {this.renderForgotPassword()}
             </div>
           </div>

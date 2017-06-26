@@ -7,8 +7,9 @@
     margin-top: 9px;
 }
 
-.relative {
-    position: relative;
+.signinContainer {
+    display: inline-flex;
+    width: 100%;
 }
 
 .forgotPasswordContainer {
@@ -45,20 +46,14 @@
 }
 
 .container {
-    position: absolute;
-    top: 0;
-    left: 0;
     width: 100%;
-    transform: translate3d(110%, 0, 0);
+    min-width: 100%;
+    transform: translate3d(10%, 0, 0);
     padding-top: 2em;
 }
 
 .containerFirst {
     transform: translate3d(0, 0, 0);
-}
-
-.extendedCard {
-    min-height: 550px;
 }
 
 .almostHidden {
