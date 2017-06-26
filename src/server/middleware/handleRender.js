@@ -8,7 +8,7 @@ import NotFound from '../../client/routes/notfound';
 import App from '../../client/components';
 import configureStore from '../../client/store/configureStore';
 
-let assets = require('../../../assets.json'); // eslint-disable-line
+const assets = require('../../../assets.json'); // eslint-disable-line
 const routes = [
   '/',
   '/signin',

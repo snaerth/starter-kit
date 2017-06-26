@@ -8,13 +8,13 @@
     transition: fill $hover-transition;
     height: 30px;
     width: 30px;
+    z-index: 1;
     &:hover {
         fill: $primary-black;
     }
 }
 
 .modalInner {
-    padding: 45px 0;
     pointer-events: all;
     background: $primary-white;
     position: relative;

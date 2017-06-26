@@ -12,6 +12,7 @@ class Error extends Component {
     strongText: PropTypes.string,
     text: PropTypes.string,
     type: PropTypes.string.isRequired,
+    className: PropTypes.string,
   };
 
   componentDidMount() {
@@ -32,11 +33,11 @@ class Error extends Component {
   }
 
   render() {
-    const { text, strongText, type } = this.props;
+    const { text, strongText, type, className } = this.props;
 
     return (
       <div
-        className={classnames(styles.box, this.checkBoxType(type))}
+        className={classnames(styles.box, this.checkBoxType(type), className)}
         ref={c => this.container = c}
       >
         {strongText ? <strong>{strongText}</strong> : null}

@@ -70,6 +70,8 @@
     ]
   },
   "settings": {
+    "ecmascript": 6,
+    "import/parser": "babel-eslint",
     "import/resolver": {
       "node": {
         "extensions": [
