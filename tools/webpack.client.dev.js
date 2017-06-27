@@ -1,5 +1,3 @@
-
-
 const path = require('path');
 const webpack = require('webpack');
 const autoprefixer = require('autoprefixer');
@@ -53,6 +51,7 @@ module.exports = {
     main: [
       'webpack/hot/only-dev-server',
       'webpack-hot-middleware/client',
+      'react-hot-loader/patch',
       CLIENT_ENTRY,
     ],
     vendor: VENDOR,

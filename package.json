@@ -15,7 +15,8 @@
     "build-client": "webpack -p  --colors --display-error-details --config ./tools/webpack.client.prod.js",
     "build-server": "webpack -p --colors --display-error-details --config ./tools/webpack.server.prod.js",
     "build-admin": "webpack -p --colors --display-error-details --config ./tools/webpack.admin.prod.js",
-    "lint": "node_modules/.bin/esw webpack.client.dev.* src --color",
+    "lint": "node_modules/.bin/esw webpack.client.dev.* src --color && npm run stylelint",
+    "stylelint": "stylelint ./src/client/**/*.scss --syntax scss",
     "lint:watch": "npm run lint -- --watch"
   },
   "betterScripts": {
@@ -121,6 +122,7 @@
     "react-dom": "^15.5.4",
     "react-dropzone": "^3.13.2",
     "react-helmet": "^5.1.3",
+    "react-hot-loader": "^3.0.0-beta.7",
     "react-image-crop": "^2.0.5",
     "react-modal": "^1.9.2",
     "react-redux": "^5.0.5",
@@ -176,6 +178,7 @@
     "rimraf": "^2.6.1",
     "sass-loader": "^6.0.5",
     "style-loader": "^0.18.2",
+    "stylelint-config-primer": "^1.4.0",
     "svgo-loader": "^1.2.1",
     "webpack": "^3.0.0",
     "webpack-dev-middleware": "^1.10.2",

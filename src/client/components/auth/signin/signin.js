@@ -219,17 +219,10 @@ class Signin extends Component {
      * @returns {undefined}
      */
   renderSocials() {
-    const {
-      container,
-      iconFacebook,
-      iconArrowForward,
-    } = styles;
+    const { container, iconFacebook, iconArrowForward } = styles;
 
     return (
-      <div
-        className={container}
-        ref={c => this.el0 = c}
-      >
+      <div className={container} ref={c => this.el0 = c}>
         <MainHeading text="Sign in with a social network" className="medium" />
         <ButtonLink
           href="/admin/auth/facebook"
