@@ -64,7 +64,6 @@ app.use(
     publicPath: webpackConfig.output.publicPath,
     contentBase: 'src',
     quiet: true,
-    noInfo: true,
     stats: {
       colors: true,
       hash: false,

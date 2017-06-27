@@ -15,7 +15,13 @@ import {
   CLEAN,
 } from './types';
 
-const user = JSON.parse(localStorage.getItem('user'));
+let user = null;
+
+try {
+  user = JSON.parse(localStorage.getItem('user'));
+} catch (error) {
+  throw new Error(error);
+}
 
 const initialState = {
   isFetching: false,

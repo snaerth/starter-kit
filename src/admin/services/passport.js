@@ -12,13 +12,13 @@ const {
   FACEBOOK_CLIENT_SECRET,
   ADMIN_PROTOCOL,
   ADMIN_HOST,
-  ADMIN_PORT,
+  ADMIN_PORT
 } = config;
 
 // Setup options for local strategy
 const localOptions = {
   usernameField: 'email',
-  passwordField: 'password',
+  passwordField: 'password'
 };
 
 // Create local strategy
@@ -29,7 +29,7 @@ export const localLogin = new LocalStrategy(
     // otherwise call done with false
     User.findOne(
       {
-        email,
+        email
       },
       (error, user) => {
         if (error) {
@@ -52,15 +52,15 @@ export const localLogin = new LocalStrategy(
 
           return done(null, user);
         });
-      },
+      }
     );
-  },
+  }
 );
 
 // Setup options for JWT Strategy
 const jwtOptions = {
   jwtFromRequest: ExtractJwt.fromHeader('authorization'),
-  secretOrKey: JWT_SECRET,
+  secretOrKey: JWT_SECRET
 };
 
 // Create JWT Strategy
@@ -89,7 +89,7 @@ const facebookOptions = {
   clientSecret: FACEBOOK_CLIENT_SECRET,
   callbackURL: `${ADMIN_PROTOCOL}://${ADMIN_HOST}:${ADMIN_PORT}/auth/facebook/callback`,
   profileFields: ['id', 'displayName', 'photos', 'email', 'birthday', 'cover'],
-  enableProof: true,
+  enableProof: true
 };
 
 export const facebookLogin = new FacebookStrategy(
@@ -120,7 +120,7 @@ export const facebookLogin = new FacebookStrategy(
         newUser.facebook.name = displayName;
         newUser.facebook.email = emails[0].value;
         // save our user to the database
-        return newUser.save((error) => {
+        return newUser.save(error => {
           if (error) {
             return done(error);
           }
@@ -129,7 +129,7 @@ export const facebookLogin = new FacebookStrategy(
         });
       });
     });
-  },
+  }
 );
 
 // Only the user ID is serialized to the session, keeping the amount of data

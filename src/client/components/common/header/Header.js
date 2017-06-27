@@ -69,7 +69,7 @@ class Header extends Component {
         <Link
           to="/profile"
           key="profile"
-          activeClassName={styles.active}
+          active={styles.active}
           className={styles.link}
         >
           Profile
@@ -77,7 +77,7 @@ class Header extends Component {
         <Link
           to="/signout"
           key="signout"
-          activeClassName={styles.active}
+          active={styles.active}
           className={styles.link}
         >
           Sign out
@@ -89,7 +89,7 @@ class Header extends Component {
           <Link
             to="/admin"
             key="admin"
-            activeClassName={styles.active}
+            active={styles.active}
             className={styles.link}
           >
             Admin

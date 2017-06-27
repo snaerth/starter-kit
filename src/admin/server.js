@@ -3,7 +3,7 @@ import http from 'http';
 import express from 'express';
 import RateLimit from 'express-rate-limit';
 import session from 'express-session';
-import routes from './router';
+import routes from './routes';
 import errorHandlers from '../server/middleware/errorHandlers';
 import middleware from './middleware';
 import config from '../config';

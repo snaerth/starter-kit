@@ -47,8 +47,8 @@ function checkUserByEmail(email) {
 }
 
 /**
- * Validates email, password and name from post request
- * If error then send response with error and status 422
+ * Validates email, password name, etc. from post request
+ * If error then return error string
  *
  * @param {String} email
  * @param {String} password
@@ -56,58 +56,49 @@ function checkUserByEmail(email) {
  * @param {String} name
  * @param {String} dateOfBirth
  * @param {Object} res
- * @returns {Object} res
+ * @returns {String} error
  * @author Snær Seljan Þóroddsson
  */
-// eslint-disable-next-line
 function validateSignup({ email, password, newPassword, name, dateOfBirth }) {
-  // eslint-disable-line
-  return new Promise((resolve, reject) => {
-    // Check if email, password or message exist in request
-    if (!email || !password || !name) {
-      return reject('You must provide name, email and password');
-    }
-    // Validate email
-    if (!validateEmail(email)) {
-      return reject(`${email} is not a valid email`);
-    }
+  // Check if email, password or message exist in request
+  if (!email || !password || !name) {
+    return 'You must provide name, email and password';
+  }
+  // Validate email
+  if (!validateEmail(email)) {
+    return `${email} is not a valid email`;
+  }
 
+  // Check if password length is longer then 6 characters
+  if (password.length < 6) {
+    return 'Password must be of minimum length 6 characters';
+  }
+  // Check if password contains one number and one uppercase letter
+  if (!/[0-9]/.test(password) || !/[A-Z]/.test(password)) {
+    return 'Password must contain at least one number (0-9) and one uppercase letter (A-Z)';
+  }
+
+  if (newPassword) {
     // Check if password length is longer then 6 characters
-    if (password.length < 6) {
-      return reject('Password must be of minimum length 6 characters');
+    if (newPassword.length < 6) {
+      return 'New password must be of minimum length 6 characters';
     }
     // Check if password contains one number and one uppercase letter
-    if (!/[0-9]/.test(password) || !/[A-Z]/.test(password)) {
-      return reject(
-        'Password must contain at least one number (0-9) and one uppercase letter (A-Z)',
-      );
+    if (!/[0-9]/.test(newPassword) || !/[A-Z]/.test(newPassword)) {
+      return 'New password must contain at least one number (0-9) and one uppercase letter (A-Z)';
     }
+  }
 
-    if (newPassword) {
-      // Check if password length is longer then 6 characters
-      if (newPassword.length < 6) {
-        return reject('New password must be of minimum length 6 characters');
-      }
-      // Check if password contains one number and one uppercase letter
-      if (!/[0-9]/.test(newPassword) || !/[A-Z]/.test(newPassword)) {
-        return reject(
-          'New password must contain at least one number (0-9) and one uppercase letter (A-' +
-            'Z)',
-        );
-      }
-    }
+  // Name has to have aleast two names
+  if (!/^([^0-9]*)$/.test(name) || name.trim().split(' ').length < 2) {
+    return 'Name has aleast two 2 names consisting of letters';
+  }
 
-    // Name has to have aleast two names
-    if (!/^([^0-9]*)$/.test(name) || name.trim().split(' ').length < 2) {
-      return reject('Name has aleast two 2 names consisting of letters');
-    }
+  if (dateOfBirth && !Date.parse(dateOfBirth)) {
+    return 'Date is not in valid format. Try DD.MM.YYYY';
+  }
 
-    if (dateOfBirth && !Date.parse(dateOfBirth)) {
-      return reject('Date is not in valid format. Try DD.MM.YYYY');
-    }
-
-    return resolve();
-  });
+  return null;
 }
 
 /**
@@ -197,16 +188,22 @@ export async function signup(req, res) {
   }
 
   const { email, password, name } = req.body;
+  // Validate post request inputs
+  const error = validateSignup({ email, password, name });
 
-  // Validate post request inputs Check for if user exists by email, Save user in
-  // database Send response object with user token and user information
-  try {
-    await validateSignup({ email, password, name });
-    await checkUserByEmail(email);
-    const user = new User({ name, email, password });
-    const data = await saveUser(user);
-    return res.status(200).json(data);
-  } catch (error) {
+  if (!error) {
+    try {
+      // Check for if user exists by email
+      await checkUserByEmail(email);
+      const user = new User({ name, email, password });
+      // Save user in database
+      const data = await saveUser(user);
+      // Send response object with user token and user information
+      return res.status(200).json(data);
+    } catch (err) {
+      return res.status(422).send({ error: err });
+    }
+  } else {
     return res.status(422).send({ error });
   }
 }
@@ -249,39 +246,45 @@ export async function updateUser(req, res) {
   if (!req.user) return res.status(422).send({ error: 'No user found' });
 
   const { email, password, newPassword, name, dateOfBirth, phone } = req.body;
+  // Validate post request inputs
+  const error = validateSignup({
+    email,
+    password,
+    newPassword,
+    name,
+    dateOfBirth,
+  });
 
-  try {
-    await validateSignup({
-      email,
-      password,
-      newPassword,
-      name,
-      dateOfBirth,
-    });
-    const user = await findUserByEmail(email);
-    user.email = email;
-    user.password = password;
-    user.name = name;
-    user.dateOfBirth = dateOfBirth;
-    user.phone = phone;
+  if (!error) {
+    try {
+      // Find user by email and populate user props
+      const user = await findUserByEmail(email);
+      user.email = email;
+      user.password = password;
+      user.name = name;
+      user.dateOfBirth = dateOfBirth;
+      user.phone = phone;
 
-    return user.comparePassword(password, async (error, isMatch) => {
-      if (error) {
-        return Promise.reject({ error });
-      }
+      return user.comparePassword(password, async (err, isMatch) => {
+        if (err) {
+          return Promise.reject({ error: err });
+        }
 
-      if (!isMatch) {
-        return Promise.reject({
-          error: 'Password does not match old password',
-        });
-      }
+        if (!isMatch) {
+          return Promise.reject({
+            error: 'Password does not match old password',
+          });
+        }
 
-      user.password = newPassword;
-      // Save new user to databases
-      const updatedUser = await saveUser(user);
-      return res.status(200).json(updatedUser);
-    });
-  } catch (error) {
+        user.password = newPassword;
+        // Save new user to databases
+        const updatedUser = await saveUser(user);
+        return res.status(200).json(updatedUser);
+      });
+    } catch (err) {
+      return res.status(422).send({ error: err });
+    }
+  } else {
     return res.status(422).send({ error });
   }
 }
