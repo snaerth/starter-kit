@@ -16,9 +16,8 @@ const config = {
   ADMIN_HOST: process.env.ADMIN_HOST || 'localhost',
 
   // Database
-  DB_URL:
-    process.env.DB_URL ||
-      'mongodb://starterkit:starterkit@ds161159.mlab.com:61159/starterkit',
+  DB_URL: process.env.DB_URL ||
+    'mongodb://starterkit:starterkit@ds161159.mlab.com:61159/starterkit',
   DB_USERNAME: process.env.DB_USERNAME || 'username',
   DB_PASSWORD: process.env.DB_PASSWORD || 'password',
 
@@ -33,15 +32,14 @@ const config = {
   EMAIL_PASSWORD: process.env.EMAIL_PASSWORD || '',
 
   // Google Recaptcha
-  RECAPTCHA_SITE_KEY:
-    process.env.RECAPTCHA_SITE_KEY ||
-      '6Ld3NBoUAAAAAIcGj92iDd8O4pOZxB3j4hufgijG',
-  RECAPTCHA_SECRET_KEY:
-    process.env.RECAPTCHA_SECRET_KEY ||
-      '6Ld3NBoUAAAAAJ0_HGIZbYR1d80zZX3vQOpmx1Yc',
+  RECAPTCHA_SITE_KEY: process.env.RECAPTCHA_SITE_KEY ||
+    '6Ld3NBoUAAAAAIcGj92iDd8O4pOZxB3j4hufgijG',
+  RECAPTCHA_SECRET_KEY: process.env.RECAPTCHA_SECRET_KEY ||
+    '6Ld3NBoUAAAAAJ0_HGIZbYR1d80zZX3vQOpmx1Yc',
 
   // Facebook passport
-  FACEBOOK_CLIENT_ID: process.env.FACEBOOK_CLIENT_ID,
+  FACEBOOK_CLIENT_ID: process.env.FACEBOOK_CLIENT_ID || '',
+  FACEBOOK_CLIENT_SECRET: process.env.FACEBOOK_CLIENT_SECRET || '',
 };
 
 export default config;
