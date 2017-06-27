@@ -36,11 +36,7 @@ export default (
       name="Reset password"
       component={pageWrapper(ResetPassword)}
     />
-    <Route
-      path="/profile"
-      name="Profile"
-      component={requireAuth(pageWrapper(Profile))}
-    />
+    <Route path="/profile" name="Profile" component={pageWrapper(Profile)} />
     <Route
       path="/admin"
       name="Admin"

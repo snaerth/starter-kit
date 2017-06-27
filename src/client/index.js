@@ -37,8 +37,8 @@ if (module.hot) {
     store.replaceReducer(rootReducer);
   });
 
-  module.hot.accept('./components/app', () => {
-    const nextApp = require('./components/app');
+  module.hot.accept('./components', () => {
+    const nextApp = require('./components');
     renderApp(nextApp);
   });
 }
