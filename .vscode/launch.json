@@ -14,6 +14,8 @@
         "--no-deprecation"
       ],
       "sourceMaps": true,
+      "protocol": "inspector",
+      "smartStep": true,
       "outFiles": [
         "${workspaceRoot}/dist/**/*.js"
       ]
@@ -27,6 +29,7 @@
       "restart": false,
       "sourceMaps": false,
       "outFiles": [],
+      "protocol": "inspector",
       "localRoot": "${workspaceRoot}",
       "remoteRoot": null
     },
@@ -36,6 +39,7 @@
       "request": "attach",
       "processId": "${command:PickProcess}",
       "port": 5858,
+      "protocol": "inspector",
       "sourceMaps": false,
       "outFiles": []
     }
