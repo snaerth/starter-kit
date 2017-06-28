@@ -4,7 +4,8 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Link } from 'react-router-dom';
 import classnames from 'classnames';
-import styles from './Header.scss';
+import { CSSTransitionGroup } from 'react-transition-group';
+import styles from './header.scss';
 import ModalWrapper from '../modal';
 import Signup from '../../auth/signup';
 import Signin from '../../auth/signin';
@@ -142,7 +143,15 @@ class Header extends Component {
               {this.renderAuthLinks()}
             </div>
           </nav>
-          <h1 className={styles.banner}>{this.props.name}</h1>
+          <CSSTransitionGroup
+            transitionName="slideInOut"
+            transitionEnterTimeout={700}
+            transitionLeaveTimeout={100}
+          >
+            <h1 className={styles.banner} key={this.props.name}>
+              {this.props.name}
+            </h1>
+          </CSSTransitionGroup>
         </div>
 
         <ModalWrapper

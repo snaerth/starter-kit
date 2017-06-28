@@ -1,13 +1,20 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { CSSTransitionGroup } from 'react-transition-group';
 import AppLayout from './app-layout';
 import Header from './common/header';
 
 const App = ({ children, name }) => (
   <AppLayout>
     <Header name={name} />
-    {children}
+    <CSSTransitionGroup
+      transitionName="fadeIn"
+      transitionLeave={false}
+      transitionEnterTimeout={700}
+    >
+      {React.cloneElement(children, { key: name })}
+    </CSSTransitionGroup>
   </AppLayout>
 );
 
