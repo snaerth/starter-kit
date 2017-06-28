@@ -31,8 +31,8 @@ const vendor = [
 // RULES
 const urlLoader = {
   test: /\.(png|gif|jpe?g|svg)$/,
-  include: path.join(process.cwd(), 'assets/images'),
-  use: 'url-loader?limit=20480&name=./assets/images/[name]-[hash].[ext]',
+  include: path.join(process.cwd(), 'public/images'),
+  use: 'url-loader?limit=20480&name=./public/images/[name]-[hash].[ext]',
 };
 
 const json = {
@@ -42,7 +42,7 @@ const json = {
 
 const file = {
   test: /\.(woff2?|jpe?g|png|gif|ico)$/,
-  use: 'file-loader?name=./assets/images/[name].[ext]',
+  use: 'file-loader?name=./public/images/[name].[ext]',
 };
 
 const svg = {
@@ -57,7 +57,7 @@ const devCss = {
     'style-loader',
     {
       loader: 'css-loader',
-      query: {
+      options: {
         modules: true,
         sourceMap: false,
         localIdentName: '[hash:base64:5]',
@@ -73,7 +73,7 @@ const devScss = {
     'style-loader',
     {
       loader: 'css-loader',
-      query: {
+      options: {
         modules: true,
         sourceMap: false,
         localIdentName: '[hash:base64:5]',
@@ -90,7 +90,7 @@ const devJs = {
   loaders: [
     {
       loader: 'babel-loader',
-      query: {
+      options: {
         cacheDirectory: true,
         presets: [
           [
@@ -113,11 +113,15 @@ const devJs = {
 const css = {
   test: /\.css$/,
   use: ExtractTextPlugin.extract({
-    fallback: 'style-loader',
-    loader: [
+    fallback: [
+      {
+        loader: 'style-loader',
+      },
+    ],
+    use: [
       {
         loader: 'css-loader',
-        query: {
+        options: {
           modules: true,
           importLoaders: 2,
           localIdentName: '[name]__[local]__[hash:base64:5]',
@@ -134,11 +138,15 @@ const css = {
 const scss = {
   test: /\.scss$/,
   use: ExtractTextPlugin.extract({
-    fallback: 'style-loader',
-    loader: [
+    fallback: [
+      {
+        loader: 'style-loader',
+      },
+    ],
+    use: [
       {
         loader: 'css-loader',
-        query: {
+        options: {
           modules: true,
           sourceMap: false,
           localIdentName: '[name]__[local]__[hash:base64:5]',
@@ -155,7 +163,7 @@ const js = {
   test: /\.(js|jsx)?$/,
   exclude: /node_modules/,
   loader: 'babel-loader',
-  query: {
+  options: {
     presets: ['es2015', 'stage-0', 'react', 'react-optimize'],
   },
 };
@@ -165,7 +173,7 @@ module.exports = {
   CLIENT_OUTPUT: path.join(process.cwd(), 'build/public'),
   SERVER_ENTRY: path.join(process.cwd(), 'src/server/server.js'),
   SERVER_OUTPUT: path.join(process.cwd(), 'build'),
-  PUBLIC_PATH: '/assets/',
+  PUBLIC_PATH: '/public/',
   VENDOR: vendor,
   RULES_COMMON: {
     json,

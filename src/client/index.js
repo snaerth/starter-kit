@@ -7,7 +7,7 @@ import createHistory from 'history/createBrowserHistory';
 import configureStore from './store/configureStore';
 import App from './components';
 import routes from './routes';
-import ReactHotLoader from './containers/ReactHotLoader';
+import ReactHotLoader from './containers/reactHotLoader';
 import rootReducer from './reducers';
 
 const preloadedState = window.__PRELOADED_STATE__;

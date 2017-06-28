@@ -1,6 +1,6 @@
 import fs from 'fs';
 
-const directorys = ['assets', 'assets/images', 'assets/images/users'];
+const directorys = ['public', 'public/images', 'public/images/users'];
 
 /**
  * Creates default directorys for project if they dont exist
@@ -68,11 +68,12 @@ export function fileExists(filePath) {
  * @returns {Promise}
  * @author Snær Seljan Þóroddsson
  */
-export function checkFileAndDelete(filePath) {
-  return new Promise((resolve, reject) => {
-    fileExists(filePath)
-      .then(() => deleteFile(filePath))
-      .then(() => resolve(filePath))
-      .catch(error => reject(error));
-  });
+export async function checkFileAndDelete(filePath) {
+  try {
+    await fileExists(filePath);
+    await deleteFile(filePath);
+    return filePath;
+  } catch (error) {
+    return error;
+  }
 }

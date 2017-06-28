@@ -5,7 +5,6 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { reduxForm, Field } from 'redux-form';
 import { TimelineLite, Power2 } from 'gsap';
-import classnames from 'classnames';
 import Input from '../../common/input';
 import Password from '../../common/password';
 import styles from './signin.scss';

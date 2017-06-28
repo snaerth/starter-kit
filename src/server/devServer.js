@@ -50,9 +50,9 @@ app.disable('x-powered-by');
 // Apply middleware to app
 app.use(middleware());
 
-// Serve static content for the app from the assets/favicon directory and build directory
-app.use(express.static('assets/favicon'));
-app.use(express.static('assets'));
+// Serve static content for the app from the public/favicon directory and build directory
+app.use(express.static('public/favicon'));
+app.use(express.static('public'));
 
 // Log all request in the Apache combined format to STDOUT
 app.use(morgan('dev'));

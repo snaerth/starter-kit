@@ -6,6 +6,7 @@ const externals = require('webpack-node-externals');
 const AssetsPlugin = require('assets-webpack-plugin');
 const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
 const CONFIG = require('./webpack.base');
+
 const {
   CLIENT_ENTRY,
   CLIENT_OUTPUT,
@@ -68,7 +69,7 @@ module.exports = {
     chunkFilename: '[name]_[chunkhash].js',
     sourceMapFilename: '[name]_[chunkhash].map',
     publicPath: '/',
-    path: '/build',
+    path: CLIENT_OUTPUT,
   },
   plugins,
   module: {
