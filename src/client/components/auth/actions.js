@@ -76,22 +76,22 @@ export function setPreviewUserImage(image) {
  * @author Snær Seljan Þóroddsson
  */
 export function signinUser({ email, password }) {
-  return (dispatch) => {
-    // Post email/password to admin server for sign in Get token back from server
-    axios
-      .post('/admin/signin', { email, password })
-      .then((response) => {
-        const payload = {
-          user: response.data.user,
-        };
-        // Dispatch admin action to authReducer
-        dispatch({ type: AUTH_USER, payload });
-        // Save token to localStorage
-        localStorage.setItem('user', JSON.stringify(response.data));
-        // Reroute user to home page
-        browserHistory.push('/');
-      })
-      .catch(error => dispatch(authError(AUTH_ERROR, error)));
+  return async (dispatch) => {
+    try {
+      // Post email/password to admin server for sign in Get token back from server
+      const response = await axios.post('/admin/signin', { email, password });
+      const payload = {
+        user: response.data.user,
+      };
+      // Dispatch admin action to authReducer
+      dispatch({ type: AUTH_USER, payload });
+      // Save token to localStorage
+      localStorage.setItem('user', JSON.stringify(response.data));
+      // Reroute user to home page
+      browserHistory.push('/');
+    } catch (error) {
+      dispatch(authError(AUTH_ERROR, error));
+    }
   };
 }
 
@@ -102,13 +102,13 @@ export function signinUser({ email, password }) {
  * @author Snær Seljan Þóroddsson
  */
 export function signinFacebook() {
-  return (dispatch) => {
-    axios
-      .get('/admin/facebook')
-      .then((response) => {
-        const payload = response.data; // eslint-disable-line
-      })
-      .catch(error => dispatch(authError(AUTH_ERROR, error)));
+  return async (dispatch) => {
+    try {
+      const response = await axios.get('/admin/facebook');
+      const payload = response.data; // eslint-disable-line
+    } catch (error) {
+      dispatch(authError(AUTH_ERROR, error));
+    }
   };
 }
 
@@ -124,49 +124,49 @@ export function signinFacebook() {
  * @author Snær Seljan Þóroddsson
  */
 export function signupUser({ email, password, name, formData }) {
-  return (dispatch) => {
-    // Post email/password to admin server to register user Get token back from server
-    axios
-      .post('/admin/signup', { email, password, name })
-      .then((response) => {
-        const payload = {
-          user: response.data,
+  return async (dispatch) => {
+    try {
+      // Post email/password to admin server to register user Get token back from server
+      const response = await axios.post('/admin/signup', {
+        email,
+        password,
+        name,
+      });
+      const payload = {
+        user: response.data,
+      };
+
+      // Save token to localStorage
+      localStorage.setItem('user', JSON.stringify(response.data));
+      // Dispatch admin action to authReducer
+      dispatch({ type: SIGNUP_USER, payload });
+      // Reroute user to home page
+      if (!formData) {
+        // Reroute user to profile page
+        browserHistory.push('/profile');
+      }
+
+      if (formData) {
+        const config = {
+          headers: {
+            authorization: response.data.token,
+          },
         };
 
+        const res = await axios.post('/admin/userimage', formData, config);
+        // Dispatch USER_UPDATED action to authReducer
+        dispatch({ type: USER_UPDATED, payload: res.data });
         // Save token to localStorage
-        localStorage.setItem('user', JSON.stringify(response.data));
-        // Dispatch admin action to authReducer
-        dispatch({ type: SIGNUP_USER, payload });
-        // Reroute user to home page
-        if (!formData) {
-          // Reroute user to profile page
-          browserHistory.push('/profile');
-        }
+        localStorage.setItem('user', {
+          user: JSON.stringify(res.data),
+        });
 
-        if (formData) {
-          const config = {
-            headers: {
-              authorization: response.data.token,
-            },
-          };
-
-          axios
-            .post('/admin/userimage', formData, config)
-            .then((res) => {
-              // Dispatch USER_UPDATED action to authReducer
-              dispatch({ type: USER_UPDATED, payload: res.data });
-              // Save token to localStorage
-              localStorage.setItem('user', {
-                user: JSON.stringify(res.data),
-              });
-
-              // Reroute user to profile page
-              browserHistory.push('/profile');
-            })
-            .catch(error => dispatch(authError(AUTH_ERROR, error)));
-        }
-      })
-      .catch(error => dispatch(authError(AUTH_ERROR, error)));
+        // Reroute user to profile page
+        browserHistory.push('/profile');
+      }
+    } catch (error) {
+      dispatch(authError(AUTH_ERROR, error));
+    }
   };
 }
 
@@ -182,22 +182,22 @@ export function signupUser({ email, password, name, formData }) {
  * @author Snær Seljan Þóroddsson
  */
 export function addUserImage(formData, token) {
-  return (dispatch) => {
+  return async (dispatch) => {
     const config = {
       headers: {
         authorization: token,
       },
     };
 
-    axios
-      .post('/admin/userimage', formData, config)
-      .then((response) => {
-        // Dispatch USER_UPDATED action to authReducer
-        dispatch({ type: USER_UPDATED, payload: response.data });
-        // Save token to localStorage
-        localStorage.setItem('user', { user: JSON.stringify(response.data) });
-      })
-      .catch(error => dispatch(authError(AUTH_ERROR, error)));
+    try {
+      const response = await axios.post('/admin/userimage', formData, config);
+      // Dispatch USER_UPDATED action to authReducer
+      dispatch({ type: USER_UPDATED, payload: response.data });
+      // Save token to localStorage
+      localStorage.setItem('user', { user: JSON.stringify(response.data) });
+    } catch (error) {
+      dispatch(authError(AUTH_ERROR, error));
+    }
   };
 }
 
@@ -252,14 +252,14 @@ export function signoutUser() {
  * @author Snær Seljan Þóroddsson
  */
 export function forgotPassword({ email }) {
-  return (dispatch) => {
-    // Post email to admin server to retreive new password
-    axios
-      .post('/admin/forgot', { email })
-      .then(response =>
-        dispatch({ type: FORGOT_PASSWORD_SUCCESS, payload: response.data }),
-      )
-      .catch(error => dispatch(authError(FORGOT_PASSWORD_ERROR, error)));
+  return async (dispatch) => {
+    try {
+      // Post email to admin server to retreive new password
+      const response = await axios.post('/admin/forgot', { email });
+      dispatch({ type: FORGOT_PASSWORD_SUCCESS, payload: response.data });
+    } catch (error) {
+      dispatch(authError(FORGOT_PASSWORD_ERROR, error));
+    }
   };
 }
 
@@ -271,23 +271,24 @@ export function forgotPassword({ email }) {
  * @author Snær Seljan Þóroddsson
  */
 export function resetPassword({ password, token }) {
-  return (dispatch) => {
-    // Post email to admin server to retreive new password
-    axios
-      .post(`/admin/reset/${token}`, { password })
-      .then((response) => {
-        if (!response.data.error) {
-          dispatch({
-            type: RESET_PASSWORD_SUCCESS,
-            payload: response.data.message,
-          });
-        } else {
-          const error = {
-            response,
-          };
-          dispatch(authError(RESET_PASSWORD_ERROR, error));
-        }
-      })
-      .catch(error => dispatch(authError(RESET_PASSWORD_ERROR, error)));
+  return async (dispatch) => {
+    try {
+      // Post email to admin server to retreive new password
+      const response = await axios.post(`/admin/reset/${token}`, { password });
+
+      if (!response.data.error) {
+        dispatch({
+          type: RESET_PASSWORD_SUCCESS,
+          payload: response.data.message,
+        });
+      } else {
+        const error = {
+          response,
+        };
+        dispatch(authError(RESET_PASSWORD_ERROR, error));
+      }
+    } catch (error) {
+      dispatch(authError(RESET_PASSWORD_ERROR, error));
+    }
   };
 }

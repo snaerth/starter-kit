@@ -68,7 +68,7 @@ module.exports = {
     historyApiFallback: true,
     hot: true,
     https: false,
-    noInfo: true,
+    noInfo: false,
   },
   plugins,
   module: {

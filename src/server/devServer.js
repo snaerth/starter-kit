@@ -63,7 +63,6 @@ app.use(
   webpackMiddleware(compiler, {
     publicPath: webpackConfig.output.publicPath,
     contentBase: 'src',
-    quiet: true,
     stats: {
       colors: true,
       hash: false,
