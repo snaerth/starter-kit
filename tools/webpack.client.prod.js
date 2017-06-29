@@ -53,8 +53,8 @@ const plugins = [
 
 // RULES
 const { file, json, svg, urlLoader } = RULES_COMMON;
-const { scss, js, css } = RULES_PROD;
-const rules = [js, css, scss, json, file, svg];
+const { js, styles } = RULES_PROD;
+const rules = [js, styles, json, file, svg];
 
 // Main webpack config
 module.exports = {

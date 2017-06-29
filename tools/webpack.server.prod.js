@@ -1,19 +1,15 @@
 const webpack = require('webpack');
 const path = require('path');
 const CONFIG = require('./webpack.base');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const externals = require('webpack-node-externals');
 const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
 
-const {
-  SERVER_ENTRY,
-  SERVER_OUTPUT,
-  RULES_COMMON,
-  RULES_DEV,
-  RULES_PROD,
-} = CONFIG;
+const { SERVER_ENTRY, SERVER_OUTPUT, RULES_COMMON, RULES_PROD } = CONFIG;
 
 const plugins = [
   new webpack.optimize.ModuleConcatenationPlugin(),
+  new ExtractTextPlugin({ filename: 'styles.css', allChunks: true }),
   new webpack.DefinePlugin({
     'process.env': {
       NODE_ENV: JSON.stringify(process.env.NODE_ENV),
@@ -36,9 +32,8 @@ const plugins = [
 
 // RULES
 const { json, svg } = RULES_COMMON;
-const { scss, css } = RULES_DEV;
-const { js } = RULES_PROD;
-const rules = [js, css, scss, json, svg];
+const { js, styles } = RULES_PROD;
+const rules = [js, styles, json, svg];
 
 module.exports = {
   target: 'node',

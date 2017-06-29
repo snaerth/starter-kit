@@ -40,8 +40,8 @@ const plugins = [
 
 // RULES
 const { file, json, svg, urlLoader } = RULES_COMMON;
-const { scss, js, css } = RULES_DEV;
-const rules = [js, css, scss, json, file, svg];
+const { js, styles } = RULES_DEV;
+const rules = [js, styles, json, file, svg];
 
 // --------------------------------------------- MAIN WEBPACK CONFIG
 module.exports = {

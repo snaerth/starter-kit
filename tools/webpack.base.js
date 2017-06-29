@@ -51,24 +51,8 @@ const svg = {
 };
 
 // Development
-const devCss = {
-  test: /\.css$/,
-  use: [
-    'style-loader',
-    {
-      loader: 'css-loader',
-      options: {
-        modules: true,
-        sourceMap: false,
-        localIdentName: '[hash:base64:5]',
-      },
-    },
-    'postcss-loader',
-  ],
-};
-
-const devScss = {
-  test: /\.scss$/,
+const stylesDev = {
+  test: /(\.scss|\.css)$/,
   use: [
     'style-loader',
     {
@@ -110,53 +94,20 @@ const devJs = {
 };
 
 // Production
-const css = {
-  test: /\.css$/,
-  use: ExtractTextPlugin.extract({
-    fallback: [
-      {
-        loader: 'style-loader',
-      },
-    ],
-    use: [
-      {
-        loader: 'css-loader',
-        options: {
-          modules: true,
-          importLoaders: 2,
-          localIdentName: '[name]__[local]__[hash:base64:5]',
-          plugins: () => [autoprefixerConfig],
-        },
-      },
-      {
-        loader: 'postcss-loader',
-      },
-    ],
-  }),
-};
-
-const scss = {
-  test: /\.scss$/,
-  use: ExtractTextPlugin.extract({
-    fallback: [
-      {
-        loader: 'style-loader',
-      },
-    ],
-    use: [
-      {
-        loader: 'css-loader',
-        options: {
-          modules: true,
-          sourceMap: false,
-          localIdentName: '[name]__[local]__[hash:base64:5]',
-          plugins: () => [autoprefixerConfig],
-        },
-      },
-      'postcss-loader',
-      'sass-loader',
-    ],
-  }),
+const stylesProd = {
+  test: /(\.scss|\.css)$/,
+  // Dont add css-modules to node_modules css files.
+  exclude: /node_modules.*\.css$/,
+  use: [
+    ...ExtractTextPlugin.extract({
+      fallback: 'style-loader',
+      use: [
+        'css-loader?modules=1&importLoaders=1&localIdentName=[hash:base64:10]',
+        'postcss-loader',
+        'sass-loader?outputStyle=expanded',
+      ],
+    }),
+  ],
 };
 
 const js = {
@@ -183,12 +134,10 @@ module.exports = {
   },
   RULES_DEV: {
     js: devJs,
-    scss: devScss,
-    css: devCss,
+    styles: stylesDev,
   },
   RULES_PROD: {
     js,
-    css,
-    scss,
+    styles: stylesProd,
   },
 };

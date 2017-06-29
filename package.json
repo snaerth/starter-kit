@@ -4,7 +4,7 @@
   "version": "0.1.0",
   "scripts": {
     "debug": "babel ./src/admin --out-dir dist --watch --source-maps",
-    "start": "concurrent --kill-others \"npm run start:server\" \"npm run start:admin\"",
+    "start": "concurrent --kill-others \"npm run start:server:prod\" \"npm run start:admin:prod\"",
     "start:prod": "concurrent --kill-others \"npm run start:server:prod\" \"npm run start:admin:prod\"",
     "start:server:prod": "better-npm-run start:server:prod",
     "start:admin:prod": "better-npm-run start:admin:prod",
