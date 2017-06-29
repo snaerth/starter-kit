@@ -4,23 +4,23 @@
   "version": "0.1.0",
   "scripts": {
     "debug": "babel ./src/admin --out-dir dist --watch --source-maps",
-    "start": "concurrent --kill-others \"npm run start-server\" \"npm run start-admin\"",
-    "start:prod": "concurrent --kill-others \"npm run start-prod-server\" \"npm run start-prod-admin\"",
-    "start-prod-server": "better-npm-run start-prod-server",
-    "start-prod-admin": "better-npm-run start-prod-admin",
-    "start:dev": "concurrent --kill-others \"npm run start-dev-admin \" \"npm run start-dev-server\" \"npm run lint:watch\"",
-    "start-dev-server": "better-npm-run start-dev-server",
-    "start-dev-admin": "better-npm-run start-dev-admin",
+    "start": "concurrent --kill-others \"npm run start:server\" \"npm run start:admin\"",
+    "start:prod": "concurrent --kill-others \"npm run start:server:prod\" \"npm run start:admin:prod\"",
+    "start:server:prod": "better-npm-run start:server:prod",
+    "start:admin:prod": "better-npm-run start:admin:prod",
+    "start:dev": "concurrent --kill-others \"npm run start:admin:dev \" \"npm run start:server:dev\" \"npm run lint:watch\"",
+    "start:server:dev": "better-npm-run start:server:dev",
+    "start:admin:dev": "better-npm-run start:admin:dev",
     "build": "better-npm-run build",
-    "build-client": "webpack -p  --colors --display-error-details --config ./tools/webpack.client.prod.js",
-    "build-server": "webpack -p --colors --display-error-details --config ./tools/webpack.server.prod.js",
-    "build-admin": "webpack -p --colors --display-error-details --config ./tools/webpack.admin.prod.js",
+    "build:client": "webpack -p --config ./tools/webpack.client.prod.js --colors --display-error-details",
+    "build:server": "webpack -p --config ./tools/webpack.server.prod.js --colors --display-error-details",
+    "build:admin": "webpack -p --config ./tools/webpack.admin.prod.js --colors --display-error-details",
     "lint": "node_modules/.bin/esw webpack.client.dev.* src --color",
     "stylelint": "stylelint ./src/client/**/*.scss --syntax scss",
     "lint:watch": "npm run lint -- --watch"
   },
   "betterScripts": {
-    "start-prod-server": {
+    "start:server:prod": {
       "command": "node build/server.js",
       "env": {
         "NODE_ENV": "production",
@@ -28,7 +28,7 @@
         "PORT": 8080
       }
     },
-    "start-prod-admin": {
+    "start:admin:prod": {
       "command": "node build/admin.js",
       "env": {
         "NODE_ENV": "production",
@@ -36,7 +36,7 @@
         "ADMIN_HOST": "localhost"
       }
     },
-    "start-dev-server": {
+    "start:server:dev": {
       "command": "babel-node src/server/index.js",
       "env": {
         "NODE_ENV": "development",
@@ -44,7 +44,7 @@
         "PORT": 3000
       }
     },
-    "start-dev-admin": {
+    "start:admin:dev": {
       "command": "babel-node src/admin/server.js",
       "env": {
         "NODE_ENV": "development",
@@ -53,7 +53,7 @@
       }
     },
     "build": {
-      "command": "rimraf build && npm run build-client && npm run build-server && npm run build-admin",
+      "command": "rimraf build && npm run build:client && npm run build:server && npm run build:admin",
       "env": {
         "NODE_ENV": "production",
         "ADMIN_PORT": 3030,
@@ -62,7 +62,7 @@
         "PORT": 3000
       }
     },
-    "start-server": {
+    "start:server": {
       "command": "pm2 start build/server.js",
       "env": {
         "NODE_ENV": "production",
@@ -70,7 +70,7 @@
         "PORT": 8080
       }
     },
-    "start-admin": {
+    "start:admin": {
       "command": "pm2 start build/admin.js",
       "env": {
         "NODE_ENV": "production",
@@ -159,7 +159,6 @@
     "case-sensitive-paths-webpack-plugin": "^2.1.1",
     "compression": "^1.6.2",
     "concurrent": "^0.3.2",
-    "cross-env": "^5.0.1",
     "css-loader": "^0.28.4",
     "eslint": "^3.19.0",
     "eslint-config-airbnb-base": "^11.2.0",
