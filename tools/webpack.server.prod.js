@@ -5,7 +5,7 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const externals = require('webpack-node-externals');
 const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
 
-const { SERVER_ENTRY, SERVER_OUTPUT, RULES_COMMON, RULES_PROD } = CONFIG;
+const { SERVER_ENTRY, SERVER_OUTPUT, RULES_COMMON } = CONFIG;
 
 const plugins = [
   new webpack.optimize.ModuleConcatenationPlugin(),
@@ -32,7 +32,32 @@ const plugins = [
 
 // RULES
 const { json, svg } = RULES_COMMON;
-const { js, styles } = RULES_PROD;
+
+const styles = {
+  test: /(\.scss|\.css)$/,
+  // Dont add css-modules to node_modules css files.
+  exclude: /node_modules.*\.css$/,
+  use: [
+    ...ExtractTextPlugin.extract({
+      fallback: 'style-loader',
+      use: [
+        'css-loader?modules=1&importLoaders=1&localIdentName=[hash:base64:10]',
+        'postcss-loader',
+        'sass-loader?outputStyle=expanded',
+      ],
+    }),
+  ],
+};
+
+const js = {
+  test: /\.(js|jsx)?$/,
+  exclude: /node_modules/,
+  loader: 'babel-loader',
+  options: {
+    presets: ['es2015', 'stage-0', 'react', 'react-optimize'],
+  },
+};
+
 const rules = [js, styles, json, svg];
 
 module.exports = {

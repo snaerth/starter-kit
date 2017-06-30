@@ -1,3 +1,4 @@
+import localStorageChecker from '../../utils/modernizr';
 import {
   AUTH_USER,
   UNAUTH_USER,
@@ -17,10 +18,12 @@ import {
 
 let user = null;
 
-try {
-  user = JSON.parse(localStorage.getItem('user'));
-} catch (error) {
-  throw new Error(error);
+if (localStorageChecker()) {
+  try {
+    user = JSON.parse(localStorage.getItem('user'));
+  } catch (error) {
+    throw new Error(error);
+  }
 }
 
 const initialState = {
